@@ -3,3 +3,7 @@
     -fx-font-weight: bold;
     -fx-text-fill: white;
 }
+.button:hover {
+    -fx-background-color: black;
+    -fx-text-fill: white; /* Optional: Textfarbe ändern, damit er sichtbar bleibt */
+}
