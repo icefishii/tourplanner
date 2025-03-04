@@ -5,4 +5,6 @@ module dev.icefish.tourplanner {
 
     opens dev.icefish.tourplanner to javafx.fxml;
     exports dev.icefish.tourplanner;
+    exports dev.icefish.tourplanner.controllers;
+    opens dev.icefish.tourplanner.controllers to javafx.fxml;
 }
