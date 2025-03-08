@@ -1,6 +1,7 @@
 module dev.icefish.tourplanner {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
 
 
     opens dev.icefish.tourplanner to javafx.fxml;
