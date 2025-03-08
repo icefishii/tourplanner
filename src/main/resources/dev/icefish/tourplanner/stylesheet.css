@@ -71,3 +71,16 @@
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
 }
+
+#nameLabel,
+#descriptionLabel,
+#fromLabel,
+#toLabel,
+#transportationModeLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #292929; /* Dunkleres Grau für bessere Lesbarkeit */
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}
+
+
