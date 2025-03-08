@@ -37,6 +37,30 @@ public class Tour {
         this.routeImagePath = routeImagePath;
     }
 
+    public String getString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Tour Name: ").append(name).append(", ")
+                .append("Description: ").append(description).append(", ")
+                .append("From: ").append(fromLocation).append(", ")
+                .append("To: ").append(toLocation).append(", ")
+                .append("Transport Type: ").append(transportType).append(", ");
+
+        if (routeImagePath != null && distance > 0) {
+            sb.append("Distance: ").append(distance).append(" km, ");
+        }
+
+        if (routeImagePath != null && estimatedTime > 0) {
+            sb.append("Estimated Time: ").append(estimatedTime).append(" hours, ");
+        }
+
+        if (routeImagePath != null && !routeImagePath.isEmpty()) {
+            sb.append("Route Image: ").append(routeImagePath).append(", ");
+        }
+
+        return sb.toString();
+    }
+
     public UUID getId() {
         return id;
     }
