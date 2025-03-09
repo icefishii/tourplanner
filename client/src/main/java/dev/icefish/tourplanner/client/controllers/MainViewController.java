@@ -117,7 +117,7 @@ public class MainViewController {
         });
     }
 
-    private void addTourToViewModel(Tour tour) {
+    public void addTourToViewModel(Tour tour) {
         tourViewModel.getAllTours().add(tour);
     }
 }
