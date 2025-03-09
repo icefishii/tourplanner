@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Client extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Client.class.getResource("/dev/icefish/tourplanner/client/TourPlannerWindow.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Client.class.getResource("/TourPlannerWindow.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 620, 440);
         stage.setTitle("Tour Planner System");
         stage.setScene(scene);
