@@ -1,11 +1,12 @@
 package dev.icefish.tourplanner.client.model;
 
 
+import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
+
 import java.util.UUID;
 
 public class Tour {
     private UUID id;
-
     private String name;
     private String description;
     private String fromLocation;
@@ -18,7 +19,7 @@ public class Tour {
 
     //wenn noch nicht die time und distance mit API berechnet wird
     public Tour(String name, String description, String fromLocation, String toLocation, String transportType) {
-        this.name = name;
+        this.id = UUIDv7Generator.generateUUIDv7();        this.name = name;
         this.description = description;
         this.toLocation = toLocation;
         this.fromLocation = fromLocation;
@@ -26,7 +27,7 @@ public class Tour {
     }
 
     public Tour(String name, String description, String fromLocation, String toLocation, String transportType, double distance, double estimatedTime, String routeImagePath) {
-        this.id = UUID.randomUUID();
+        this.id = UUIDv7Generator.generateUUIDv7();
         this.name = name;
         this.description = description;
         this.fromLocation = fromLocation;

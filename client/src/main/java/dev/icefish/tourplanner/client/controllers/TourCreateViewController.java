@@ -33,6 +33,7 @@ public class TourCreateViewController {
 
 
     public void onCreateButtonClick(ActionEvent actionEvent) {
+
         String name = tourNameField.getText();
         String description = tourDescriptionField.getText();
         String fromLocation = fromLocationField.getText();
