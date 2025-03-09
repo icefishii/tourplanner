@@ -1,0 +1,86 @@
+/* Allgemein */
+.root {
+    -fx-background-color: #ECF0F1;
+    -fx-font-family: "Arial", sans-serif;
+}
+
+/* Untertitel (Tour Logs, Tours, Route)*/
+.label {
+    -fx-text-fill: #555555;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/*  Haupttitel  */
+.label[Text="Tour Planner"] {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Button */
+.button {
+    -fx-background-color: #BDC3C7;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 2);
+}
+
+/* Hover-Effekt für Buttons */
+.button:hover {
+    -fx-background-color: #95A5A6;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 3);
+}
+
+/* Button für Löschen */
+.button-danger {
+    -fx-background-color: #E74C3C;
+    -fx-text-fill: white;
+}
+
+.button-danger:hover {
+    -fx-background-color: #C0392B;
+}
+
+/* Listen Styling */
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #BDC3C7;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.list-view .list-cell {
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+}
+
+/* Hover-Effekt für Listen */
+.list-view .list-cell:hover {
+    -fx-background-color: #D5DBDB;
+}
+
+/* Bildrahmen für ImageView */
+.image-view {
+    -fx-border-color: #BDC3C7;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+#nameLabel,
+#descriptionLabel,
+#fromLabel,
+#toLabel,
+#transportationModeLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #292929; /* Dunkleres Grau für bessere Lesbarkeit */
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+}
+
+
