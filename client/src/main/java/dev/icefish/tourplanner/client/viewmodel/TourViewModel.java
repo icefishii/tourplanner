@@ -23,4 +23,13 @@ public class TourViewModel {
         tourService.createNewTour(newTour);
         this.toursList.add(newTour);
     }
+
+    public void deleteTour(Tour tour) {
+        tourService.deleteTour(tour);
+        this.toursList.remove(tour);
+    }
+
+    public void updateTour(Tour tour) {
+        tourService.updateTour(tour);
+    }
 }
