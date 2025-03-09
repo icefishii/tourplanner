@@ -1,7 +1,7 @@
-package dev.icefish.tourplanner.controllers;
+package dev.icefish.tourplanner.client.controllers;
 
-import dev.icefish.tourplanner.models.Tour;
-import dev.icefish.tourplanner.mvvm.TourViewModel;
+import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class TourPlannerController {
+public class MainViewController {
     @FXML
     private Button deleteTourButton, editTourButton, newTourButton;
 
@@ -38,10 +38,10 @@ public class TourPlannerController {
 
     public void onCreateTour(ActionEvent actionEvent) { //Beim Drücken von New
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/icefish/tourplanner/TourCreateWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/icefish/tourplanner/client/TourCreateWindow.fxml"));
             Parent root = loader.load();
 
-            TourCreateController controller = loader.getController();
+            TourCreateViewController controller = loader.getController();
             controller.setTourCreatedListener(this::addTourToViewModel);
 
             Stage stage = new Stage();
