@@ -13,6 +13,32 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- Spring Boot Starter Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+        <!-- Spring Boot Starter Data JPA (if you are using JPA for persistence) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+        <!-- H2 Database (for in-memory database) -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.3.232</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Spring Boot Starter Test (for testing) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>3.4.3</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>

@@ -2,7 +2,6 @@ package dev.icefish.tourplanner.client.controllers;
 
 import dev.icefish.tourplanner.client.model.Tour;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-
 public class MainViewController {
     @FXML
     private Button deleteTourButton, editTourButton, newTourButton;
@@ -21,16 +19,16 @@ public class MainViewController {
     @FXML
     private ListView<Tour> tourListView;
 
-    private final TourViewModel TourViewModel = new TourViewModel();
+    private final TourViewModel tourViewModel = new TourViewModel();
 
     @FXML
     public void initialize() {
         setTourListView();
-        tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);//mehrere Auswählen
+        tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
     }
 
-    public void onCreateTour(ActionEvent actionEvent) { //Beim Drücken von New
+    public void onCreateTour(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/icefish/tourplanner/client/TourCreateWindow.fxml"));
             Parent root = loader.load();
@@ -49,59 +47,48 @@ public class MainViewController {
         }
     }
 
-    public void onDeleteTour(ActionEvent actionEvent) { //Beim Drücken von Delete
+    public void onDeleteTour(ActionEvent actionEvent) {
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
-
-        //ToDo Button deaktivieren (Mediator??)
         if (selectedTour == null) {
             System.out.println("No Tour selected");
             return;
         }
 
-        //das Problem bei ButtonType.Yes = wird es dann deutsch
         ButtonType yesButton = new ButtonType("Yes");
         ButtonType noButton = new ButtonType("No");
 
-        // Bestätigungsdialog mit eigenen Buttons
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + selectedTour.getName() + "?", yesButton, noButton);
-
         alert.setTitle("Delete Tour");
         alert.setHeaderText(null);
 
-        // Falls der Nutzer bestätigt
         alert.showAndWait().ifPresent(response -> {
-
             if (response == yesButton) {
-                TourViewModel.getAllTours().removeAll(selectedTour);  // Entferne die Tour aus der Liste
-                tourListView.refresh();  // Aktualisiere die Tabelle
+                tourViewModel.getAllTours().removeAll(selectedTour);
+                tourListView.refresh();
                 System.out.println("Tour deleted: " + selectedTour.getName());
             }
         });
-
     }
 
-    public void onEditTour(ActionEvent actionEvent) { //Beim Drücken von Edit
+    public void onEditTour(ActionEvent actionEvent) {
         //ToDo edit
     }
 
     private void setTourListView() {
-        tourListView.setItems(TourViewModel.getAllTours());
+        tourListView.setItems(tourViewModel.getAllTours());
     }
 
     private void setTourCellFactory() {
-        tourListView.setCellFactory(param -> {
-            return new ListCell<>() {
-                @Override
-                protected void updateItem(Tour tour, boolean empty) {
-                    super.updateItem(tour, empty);
-                    setText(empty || tour == null ? null : tour.getName());
-                }
-            };
+        tourListView.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Tour tour, boolean empty) {
+                super.updateItem(tour, empty);
+                setText(empty || tour == null ? null : tour.getName());
+            }
         });
     }
 
     private void addTourToViewModel(Tour tour) {
-        TourViewModel.getAllTours().add(tour);
+        tourViewModel.getAllTours().add(tour);
     }
-
 }
