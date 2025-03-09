@@ -8,10 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,11 +26,8 @@ public class TourPlannerController {
     @FXML
     public void initialize() {
         setTourListView();
-
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);//mehrere Auswählen
-
         setTourCellFactory();
-
     }
 
     public void onCreateTour(ActionEvent actionEvent) { //Beim Drücken von New
@@ -50,13 +44,40 @@ public class TourPlannerController {
             stage.show();
 
         } catch (IOException e) {
-            System.err.println("Fehler beim Laden des Tour-Erstellungsfensters: " + e.getMessage());
+            System.err.println("Error loading the tour creation window:  " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     public void onDeleteTour(ActionEvent actionEvent) { //Beim Drücken von Delete
-        //ToDo delete
+        Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+
+        //ToDo Button deaktivieren (Mediator??)
+        if (selectedTour == null) {
+            System.out.println("No Tour selected");
+            return;
+        }
+
+        //das Problem bei ButtonType.Yes = wird es dann deutsch
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+
+        // Bestätigungsdialog mit eigenen Buttons
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + selectedTour.getName() + "?", yesButton, noButton);
+
+        alert.setTitle("Delete Tour");
+        alert.setHeaderText(null);
+
+        // Falls der Nutzer bestätigt
+        alert.showAndWait().ifPresent(response -> {
+
+            if (response == yesButton) {
+                TourViewModel.getAllTours().removeAll(selectedTour);  // Entferne die Tour aus der Liste
+                tourListView.refresh();  // Aktualisiere die Tabelle
+                System.out.println("Tour deleted: " + selectedTour.getName());
+            }
+        });
+
     }
 
     public void onEditTour(ActionEvent actionEvent) { //Beim Drücken von Edit

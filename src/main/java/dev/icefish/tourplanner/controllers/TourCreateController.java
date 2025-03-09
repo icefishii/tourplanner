@@ -50,7 +50,7 @@ public class TourCreateController {
             tourCreatedListener.accept(newTour);
         }
 
-        System.out.println("Tour erstellt: " + newTour.getString());
+        System.out.println("Tour created: " + newTour.getString());
 
         WindowUtils.close(tourNameField);
     }
