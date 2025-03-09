@@ -1,5 +1,6 @@
 package dev.icefish.tourplanner.controllers;
 
+import dev.icefish.tourplanner.helpers.WindowUtils;
 import dev.icefish.tourplanner.models.Tour;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,18 +52,10 @@ public class TourCreateController {
 
         System.out.println("Tour erstellt: " + newTour.getString());
 
-        close();
+        WindowUtils.close(tourNameField);
     }
 
     public void onCancelButtonClick(ActionEvent actionEvent) {
-        close(); //ToDo close auslagern (Helper)
+        WindowUtils.close(tourNameField);
     }
-
-    private void close() { //könnte auch ein eigener Helper sein (JA)
-        Stage stage = (Stage) tourNameField.getScene().getWindow();
-        if(stage != null) {
-            stage.close();
-        }
-    }
-
 }
