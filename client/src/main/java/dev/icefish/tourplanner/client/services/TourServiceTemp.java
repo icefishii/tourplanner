@@ -17,4 +17,17 @@ public class TourServiceTemp {
     public void createNewTour(Tour tour) {
         tours.add(tour);
     }
+
+    public void deleteTour(Tour tour) {
+        tours.remove(tour);
+    }
+
+    public void updateTour(Tour tour) {
+        for (int i = 0; i < tours.size(); i++) {
+            if (tours.get(i).getId().equals(tour.getId())) {
+                tours.set(i, tour);
+                break;
+            }
+        }
+    }
 }

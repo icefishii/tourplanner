@@ -30,7 +30,7 @@ public class MainViewController {
 
     public void onCreateTour(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/dev/icefish/tourplanner/client/TourCreateWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
             Parent root = loader.load();
 
             TourCreateViewController controller = loader.getController();
@@ -71,7 +71,36 @@ public class MainViewController {
     }
 
     public void onEditTour(ActionEvent actionEvent) {
-        //ToDo edit
+        Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+        if (selectedTour == null) {
+            System.out.println("No Tour selected");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
+            loader.setControllerFactory(param -> new TourEditViewController());
+
+            Parent root = loader.load();
+
+            TourEditViewController controller = loader.getController();
+            controller.setTour(selectedTour);
+            controller.setTourUpdatedListener(this::updateTourInViewModel);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Tour");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Error loading the tour edit window: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void updateTourInViewModel(Tour tour) {
+        tourViewModel.updateTour(tour);
+        tourListView.refresh();
     }
 
     private void setTourListView() {

@@ -4,6 +4,7 @@ import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.model.Tour;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,6 +12,9 @@ import javafx.scene.control.TextField;
 import java.util.function.Consumer;
 
 public class TourCreateViewController {
+    @FXML
+    private Button createButton, cancelButton;
+
     @FXML
     private TextField tourNameField, tourDescriptionField, fromLocationField, toLocationField;
 
@@ -24,34 +28,29 @@ public class TourCreateViewController {
 
     @FXML
     private void initialize() {
-        transportTypeBox.getItems().addAll("Walk", "Car", "Bike"); //kann man auch im fxml machen
+        transportTypeBox.getItems().addAll("Walk", "Car", "Bike");
+        createButton.setOnAction(this::onCreateButtonClick);
+        cancelButton.setOnAction(this::onCancelButtonClick);
     }
 
     public void setTourCreatedListener(Consumer<Tour> listener) {
         this.tourCreatedListener = listener;
     }
 
-
     public void onCreateButtonClick(ActionEvent actionEvent) {
-
         String name = tourNameField.getText();
         String description = tourDescriptionField.getText();
         String fromLocation = fromLocationField.getText();
         String toLocation = toLocationField.getText();
         String transportType = transportTypeBox.getValue();
 
-        //ToDo Daten checken eigene File
-
-        //ToDo API distance & time
-
         Tour newTour = new Tour(name, description, fromLocation, toLocation, transportType);
 
-        if (tourCreatedListener != null) { //Tour zu Liste hinzugefügt
+        if (tourCreatedListener != null) {
             tourCreatedListener.accept(newTour);
         }
 
         System.out.println("Tour created: " + newTour.getString());
-
         WindowUtils.close(tourNameField);
     }
 
