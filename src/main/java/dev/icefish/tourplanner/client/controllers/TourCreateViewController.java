@@ -1,17 +1,16 @@
-package dev.icefish.tourplanner.controllers;
+package dev.icefish.tourplanner.client.controllers;
 
-import dev.icefish.tourplanner.helpers.WindowUtils;
-import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.client.utils.WindowUtils;
+import dev.icefish.tourplanner.client.model.Tour;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.util.function.Consumer;
 
-public class TourCreateController {
+public class TourCreateViewController {
     @FXML
     private TextField tourNameField, tourDescriptionField, fromLocationField, toLocationField;
 

@@ -1,4 +1,4 @@
-package dev.icefish.tourplanner.models;
+package dev.icefish.tourplanner.client.model;
 
 
 import java.util.UUID;

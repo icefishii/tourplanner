@@ -1,8 +1,7 @@
-package dev.icefish.tourplanner.helpers;
+package dev.icefish.tourplanner.client.utils;
 
 import javafx.stage.Stage;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
 
 public class WindowUtils {
     public static void close(Node node) {
