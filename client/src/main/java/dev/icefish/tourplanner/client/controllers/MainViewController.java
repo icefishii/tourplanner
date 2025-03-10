@@ -121,3 +121,7 @@ public class MainViewController {
         tourViewModel.getAllTours().add(tour);
     }
 }
+//ToDo TourLogs (create, Delete, Edit)
+//ToDo Buttons Mediator
+//ToDo Strg Aktionen
+//ToDo TourDetail & TourLogDetail
