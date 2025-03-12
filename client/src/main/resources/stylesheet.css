@@ -12,10 +12,10 @@
 }
 
 /*  Haupttitel  */
-.label[Text="Tour Planner"] {
-    -fx-font-size: 28px;
+#TourPlannerLabel {
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2C3E50;
+    -fx-text-fill: #555555;
 }
 
 /* Button */
@@ -81,6 +81,65 @@
     -fx-text-fill: #292929; /* Dunkleres Grau für bessere Lesbarkeit */
     -fx-font-weight: bold;
     -fx-padding: 5px;
+}
+
+/* Styling für TableView */
+.table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-radius: 6px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+/* Styling für TableColumn Header */
+.table-view .column-header {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 5px;
+    -fx-alignment: center;
+}
+
+/* Styling für TableColumn Header, wenn sie ausgewählt ist */
+.table-view .column-header:focused {
+    -fx-background-color: #c4c5cc;
+}
+
+/* Styling für Zeilen */
+.table-view .table-row-cell {
+    -fx-padding: 8px;
+    -fx-alignment: center-left;
+}
+
+/* Hover-Effekt für Zeilen */
+.table-view .table-row-cell:hover {
+    -fx-background-color: #ECF0F1;
+    -fx-cursor: hand;
+}
+
+/* Abwechselnde Zeilenfarben für bessere Lesbarkeit */
+.table-view .table-row-cell:odd {
+    -fx-background-color: #F9F9F9;
+}
+
+.table-view .table-row-cell:even {
+    -fx-background-color: #FFFFFF;
+}
+
+/* Styling für die Zellen */
+.table-view .table-cell {
+    -fx-padding: 8px 15px;
+    -fx-text-fill: #797b7c;
+}
+
+/* Styling für die Zellen, wenn sie fokussiert sind */
+.table-view .table-cell:focused {
+    -fx-background-color: #D5DBDB;
+    -fx-text-fill: #606060;
+}
+
+/* Border für die TableCell bei Auswahl */
+.table-view .table-cell:selected {
+    -fx-background-color: #2980B9;
+    -fx-text-fill: #FFFFFF;
 }
 
 

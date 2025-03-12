@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TourChecker {
-    //ToDo Daten überprüfen
-
-    public static Map<String, String> validateTour(String name, String description, String fromLocation, String toLocation, String transportType) {
+      public static Map<String, String> validateTour(String name, String description, String fromLocation, String toLocation, String transportType) {
         Map<String, String> errors = new HashMap<>();
 
         if (name == null || name.trim().isEmpty()) {

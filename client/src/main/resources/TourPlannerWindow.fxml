@@ -4,6 +4,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -11,13 +14,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.image.Image?>
-
 <!--ToDo Responsive-->
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" stylesheets="@stylesheet.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.MainViewController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.MainViewController">
 
    <top>
-      <Label text="Tour Planner" BorderPane.alignment="TOP_LEFT">
+      <Label fx:id="TourPlannerLabel" text="Tour Planner" BorderPane.alignment="TOP_LEFT">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -26,11 +28,13 @@
          </BorderPane.margin>
       </Label>
    </top>
+
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" spacing="20.0">
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
          <children>
+
             <!-- Linke Spalte (Tours) -->
-            <VBox prefHeight="353.0" prefWidth="309.0">
+            <VBox prefHeight="353.0" prefWidth="309.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                <children>
                   <HBox prefHeight="21.0" prefWidth="289.0" spacing="5.0">
                      <children>
@@ -39,18 +43,23 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Region prefWidth="20.0"/>
+                        <Region prefWidth="20.0" HBox.hgrow="ALWAYS" />
                         <HBox spacing="5.0">
-                           <Button fx:id="newTourButton" text="+" onAction="#onCreateTour"/>
-                           <Button fx:id="deleteTourButton" text="-" onAction="#onDeleteTour"/>
-                           <Button fx:id="editTourButton" text="..." onAction="#onEditTour"/>
+                           <Button fx:id="newTourButton" onAction="#onCreateTour" text="+" />
+                           <Button fx:id="deleteTourButton" onAction="#onDeleteTour" text="-" />
+                           <Button fx:id="editTourButton" onAction="#onEditTour" text="...">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Button>
                         </HBox>
                      </children>
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <ListView fx:id="tourListView" prefHeight="291.0" prefWidth="334.0">
+
+                  <ListView fx:id="tourListView" prefHeight="291.0" prefWidth="334.0" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" />
                      </VBox.margin>
@@ -59,11 +68,12 @@
             </VBox>
 
             <!-- Rechte Spalte (Route + Tour Logs) -->
-            <VBox prefHeight="353.0" prefWidth="287.0">
+            <VBox prefHeight="353.0" prefWidth="287.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
                <children>
+
                   <HBox prefHeight="21.0" prefWidth="289.0">
                      <children>
                         <Label prefHeight="17.0" prefWidth="93.0" text="Route">
@@ -76,11 +86,14 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <ImageView fitHeight="150.0" fitWidth="278.0" pickOnBounds="true" preserveRatio="true">
+
+                  <!-- Bild (responsive) -->
+                  <ImageView fitHeight="150.0" fitWidth="278.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                      <image>
                         <Image url="@images/maps.jpeg" />
                      </image>
                   </ImageView>
+
                   <HBox prefHeight="21.0" prefWidth="289.0" spacing="5.0">
                      <children>
                         <Label prefHeight="17.0" prefWidth="93.0" text="Tour Logs">
@@ -88,25 +101,36 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Region prefWidth="20.0"/>
+                        <Region prefWidth="20.0" HBox.hgrow="ALWAYS" />
                         <HBox spacing="5.0">
                            <Button text="+" />
                            <Button text="-" />
-                           <Button text="..." />
+                           <Button text="...">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Button>
                         </HBox>
                      </children>
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <ListView prefHeight="107.0" prefWidth="287.0">
+                  <TableView fx:id="tourLogTableView" VBox.vgrow="ALWAYS" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                       <TableColumn fx:id="tourLogDateView" text="Date"  />
+                       <TableColumn fx:id="tourLogDurationView" text="Duration" />
+                       <TableColumn fx:id="tourLogDistanceView" text="Distance"  />
+                    </columns>
                      <VBox.margin>
                         <Insets bottom="10.0" right="10.0" />
                      </VBox.margin>
-                  </ListView>
+                  </TableView>
                </children>
             </VBox>
+
          </children>
       </HBox>
    </center>
+
 </BorderPane>
