@@ -1,7 +1,10 @@
 package dev.icefish.tourplanner.client.controllers;
 
 import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.client.model.TourLog;
 import dev.icefish.tourplanner.client.utils.TourButtonHandler;
+import dev.icefish.tourplanner.client.utils.TourLogButtonHandler;
+import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,26 +12,35 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainViewController {
     @FXML
-    private Button deleteTourButton, editTourButton, newTourButton;
+    private Button deleteTourButton, editTourButton, newTourButton, newTourLogButton, deleteTourLogButton, editTourLogButton;
 
     @FXML
     private ListView<Tour> tourListView;
 
+    @FXML
+    private TableView<TourLog> tourLogTableView;
+
     private final TourViewModel tourViewModel = new TourViewModel();
-    private TourButtonHandler buttonHandler;
+    private final TourLogViewModel tourLogViewModel = new TourLogViewModel();
+    private TourButtonHandler tourButtonHandler;
+    private TourLogButtonHandler tourLogButtonHandler;
 
     @FXML
     public void initialize() {
         setTourListView();
-        buttonHandler = new TourButtonHandler(deleteTourButton, editTourButton, newTourButton, tourListView);  // Initialisieren des Handlers
+        setTourLogTableView();
+        tourButtonHandler = new TourButtonHandler(deleteTourButton, editTourButton, newTourButton, tourListView);
+        tourLogButtonHandler = new TourLogButtonHandler(deleteTourLogButton, editTourLogButton, tourLogTableView);
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
     }
@@ -36,18 +48,42 @@ public class MainViewController {
     public void onCreateTour(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
+            loader.setController(new TourCreateViewController());
             Parent root = loader.load();
-
             TourCreateViewController controller = loader.getController();
-            controller.setTourCreatedListener(this::addTourToViewModel);
-
+            controller.setTourCreatedListener(tour -> {
+                if (!tourViewModel.getAllTours().contains(tour)) {
+                    tourViewModel.createNewTour(tour.getName(), tour.getDescription(), tour.getFromLocation(), tour.getToLocation(), tour.getTransportType());
+                }
+            });
             Stage stage = new Stage();
-            stage.setTitle("Create New Tour");
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
-            System.err.println("Error loading the tour creation window:  " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void onEditTour(ActionEvent actionEvent) {
+        Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+        if (selectedTour == null) {
+            System.out.println("No Tour selected");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
+            // Set the controller explicitly before loading
+            loader.setController(new TourEditViewController());
+            Parent root = loader.load();
+
+            TourEditViewController controller = loader.getController();
+            controller.setTour(selectedTour);
+            controller.setTourUpdatedListener(tour -> tourViewModel.updateTour(tour));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -55,7 +91,7 @@ public class MainViewController {
     public void onDeleteTour(ActionEvent actionEvent) {
         List<Tour> selectedTours = new ArrayList<>(tourListView.getSelectionModel().getSelectedItems());
 
-        if (selectedTours == null) {
+        if (selectedTours.isEmpty()) {
             System.out.println("No Tour selected");
             return;
         }
@@ -71,72 +107,118 @@ public class MainViewController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message.toString(), yesButton, noButton);
         alert.setTitle("Delete Tours");
         alert.setHeaderText(null);
-
         alert.showAndWait().ifPresent(response -> {
             if (response == yesButton) {
-                tourViewModel.getAllTours().removeAll(selectedTours);
-                tourListView.refresh();
-                System.out.println("Tours deleted: ");
                 for (Tour tour : selectedTours) {
-                    System.out.println(tour.getName());
+                    tourViewModel.deleteTour(tour);
                 }
             }
         });
     }
 
-    public void onEditTour(ActionEvent actionEvent) {
-        Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
-        if (selectedTour == null) {
-            System.out.println("No Tour selected");
-            return;
-        }
-
+    public void onCreateTourLog(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
-            loader.setControllerFactory(param -> new TourEditViewController());
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
+            TourLogCreateViewController controller = new TourLogCreateViewController(tourViewModel);
+            loader.setController(controller);
             Parent root = loader.load();
-
-            TourEditViewController controller = loader.getController();
-            controller.setTour(selectedTour);
-            controller.setTourUpdatedListener(this::updateTourInViewModel);
-
+            controller.setTourLogCreatedListener(tourLog -> tourLogViewModel.createNewTourLog(tourLog));
             Stage stage = new Stage();
-            stage.setTitle("Edit Tour");
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
-            System.err.println("Error loading the tour edit window: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void updateTourInViewModel(Tour tour) {
-        tourViewModel.updateTour(tour);
-        tourListView.refresh();
+    public void onEditTourLog(ActionEvent actionEvent) {
+        TourLog selectedTourLog = tourLogTableView.getSelectionModel().getSelectedItem();
+        if (selectedTourLog == null) {
+            System.out.println("No Tour Log selected");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
+            loader.setController(new TourLogEditViewController());
+            Parent root = loader.load();
+            TourLogEditViewController controller = loader.getController();
+            controller.setTourLog(selectedTourLog);
+            controller.setTourLogUpdatedListener(tourLog -> tourLogViewModel.updateTourLog(tourLog));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onDeleteTourLog(ActionEvent actionEvent) {
+        List<TourLog> selectedTourLogs = new ArrayList<>(tourLogTableView.getSelectionModel().getSelectedItems());
+
+        if (selectedTourLogs.isEmpty()) {
+            System.out.println("No Tour Log selected");
+            return;
+        }
+
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+
+        StringBuilder message = new StringBuilder("Are you sure you want to delete the following tour logs?\n");
+        for (TourLog tourLog : selectedTourLogs) {
+            message.append("- ").append(tourLog.getId()).append("\n");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message.toString(), yesButton, noButton);
+        alert.setTitle("Delete Tour Logs");
+        alert.setHeaderText(null);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == yesButton) {
+                for (TourLog tourLog : selectedTourLogs) {
+                    tourLogViewModel.deleteTourLog(tourLog);
+                }
+            }
+        });
     }
 
     private void setTourListView() {
         tourListView.setItems(tourViewModel.getAllTours());
     }
 
+    // Add these column declarations to match your FXML
+    @FXML
+    private TableColumn<TourLog, Timestamp> tourLogDateView;
+
+    @FXML
+    private TableColumn<TourLog, String> tourLogDurationView;
+
+    @FXML
+    private TableColumn<TourLog, Double> tourLogDistanceView;
+
+    // Then update your setTourLogTableView method
+    private void setTourLogTableView() {
+        tourLogTableView.setItems(tourLogViewModel.getAllTourLogs());
+
+        // Set up the cell value factories for each column
+        tourLogDateView.setCellValueFactory(new PropertyValueFactory<>("date"));
+        tourLogDurationView.setCellValueFactory(new PropertyValueFactory<>("durationText"));
+        tourLogDistanceView.setCellValueFactory(new PropertyValueFactory<>("distance"));
+
+        // Set up row factory for selection
+        tourLogTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
     private void setTourCellFactory() {
         tourListView.setCellFactory(param -> new ListCell<>() {
             @Override
-            protected void updateItem(Tour tour, boolean empty) {
-                super.updateItem(tour, empty);
-                setText(empty || tour == null ? null : tour.getName());
+            protected void updateItem(Tour item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null || item.getName() == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
             }
         });
     }
-
-    public void addTourToViewModel(Tour tour) {
-        tourViewModel.getAllTours().add(tour);
-    }
 }
-
-//ToDo TourLogs (create, Delete, Edit)
-//ToDo Strg Aktionen
-//ToDo TourDetail & TourLogDetail
-//ToDo Testing

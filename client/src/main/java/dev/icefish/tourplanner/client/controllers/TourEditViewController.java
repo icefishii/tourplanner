@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.util.function.Consumer;
-
+//TODO: Geht nicht
 public class TourEditViewController {
     @FXML
     private Button createButton, cancelButton;
@@ -25,8 +25,8 @@ public class TourEditViewController {
         createButton.setText("Save");
         createButton.setOnAction(this::onSaveButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
-        transportTypeBox.getItems().addAll("Walk", "Car", "Bike");
     }
+
     @FXML
     private TextField tourNameField, tourDescriptionField, fromLocationField, toLocationField;
 

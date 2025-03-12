@@ -40,7 +40,6 @@ public class TourCreateViewController {
     }
 
     public void onCreateButtonClick(ActionEvent actionEvent) {
-        //ToDo Checker einfügen
         String name = tourNameField.getText();
         String description = tourDescriptionField.getText();
         String fromLocation = fromLocationField.getText();
@@ -53,7 +52,7 @@ public class TourCreateViewController {
 
         if (!errors.isEmpty()) {
             highlightErrors(errors);
-            return; // Methode beenden, wenn ein Fehler gefunden wurde
+            return;
         }
 
         Tour newTour = new Tour(name, description, fromLocation, toLocation, transportType);
@@ -69,6 +68,7 @@ public class TourCreateViewController {
     public void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(tourNameField);
     }
+
     private void resetFieldStyles() {
         tourNameField.setStyle("");
         tourDescriptionField.setStyle("");
@@ -81,36 +81,31 @@ public class TourCreateViewController {
         if (errors.containsKey("name")) {
             tourNameField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
         } else {
-            tourNameField.setStyle(""); // Falls kein Fehler mehr -> Normalisieren
+            tourNameField.setStyle("");
         }
 
-        // Beschreibung prüfen
         if (errors.containsKey("description")) {
             tourDescriptionField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
         } else {
             tourDescriptionField.setStyle("");
         }
 
-        // From-Location prüfen
         if (errors.containsKey("fromLocation")) {
             fromLocationField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
         } else {
             fromLocationField.setStyle("");
         }
 
-        // To-Location prüfen
         if (errors.containsKey("toLocation")) {
             toLocationField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
         } else {
             toLocationField.setStyle("");
         }
 
-        // Transport-Typ prüfen
         if (errors.containsKey("transportType")) {
             transportTypeBox.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
         } else {
             transportTypeBox.setStyle("");
         }
     }
-
 }

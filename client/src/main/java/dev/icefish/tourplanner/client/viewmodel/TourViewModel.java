@@ -20,16 +20,22 @@ public class TourViewModel {
 
     public void createNewTour(String name, String description, String fromLocation, String toLocation, String transportType) {
         Tour newTour = new Tour(name, description, fromLocation, toLocation, transportType);
-        tourService.createNewTour(newTour);
-        this.toursList.add(newTour);
+        if (!toursList.contains(newTour)) {
+            tourService.createNewTour(newTour);
+        }
     }
 
     public void deleteTour(Tour tour) {
         tourService.deleteTour(tour);
-        this.toursList.remove(tour);
     }
 
     public void updateTour(Tour tour) {
+        for (int i = 0; i < toursList.size(); i++) {
+            if (toursList.get(i).getId().equals(tour.getId())) {
+                toursList.set(i, tour);
+                break;
+            }
+        }
         tourService.updateTour(tour);
     }
 }

@@ -103,9 +103,9 @@
                         </Label>
                         <Region prefWidth="20.0" HBox.hgrow="ALWAYS" />
                         <HBox spacing="5.0">
-                           <Button text="+" />
-                           <Button text="-" />
-                           <Button text="...">
+                           <Button fx:id="newTourLogButton" onAction="#onCreateTourLog" text="+" />
+                           <Button fx:id="deleteTourLogButton" onAction="#onDeleteTourLog" text="-" />
+                           <Button fx:id="editTourLogButton" onAction="#onEditTourLog" text="...">
                               <HBox.margin>
                                  <Insets right="10.0" />
                               </HBox.margin>
@@ -118,6 +118,7 @@
                   </HBox>
                   <TableView fx:id="tourLogTableView" VBox.vgrow="ALWAYS" prefHeight="200.0" prefWidth="200.0">
                     <columns>
+                       <!-- TODO: Ändern wie daten ausgegeben werden -->
                        <TableColumn fx:id="tourLogDateView" text="Date"  />
                        <TableColumn fx:id="tourLogDurationView" text="Duration" />
                        <TableColumn fx:id="tourLogDistanceView" text="Distance"  />
