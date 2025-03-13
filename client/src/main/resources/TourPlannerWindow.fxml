@@ -15,25 +15,26 @@
 <?import javafx.scene.text.Font?>
 
 <!--ToDo Responsive-->
+<!--ToDo Fenstergröße anpassen (Vorallem die Tabellen)-->
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.MainViewController">
 
-   <top>
-      <Label fx:id="TourPlannerLabel" text="Tour Planner" BorderPane.alignment="TOP_LEFT">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-      </Label>
-   </top>
+<top>
+<Label fx:id="TourPlannerLabel" text="Tour Planner" BorderPane.alignment="TOP_LEFT">
+   <font>
+      <Font name="System Bold" size="18.0" />
+   </font>
+   <BorderPane.margin>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </BorderPane.margin>
+</Label>
+</top>
 
-   <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
-         <children>
+<center>
+<HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
+   <children>
 
-            <!-- Linke Spalte (Tours) -->
+      <!-- Linke Spalte (Tours) -->
             <VBox prefHeight="353.0" prefWidth="309.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                <children>
                   <HBox prefHeight="21.0" prefWidth="289.0" spacing="5.0">

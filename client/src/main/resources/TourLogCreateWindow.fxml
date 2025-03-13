@@ -10,13 +10,15 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane prefHeight="300.0" prefWidth="400.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<!-- Responsive GridPane für Create Tour Log Formular -->
+
+<GridPane prefHeight="380.0" prefWidth="480.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <Label fx:id="createTourLogLabel" text="Create Tour Log" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    <Label fx:id="createTourLogLabel" text="Create Tour Log" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
 
     <Label fx:id="tourLabel" text="Tour:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
     <ComboBox fx:id="tourComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" />
@@ -43,17 +45,20 @@
     <Button fx:id="cancelButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" />
 
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS"/>
-        <ColumnConstraints hgrow="ALWAYS"/>
+        <!-- Beide Spalten sind flexibel und passen sich der Fenstergröße an -->
+        <ColumnConstraints hgrow="ALWAYS" minWidth="100" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="100" />
     </columnConstraints>
+
     <rowConstraints>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="ALWAYS"/>
+        <!-- Die Zeilen sind flexibel und wachsen, wenn mehr Platz benötigt wird -->
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="ALWAYS" />
     </rowConstraints>
 </GridPane>

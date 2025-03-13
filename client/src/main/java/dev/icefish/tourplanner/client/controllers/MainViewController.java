@@ -43,6 +43,24 @@ public class MainViewController {
         tourLogButtonHandler = new TourLogButtonHandler(deleteTourLogButton, editTourLogButton, tourLogTableView);
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
+
+        //Auslagern??
+        tourListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Doppelklick
+                Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+                if (selectedTour != null) {
+                    openTourDetailsWindow(selectedTour);
+                }
+            }
+        });
+        tourLogTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Doppelklick
+                TourLog selectedTourLog = tourLogTableView.getSelectionModel().getSelectedItem();
+                if (selectedTourLog != null) {
+                    openTourLogDetailWindow(selectedTourLog);
+                }
+            }
+        });
     }
 
     public void onCreateTour(ActionEvent actionEvent) {
@@ -221,4 +239,41 @@ public class MainViewController {
             }
         });
     }
+
+    private void openTourDetailsWindow(Tour tour) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourDetailWindow.fxml"));
+            Parent root = loader.load();
+
+            // Controller wird automatisch vom FXMLLoader instanziiert
+            TourDetailViewController controller = loader.getController();
+            controller.setTourDetails(tour); // Tour-Daten setzen
+
+            Stage stage = new Stage();
+            stage.setTitle("Tour Details");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openTourLogDetailWindow(TourLog tourLog) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogDetailWindow.fxml"));
+            Parent root = loader.load();
+
+            // Holen des Controllers und setzen des TourLog
+            TourLogDetailViewController controller = loader.getController();
+            controller.setTourLog(tourLog);
+
+            Stage stage = new Stage();
+            stage.setTitle("Tour Log Details");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
 }
