@@ -27,3 +27,6 @@ Tourplanner is a JavaFX-based application that allows users to create and manage
 - Create unit tests with JUnit.
 - Manage configuration in a separate config file.
 - Document the application architecture and development process using UML and wireframes.
+
+
+Test: 2023-10-15 14:30:00
