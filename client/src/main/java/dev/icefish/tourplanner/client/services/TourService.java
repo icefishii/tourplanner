@@ -1,4 +1,4 @@
-package dev.icefish.tourplanner.client.services;
+/*package dev.icefish.tourplanner.client.services;
 
 import dev.icefish.tourplanner.client.model.Tour;
 import javafx.collections.FXCollections;
@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
+
+import static com.google.gson.internal.bind.TypeAdapters.URI;
 
 //TODO: Implement the REST API in he server
 
@@ -30,7 +32,7 @@ public class TourService {
                 Scanner scanner = new Scanner(url.openStream());
                 while (scanner.hasNext()) {
                     // Parse the response and add to tours list
-                    // Example: tours.add(parseTour(scanner.nextLine()));
+                    //tours.add(parseTour(scanner.nextLine()));
                 }
                 scanner.close();
             }
@@ -39,6 +41,7 @@ public class TourService {
         }
         return tours;
     }
+
 
     public void createNewTour(Tour tour) {
         try {
@@ -60,3 +63,5 @@ public class TourService {
         }
     }
 }
+
+ */
