@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.util.function.Consumer;
-//TODO: Edit geht noch nicht
+
 public class TourEditViewController {
     @FXML
     private Button createButton, cancelButton;

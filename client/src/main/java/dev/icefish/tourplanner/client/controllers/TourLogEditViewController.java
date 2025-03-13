@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.function.Consumer;
-
+//TODO: Edit geht noch nicht
 public class TourLogEditViewController {
     @FXML
     private Button saveButton, cancelButton;
