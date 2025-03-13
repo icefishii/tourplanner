@@ -22,7 +22,7 @@ public class MainViewControllerTest extends TestFXBase {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourPlannerWindow.fxml")); // Ensure this path is correct
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourPlannerWindow.fxml"));
         Parent root = loader.load();
         controller = loader.getController();
 
@@ -35,7 +35,7 @@ public class MainViewControllerTest extends TestFXBase {
     public void testDeleteTour() {
         // Add a test tour
         Tour testTour = new Tour("Test Tour", "Description", "Vienna", "Salzburg", "Car");
-        controller.addTourToViewModel(testTour);
+        controller.getTourViewModel().createNewTour(testTour);
 
         // Wait for the UI to update
         WaitForAsyncUtils.waitForFxEvents();

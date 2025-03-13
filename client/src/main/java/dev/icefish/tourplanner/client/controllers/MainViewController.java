@@ -53,6 +53,8 @@ public class MainViewController {
                 }
             }
         });
+
+
         tourLogTableView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // Doppelklick
                 TourLog selectedTourLog = tourLogTableView.getSelectionModel().getSelectedItem();
@@ -61,6 +63,10 @@ public class MainViewController {
                 }
             }
         });
+    }
+
+    public TourViewModel getTourViewModel() {
+        return tourViewModel;
     }
 
     public void onCreateTour(ActionEvent actionEvent) {

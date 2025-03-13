@@ -38,4 +38,10 @@ public class TourViewModel {
         }
         tourService.updateTour(tour);
     }
+
+    public void createNewTour(Tour testTour) {
+        if (!toursList.contains(testTour)) {
+            tourService.createNewTour(testTour);
+        }
+    }
 }
