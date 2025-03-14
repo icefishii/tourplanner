@@ -36,7 +36,7 @@ public class TourLogDetailViewController {
         commentLabel.setText(tourLog.getComment());
         difficultyLabel.setText(String.valueOf(tourLog.getDifficulty()));
         distanceLabel.setText(String.format("%.2f km", tourLog.getDistance()));
-        durationLabel.setText(tourLog.getDurationText());
+        durationLabel.setText(String.format("%s min",tourLog.getDurationText()));
         setRatingStars(tourLog.getRating());
     }
 

@@ -19,16 +19,16 @@
     <Label fx:id="createTourLabel" text="Create Tour" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
     <Label fx:id="nameLabel" text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-    <TextField fx:id="tourNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" />
+    <TextField fx:id="tourNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" promptText="z.B. Rundweg" />
 
     <Label fx:id="descriptionLabel" text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-    <TextField fx:id="tourDescriptionField" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.hgrow="ALWAYS"/>
+    <TextField fx:id="tourDescriptionField" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.hgrow="ALWAYS" promptText="z.B. Weg an der Donau"/>
 
     <Label fx:id="fromLabel" text="From:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-    <TextField fx:id="fromLocationField" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.hgrow="ALWAYS" />
+    <TextField fx:id="fromLocationField" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.hgrow="ALWAYS" promptText="z.B. Wien"/>
 
     <Label fx:id="toLabel" text="To:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <TextField fx:id="toLocationField" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.hgrow="ALWAYS"/>
+    <TextField fx:id="toLocationField" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.hgrow="ALWAYS" promptText="z.B. Salzburg"/>
 
     <Label fx:id="transportationModeLabel" text="Transportation Mode:" GridPane.columnIndex="0" GridPane.rowIndex="5">
         <GridPane.margin>
