@@ -27,6 +27,9 @@ public class TourLogEditViewController {
     @FXML
     private ComboBox<Tour> tourComboBox;
 
+    @FXML
+    private Label createTourLogLabel;
+
     private Consumer<TourLog> tourLogUpdatedListener;
     private TourLog tourLog;
     private TourLogViewModel tourLogViewModel;
@@ -38,8 +41,38 @@ public class TourLogEditViewController {
 
     @FXML
     private void initialize() {
+        createTourLogLabel.setText("Edit Tour Log");
         tourLogViewModel = new TourLogViewModel(tourViewModel);
         tourComboBox.setItems(tourViewModel.getAllTours());
+
+        // Set the cell factory to display the tour name
+        tourComboBox.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Tour item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        // Set the button cell to display the selected tour name
+        tourComboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Tour item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        tourComboBox.setDisable(true);
+        createButton.setText("Save");
         createButton.setOnAction(this::onSaveButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
     }

@@ -281,6 +281,10 @@ public class MainViewController {
             e.printStackTrace();
         }
     }
+
+    public TourLogViewModel getTourLogViewModel() {
+        return tourLogViewModel;
+    }
     //ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
 
     //ToDo better Output for Tours and TourLogs

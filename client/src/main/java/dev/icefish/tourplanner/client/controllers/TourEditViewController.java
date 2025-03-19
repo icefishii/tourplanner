@@ -46,6 +46,9 @@ public class TourEditViewController {
         fromLocationField.setText(tour.getFromLocation());
         toLocationField.setText(tour.getToLocation());
         transportTypeBox.setValue(tour.getTransportType());
+        fromLocationField.setDisable(true);
+        toLocationField.setDisable(true);
+        transportTypeBox.setDisable(true);
     }
 
     public void setTourUpdatedListener(Consumer<Tour> listener) {

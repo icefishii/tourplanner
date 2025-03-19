@@ -11,8 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -41,6 +39,33 @@ public class TourLogCreateViewController {
     private void initialize() {
         tourLogViewModel = new TourLogViewModel(tourViewModel);
         tourComboBox.setItems(tourViewModel.getAllTours());
+
+        // Set the cell factory to display the tour name
+        tourComboBox.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Tour item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        // Set the button cell to display the selected tour name
+        tourComboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Tour item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
         createButton.setOnAction(this::onCreateButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
     }
