@@ -134,7 +134,5 @@ public class Tour {
         this.routeImagePath = routeImagePath;
     }
 
-    //Vllt Tourlogs eine Liste aus Tours??
-
 }
 
