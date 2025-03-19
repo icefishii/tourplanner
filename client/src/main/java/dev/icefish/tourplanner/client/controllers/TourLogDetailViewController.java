@@ -41,6 +41,7 @@ public class TourLogDetailViewController {
     }
 
     private void setRatingStars(int rating) {
+        //TODO Namen von der Tour ausgeben (als name und nd object-i, schau dir die anderen Klassen an TourLogCreate und EditController)
         StringBuilder stars = new StringBuilder();
         for (int i = 0; i < 5; i++) {
             if (i < rating) {
