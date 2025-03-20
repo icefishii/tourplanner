@@ -28,5 +28,26 @@ Tourplanner is a JavaFX-based application that allows users to create and manage
 - Manage configuration in a separate config file.
 - Document the application architecture and development process using UML and wireframes.
 
+## How to run
 
-Test: 2023-10-15 14:30:00
+### Windows
+Run:
+```shell
+  .\mvnw.cmd javafx:run -f client/pom.xml
+```
+Test:
+```shell
+  .\mvnw.cmd test -f client/pom.xml
+```
+### Linux
+Run:
+```shell
+  ./mvnw javafx:run -f client/pom.xml
+```
+```shell
+  ./mvnw test -f client/pom.xml
+```
+
+## Documentation
+
+- [Documentation](./Protokoll_Intermediate_TP_Lampart_Unger.pdf)
