@@ -1,12 +1,17 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.model.Tour;
 import dev.icefish.tourplanner.client.model.TourLog;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
+import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class TourLogDetailViewController {
+
+    @FXML
+    private Label nameLabel;
 
     @FXML
     private Label dateLabel;
@@ -27,11 +32,25 @@ public class TourLogDetailViewController {
     private Label ratingLabel;
 
     private TourLog tourLog;
+    private TourViewModel tourViewModel;
+
 
     // Setter für das TourLog, das angezeigt werden soll
-    public void setTourLog(TourLog tourLog) {
+    public void setTourLog(TourLog tourLog, TourViewModel tourViewModel) {
         this.tourLog = tourLog;
-        // Fülle die Labels mit den TourLog-Daten
+        this.tourViewModel = tourViewModel;
+
+        Tour tour = tourViewModel.getAllTours().stream()
+                .filter(t -> t.getId().equals(tourLog.getTourId()))
+                .findFirst()
+                .orElse(null);
+
+        if (tour != null) {
+            nameLabel.setText(tour.getName());
+        } else {
+            nameLabel.setText("Unknown Tour");
+        }
+
         dateLabel.setText(tourLog.getDate().toString());
         commentLabel.setText(tourLog.getComment());
         difficultyLabel.setText(String.valueOf(tourLog.getDifficulty()));
@@ -41,7 +60,6 @@ public class TourLogDetailViewController {
     }
 
     private void setRatingStars(int rating) {
-        //TODO Namen von der Tour ausgeben (als name und nd object-i, schau dir die anderen Klassen an TourLogCreate und EditController)
         StringBuilder stars = new StringBuilder();
         for (int i = 0; i < 5; i++) {
             if (i < rating) {

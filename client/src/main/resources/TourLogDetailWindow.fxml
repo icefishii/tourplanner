@@ -16,6 +16,11 @@
     <Label text="Tour Log Details" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 5px;" />
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Tour Name:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="nameLabel" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox spacing="10" VBox.vgrow="ALWAYS">
         <Label text="Date:" style="-fx-font-weight: bold;"/>
         <Label fx:id="dateLabel" HBox.hgrow="ALWAYS" />
     </HBox>

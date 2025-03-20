@@ -271,7 +271,7 @@ public class MainViewController {
 
             // Holen des Controllers und setzen des TourLog
             TourLogDetailViewController controller = loader.getController();
-            controller.setTourLog(tourLog);
+            controller.setTourLog(tourLog,tourViewModel);
 
             Stage stage = new Stage();
             stage.setTitle("Tour Log Details");
