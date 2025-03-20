@@ -6,6 +6,11 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * This was created  with the help of ChatGPT Model-4o
+ */
+
+
 public class TourLogChecker {
     public static Map<String, String> validateTourLog(Tour tour, Timestamp date, String comment, int difficulty, double distance, Duration duration, int rating) {
         Map<String, String> errors = new HashMap<>();

@@ -3,6 +3,10 @@ package dev.icefish.tourplanner.client.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * This was created  with the help of ChatGPT Model-4o
+ */
+
 public class TourChecker {
       public static Map<String, String> validateTour(String name, String description, String fromLocation, String toLocation, String transportType) {
         Map<String, String> errors = new HashMap<>();
