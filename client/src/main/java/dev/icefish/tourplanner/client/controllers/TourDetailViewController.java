@@ -14,6 +14,7 @@ public class TourDetailViewController {
     @FXML
     private Label nameLabel, descriptionLabel, fromLocationLabel, toLocationLabel, transportTypeLabel;
 
+    //Ausgabe der Details
     public void setTourDetails(Tour tour) {
         nameLabel.setText(tour.getName());
         descriptionLabel.setText(tour.getDescription());
@@ -22,8 +23,9 @@ public class TourDetailViewController {
         transportTypeLabel.setText( tour.getTransportType());
     }
 
+    //schließen des Fensters
     public void handleClose() {
-        WindowUtils.close(nameLabel);
+        WindowUtils.close(nameLabel); //Unsere eigene Klasse in utils
     }
 
 }

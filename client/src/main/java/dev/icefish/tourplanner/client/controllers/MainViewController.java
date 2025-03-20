@@ -45,7 +45,7 @@ public class MainViewController {
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
 
-        //Auslagern??
+        //Könnte man möglicherweise auslagern
         tourListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // Doppelklick
                 Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
@@ -70,6 +70,7 @@ public class MainViewController {
         return tourViewModel;
     }
 
+    //Bei ButtonClick "+"
     public void onCreateTour(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
@@ -92,6 +93,7 @@ public class MainViewController {
         }
     }
 
+    //Bei ButtonClick "..."
     public void onEditTour(ActionEvent actionEvent) {
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
         if (selectedTour == null) {
@@ -119,6 +121,7 @@ public class MainViewController {
         }
     }
 
+    //Bei ButtonClick "-"
     public void onDeleteTour(ActionEvent actionEvent) {
         List<Tour> selectedTours = new ArrayList<>(tourListView.getSelectionModel().getSelectedItems());
 
@@ -151,6 +154,7 @@ public class MainViewController {
         });
     }
 
+    //Bei ButtonClick "+" Logs
     public void onCreateTourLog(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
@@ -169,6 +173,7 @@ public class MainViewController {
         }
     }
 
+    //Bei ButtonClick "..." Logs
     public void onEditTourLog(ActionEvent actionEvent) {
         TourLog selectedTourLog = tourLogTableView.getSelectionModel().getSelectedItem();
         if (selectedTourLog == null) {
@@ -194,6 +199,7 @@ public class MainViewController {
         }
     }
 
+    //Bei ButtonClick "-"
     public void onDeleteTourLog(ActionEvent actionEvent) {
         List<TourLog> selectedTourLogs = new ArrayList<>(tourLogTableView.getSelectionModel().getSelectedItems());
 
@@ -263,6 +269,7 @@ public class MainViewController {
         });
     }
 
+    //Bei Doppelklick auf eine Tour
     private void openTourDetailsWindow(Tour tour) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourDetailWindow.fxml"));
@@ -281,6 +288,7 @@ public class MainViewController {
         }
     }
 
+    //Bei Doppelklick auf eine TourLog
     private void openTourLogDetailWindow(TourLog tourLog) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogDetailWindow.fxml"));
@@ -304,7 +312,7 @@ public class MainViewController {
     }
     //ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
 
-    //ToDo better Output for Tours and TourLogs
+    //ToDo better Detail-Output for Tours and TourLogs
 
     //ToDo Keyboard-Shortcuts
 

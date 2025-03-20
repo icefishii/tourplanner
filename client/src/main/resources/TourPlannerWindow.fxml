@@ -14,8 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<!--ToDo Responsive-->
-<!--ToDo Fenstergröße anpassen (Vorallem die Tabellen)-->
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.MainViewController">
 
@@ -119,7 +117,7 @@
                   </HBox>
                   <TableView fx:id="tourLogTableView" VBox.vgrow="ALWAYS" prefHeight="200.0" prefWidth="200.0">
                     <columns>
-                       <!-- TODO: Ändern wie daten ausgegeben werden -->
+                       <!-- TODO: Ändern wie Daten ausgegeben werden -->
                        <TableColumn fx:id="tourLogDateView" text="Date"  />
                        <TableColumn fx:id="tourLogDurationView" text="Duration" />
                        <TableColumn fx:id="tourLogDistanceView" text="Distance"  />

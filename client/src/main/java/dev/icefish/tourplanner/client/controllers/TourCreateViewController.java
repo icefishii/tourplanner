@@ -39,6 +39,7 @@ public class TourCreateViewController {
         this.tourCreatedListener = listener;
     }
 
+    //Beim erstellen einer Tour
     public void onCreateButtonClick(ActionEvent actionEvent) {
         String name = tourNameField.getText();
         String description = tourDescriptionField.getText();
@@ -65,10 +66,12 @@ public class TourCreateViewController {
         WindowUtils.close(tourNameField);
     }
 
+    //Fenster schließen
     public void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(tourNameField);
     }
 
+    //Felder leeren
     private void resetFieldStyles() {
         tourNameField.setStyle("");
         tourDescriptionField.setStyle("");
@@ -77,6 +80,7 @@ public class TourCreateViewController {
         transportTypeBox.setStyle("");
     }
 
+    //Wenn etwas fehlt in der Eingabe
     private void highlightErrors(Map<String, String> errors) {
         if (errors.containsKey("name")) {
             tourNameField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");

@@ -138,6 +138,7 @@ public class TourLogEditViewController {
         WindowUtils.close(dateField);
     }
 
+    //Fehlermeldung
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -146,6 +147,7 @@ public class TourLogEditViewController {
         alert.showAndWait();
     }
 
+    //Felder leeren
     private void resetFieldStyles() {
         dateField.setStyle("");
         commentField.setStyle("");
@@ -156,6 +158,7 @@ public class TourLogEditViewController {
         tourComboBox.setStyle("");
     }
 
+    //Fehler markieren
     private void highlightErrors(Map<String, String> errors) {
         if (errors.containsKey("date")) {
             dateField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");

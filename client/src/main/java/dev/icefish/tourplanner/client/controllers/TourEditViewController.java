@@ -55,6 +55,7 @@ public class TourEditViewController {
         this.tourUpdatedListener = listener;
     }
 
+    //Änderung speichern
     public void onSaveButtonClick(ActionEvent actionEvent) {
         tour.setName(tourNameField.getText());
         tour.setDescription(tourDescriptionField.getText());
@@ -70,6 +71,7 @@ public class TourEditViewController {
         WindowUtils.close(tourNameField);
     }
 
+    //Fenster schließen
     public void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(tourNameField);
     }

@@ -59,6 +59,7 @@ public class TourLogDetailViewController {
         setRatingStars(tourLog.getRating());
     }
 
+    //Stern ausgeben
     private void setRatingStars(int rating) {
         StringBuilder stars = new StringBuilder();
         for (int i = 0; i < 5; i++) {

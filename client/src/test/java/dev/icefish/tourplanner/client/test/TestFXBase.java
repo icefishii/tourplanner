@@ -11,7 +11,6 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 
 public abstract class TestFXBase extends ApplicationTest {
-//TODO: UnitTests für die Tourlogs
     @BeforeAll
     public static void setupHeadlessMode() {
         System.setProperty("testfx.robot", "glass");

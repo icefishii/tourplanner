@@ -24,6 +24,7 @@ public class TourLogButtonHandler {
         updateButtonState();
     }
 
+    //Aus und einblenden
     private void updateButtonState() {
         int selectedCount = tourLogTableView.getSelectionModel().getSelectedItems().size();
 

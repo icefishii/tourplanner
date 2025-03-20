@@ -74,6 +74,7 @@ public class TourLogCreateViewController {
         this.tourLogCreatedListener = listener;
     }
 
+    //Erstellen der Logs
     public void onCreateButtonClick(ActionEvent actionEvent) {
         try {
             Tour selectedTour = tourComboBox.getValue();
@@ -122,6 +123,7 @@ public class TourLogCreateViewController {
         }
     }
 
+    //Fehlermeldung
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -130,10 +132,12 @@ public class TourLogCreateViewController {
         alert.showAndWait();
     }
 
+    //Fenster schließen
     public void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(dateField);
     }
 
+    //Felder leeren
     private void resetFieldStyles() {
         dateField.setStyle("");
         commentField.setStyle("");
@@ -144,6 +148,7 @@ public class TourLogCreateViewController {
         tourComboBox.setStyle("");
     }
 
+    //Leere Stellen markieren
     private void highlightErrors(Map<String, String> errors) {
         if (errors.containsKey("date")) {
             dateField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
