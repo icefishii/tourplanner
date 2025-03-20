@@ -6,6 +6,7 @@ import dev.icefish.tourplanner.client.utils.TourButtonHandler;
 import dev.icefish.tourplanner.client.utils.TourLogButtonHandler;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -82,6 +83,9 @@ public class MainViewController {
             });
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.setTitle("Create Tour");
+            stage.setMinWidth(380);
+            stage.setMinHeight(450);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,6 +110,9 @@ public class MainViewController {
             controller.setTourUpdatedListener(tour -> tourViewModel.updateTour(tour));
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.setTitle("Edit Tour");
+            stage.setMinWidth(380);
+            stage.setMinHeight(450);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,6 +141,10 @@ public class MainViewController {
         alert.showAndWait().ifPresent(response -> {
             if (response == yesButton) {
                 for (Tour tour : selectedTours) {
+                    ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(tour.getId());
+                    for (TourLog tourLog : tourLogs) {
+                        tourLogViewModel.deleteTourLog(tourLog);
+                    }
                     tourViewModel.deleteTour(tour);
                 }
             }
@@ -149,6 +160,9 @@ public class MainViewController {
             controller.setTourLogCreatedListener(tourLog -> tourLogViewModel.createNewTourLog(tourLog));
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.setTitle("Create Tour Log");
+            stage.setMinWidth(450);
+            stage.setMinHeight(600);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -171,6 +185,9 @@ public class MainViewController {
             controller.setTourLogUpdatedListener(tourLog -> tourLogViewModel.updateTourLog(tourLog));
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.setTitle("Edit Tour Log");
+            stage.setMinWidth(450);
+            stage.setMinHeight(600);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

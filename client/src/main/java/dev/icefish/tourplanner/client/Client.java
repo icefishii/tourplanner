@@ -14,6 +14,8 @@ public class Client extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 620, 440);
         stage.setTitle("Tour Planner System");
         stage.setScene(scene);
+        stage.setMinWidth(620);
+        stage.setMinHeight(440);
         stage.show();
         stage.sizeToScene();
     }
