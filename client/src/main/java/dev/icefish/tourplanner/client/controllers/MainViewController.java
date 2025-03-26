@@ -317,4 +317,18 @@ public class MainViewController {
     //ToDo Keyboard-Shortcuts
 
     //ToDo Mandatory Feature (Language, ???)
+
+    //ToDo das mit den , . in der Eingabe
+
+    //ToDo TourLog change when tour is selected
+
+    //ToDo only one edit window can be opened
+
+    //ToDo Button Controller
+
+    //ToDo more details in Errors in TourLogCreateWindow
+
+    //ToDo Tabulator überprüfen
+
+
 }
