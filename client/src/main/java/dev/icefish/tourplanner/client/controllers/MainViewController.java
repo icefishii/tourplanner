@@ -328,7 +328,9 @@ public class MainViewController {
 
     //ToDo more details in Errors in TourLogCreateWindow
 
-    //ToDo Tabulator überprüfen
+    //ToDo Mondbutton für Darkmode
 
+    //ToDo DatePicker
 
+    //ToDo Starrating
 }
