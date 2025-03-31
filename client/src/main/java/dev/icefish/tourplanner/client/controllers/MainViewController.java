@@ -19,7 +19,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainViewController {
     @FXML
@@ -30,6 +32,17 @@ public class MainViewController {
 
     @FXML
     private TableView<TourLog> tourLogTableView;
+
+    private Stage tourLogCreateStage;
+
+    private Stage tourCreateStage;
+
+    private Stage tourEditStage;
+
+    private Stage tourLogEditStage;
+
+    private final Map<TourLog, Stage> tourLogDetailStages = new HashMap<>();
+    private final Map<Tour, Stage> tourDetailStages = new HashMap<>();
 
     private final TourViewModel tourViewModel = new TourViewModel();
     private final TourLogViewModel tourLogViewModel = new TourLogViewModel();
@@ -73,6 +86,12 @@ public class MainViewController {
     //Bei ButtonClick "+"
     public void onCreateTour(ActionEvent actionEvent) {
         try {
+            if (tourCreateStage != null && tourCreateStage.isShowing()) {
+                tourCreateStage.toFront(); // Nach vorne bringen
+                return;
+            }
+
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
             loader.setController(new TourCreateViewController());
             Parent root = loader.load();
@@ -82,12 +101,17 @@ public class MainViewController {
                     tourViewModel.createNewTour(tour.getName(), tour.getDescription(), tour.getFromLocation(), tour.getToLocation(), tour.getTransportType());
                 }
             });
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Create Tour");
-            stage.setMinWidth(380);
-            stage.setMinHeight(450);
-            stage.show();
+            tourCreateStage = new Stage();
+            tourCreateStage.setScene(new Scene(root));
+            tourCreateStage.setTitle("Create Tour");
+            tourCreateStage.setMinWidth(380);
+            tourCreateStage.setMinHeight(450);
+            tourCreateStage.show();
+
+            tourCreateStage.setOnCloseRequest(e -> tourCreateStage = null);
+
+            tourCreateStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,6 +125,11 @@ public class MainViewController {
             return;
         }
 
+        if (tourEditStage != null && tourEditStage.isShowing()) {
+            tourEditStage.toFront(); // Bringt das Fenster in den Vordergrund
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
             // Set the controller explicitly before loading
@@ -110,12 +139,15 @@ public class MainViewController {
             TourEditViewController controller = loader.getController();
             controller.setTour(selectedTour);
             controller.setTourUpdatedListener(tour -> tourViewModel.updateTour(tour));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Edit Tour");
-            stage.setMinWidth(380);
-            stage.setMinHeight(450);
-            stage.show();
+
+
+            tourEditStage = new Stage();
+            tourEditStage.setScene(new Scene(root));
+            tourEditStage.setTitle("Edit Tour");
+            tourEditStage.setMinWidth(380);
+            tourEditStage.setMinHeight(450);
+            tourEditStage.setOnCloseRequest(e -> tourEditStage = null);
+            tourEditStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,17 +189,29 @@ public class MainViewController {
     //Bei ButtonClick "+" Logs
     public void onCreateTourLog(ActionEvent actionEvent) {
         try {
+
+            if (tourLogCreateStage != null && tourLogCreateStage.isShowing()) {
+                tourLogCreateStage.toFront(); // nur nach vorne bringen
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
             TourLogCreateViewController controller = new TourLogCreateViewController(tourViewModel);
             loader.setController(controller);
             Parent root = loader.load();
             controller.setTourLogCreatedListener(tourLog -> tourLogViewModel.createNewTourLog(tourLog));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Create Tour Log");
-            stage.setMinWidth(450);
-            stage.setMinHeight(600);
-            stage.show();
+
+            tourLogCreateStage = new Stage();
+            tourLogCreateStage.setScene(new Scene(root));
+            tourLogCreateStage.setTitle("Create Tour Log");
+            tourLogCreateStage.setMinWidth(450);
+            tourLogCreateStage.setMinHeight(600);
+
+            // Wenn das Fenster geschlossen wird, wieder auf null setzen
+            tourLogCreateStage.setOnCloseRequest(e -> tourLogCreateStage = null);
+
+            tourLogCreateStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -181,6 +225,11 @@ public class MainViewController {
             return;
         }
 
+        if (tourLogEditStage != null && tourLogEditStage.isShowing()) {
+            tourLogEditStage.toFront();
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
             loader.setController(new TourLogEditViewController(tourViewModel));
@@ -188,12 +237,15 @@ public class MainViewController {
             TourLogEditViewController controller = loader.getController();
             controller.setTourLog(selectedTourLog);
             controller.setTourLogUpdatedListener(tourLog -> tourLogViewModel.updateTourLog(tourLog));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Edit Tour Log");
-            stage.setMinWidth(450);
-            stage.setMinHeight(600);
-            stage.show();
+
+            tourLogEditStage = new Stage();
+            tourLogEditStage.setScene(new Scene(root));
+            tourLogEditStage.setTitle("Edit Tour Log");
+            tourLogEditStage.setMinWidth(450);
+            tourLogEditStage.setMinHeight(600);
+            tourLogEditStage.setOnCloseRequest(e -> tourLogEditStage = null);
+            tourLogEditStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -271,6 +323,10 @@ public class MainViewController {
 
     //Bei Doppelklick auf eine Tour
     private void openTourDetailsWindow(Tour tour) {
+        if (tourDetailStages.containsKey(tour) && tourDetailStages.get(tour).isShowing()) {
+            tourDetailStages.get(tour).toFront();  // Falls Fenster schon existiert, in den Vordergrund bringen
+            return;
+        }
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourDetailWindow.fxml"));
             Parent root = loader.load();
@@ -282,6 +338,11 @@ public class MainViewController {
             Stage stage = new Stage();
             stage.setTitle("Tour Details");
             stage.setScene(new Scene(root));
+
+            tourDetailStages.put(tour, stage);
+
+            stage.setOnCloseRequest(e -> tourDetailStages.remove(tour));
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -290,6 +351,11 @@ public class MainViewController {
 
     //Bei Doppelklick auf eine TourLog
     private void openTourLogDetailWindow(TourLog tourLog) {
+        if (tourLogDetailStages.containsKey(tourLog) && tourLogDetailStages.get(tourLog).isShowing()) {
+            tourLogDetailStages.get(tourLog).toFront();
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogDetailWindow.fxml"));
             Parent root = loader.load();
@@ -301,6 +367,10 @@ public class MainViewController {
             Stage stage = new Stage();
             stage.setTitle("Tour Log Details");
             stage.setScene(new Scene(root));
+
+            tourLogDetailStages.put(tourLog, stage);
+            stage.setOnCloseRequest(e -> tourLogDetailStages.remove(tourLog));
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -321,8 +391,6 @@ public class MainViewController {
     //ToDo das mit den , . in der Eingabe
 
     //ToDo TourLog change when tour is selected
-
-    //ToDo only one edit window can be opened
 
     //ToDo Button Controller
 
