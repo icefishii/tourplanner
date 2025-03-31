@@ -11,6 +11,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -19,13 +23,16 @@ public class TourLogCreateViewController {
     private Button createButton, cancelButton;
 
     @FXML
-    private TextField dateField, difficultyField, distanceField, durationField, ratingField;
+    private TextField timeField, difficultyField, distanceField, durationField, ratingField;
 
     @FXML
     private TextArea commentField;
 
     @FXML
     private ComboBox<Tour> tourComboBox;
+
+    @FXML
+    private DatePicker datePicker;
 
     private Consumer<TourLog> tourLogCreatedListener;
     private TourLogViewModel tourLogViewModel;
@@ -78,7 +85,8 @@ public class TourLogCreateViewController {
     public void onCreateButtonClick(ActionEvent actionEvent) {
         try {
             Tour selectedTour = tourComboBox.getValue();
-            Timestamp date = Timestamp.valueOf(dateField.getText());
+            LocalDate selectedDate = datePicker.getValue();
+            String timeText = timeField.getText();
             String comment = commentField.getText();
             int difficulty = Integer.parseInt(difficultyField.getText());
             double distance = Double.parseDouble(distanceField.getText());
@@ -89,6 +97,16 @@ public class TourLogCreateViewController {
                 return;
             }
             resetFieldStyles();
+
+            Timestamp date;
+            try {
+                LocalTime selectedTime = LocalTime.parse(timeText);
+                LocalDateTime dateTime = LocalDateTime.of(selectedDate, selectedTime);
+                date = Timestamp.valueOf(dateTime);
+            } catch (DateTimeParseException e) {
+                showErrorAlert("Invalid time format. Use HH:MM:SS.");
+                return;
+            }
 
             Map<String, String> errors = TourLogChecker.validateTourLogWithStringDuration(
                     selectedTour, date, comment, difficulty, distance, durationText, rating);
@@ -117,7 +135,7 @@ public class TourLogCreateViewController {
             }
 
             System.out.println("TourLog created: " + newTourLog);
-            WindowUtils.close(dateField);
+            WindowUtils.close(commentField);
         } catch (Exception e) {
             showErrorAlert("Invalid input: " + e.getMessage());
         }
@@ -134,12 +152,12 @@ public class TourLogCreateViewController {
 
     //Fenster schließen
     public void onCancelButtonClick(ActionEvent actionEvent) {
-        WindowUtils.close(dateField);
+        WindowUtils.close(commentField);
     }
 
     //Felder leeren
     private void resetFieldStyles() {
-        dateField.setStyle("");
+        timeField.setStyle("");
         commentField.setStyle("");
         difficultyField.setStyle("");
         distanceField.setStyle("");
@@ -151,9 +169,9 @@ public class TourLogCreateViewController {
     //Leere Stellen markieren
     private void highlightErrors(Map<String, String> errors) {
         if (errors.containsKey("date")) {
-            dateField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            timeField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
         } else {
-            dateField.setStyle("");
+            timeField.setStyle("");
         }
 
         if (errors.containsKey("comment")) {

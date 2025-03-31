@@ -394,11 +394,12 @@ public class MainViewController {
 
     //ToDo Button Controller
 
-    //ToDo more details in Errors in TourLogCreateWindow
+    //ToDo more details in Errors in TourLogCreateWindow (bzw. anpassen)
+
+    //ToDo man kann nur TourLog erstellen, wenn eine Tour existiert
 
     //ToDo Mondbutton für Darkmode
 
-    //ToDo DatePicker
-
     //ToDo Starrating
+
 }
