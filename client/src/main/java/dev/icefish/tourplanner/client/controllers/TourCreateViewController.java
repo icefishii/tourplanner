@@ -5,10 +5,7 @@ import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.model.Tour;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -22,6 +19,7 @@ public class TourCreateViewController {
 
     @FXML
     private Label nameLabel, descriptionLabel, fromLabel, toLabel, transportationModeLabel;
+
 
     @FXML
     private ComboBox<String> transportTypeBox;

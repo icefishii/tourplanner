@@ -54,7 +54,7 @@ public class MainViewController {
         setTourListView();
         setTourLogTableView();
         tourButtonHandler = new TourButtonHandler(deleteTourButton, editTourButton, newTourButton, tourListView);
-        tourLogButtonHandler = new TourLogButtonHandler(deleteTourLogButton, editTourLogButton, tourLogTableView);
+        tourLogButtonHandler = new TourLogButtonHandler(tourListView, newTourLogButton, deleteTourLogButton, editTourLogButton, tourLogTableView);
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
 
@@ -380,26 +380,20 @@ public class MainViewController {
     public TourLogViewModel getTourLogViewModel() {
         return tourLogViewModel;
     }
-    //ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
 
-    //ToDo better Detail-Output for Tours and TourLogs
-
-    //ToDo Keyboard-Shortcuts
-
-    //ToDo Mandatory Feature (Language, ???)
-
-    //ToDo das mit den , . in der Eingabe
+    //ToDo more details in Errors in TourLogCreateWindow (bzw. anpassen)
 
     //ToDo TourLog change when tour is selected
 
     //ToDo Button Controller
 
-    //ToDo more details in Errors in TourLogCreateWindow (bzw. anpassen)
+    //ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
 
-    //ToDo man kann nur TourLog erstellen, wenn eine Tour existiert
+    //ToDo Keyboard-Shortcuts
 
     //ToDo Mondbutton für Darkmode
 
-    //ToDo Starrating
+    //ToDo Mandatory Feature (Language, ???)
 
+    //ToDo das mit den , . in der Eingabe
 }
