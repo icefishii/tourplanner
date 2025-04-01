@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -19,7 +20,10 @@ public class TourLogEditViewController {
     private Button createButton, cancelButton;
 
     @FXML
-    private TextField dateField, difficultyField, distanceField, durationField, ratingField;
+    private TextField timeField, difficultyField, distanceField, durationField, ratingField;
+
+    @FXML
+    private DatePicker datePicker;
 
     @FXML
     private TextArea commentField;
@@ -36,6 +40,10 @@ public class TourLogEditViewController {
     private TourViewModel tourViewModel;
 
     public TourLogEditViewController(TourViewModel tourViewModel) {
+        this.tourViewModel = tourViewModel;
+    }
+
+    public void setTourViewModel(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
     }
 
@@ -83,7 +91,11 @@ public class TourLogEditViewController {
                 .filter(tour -> tour.getId().equals(tourLog.getTourId()))
                 .findFirst()
                 .orElse(null));
-        dateField.setText(tourLog.getDate().toString());
+
+        LocalDateTime dateTime = tourLog.getDate().toLocalDateTime();
+        datePicker.setValue(dateTime.toLocalDate());
+        timeField.setText(dateTime.toLocalTime().toString());
+
         commentField.setText(tourLog.getComment());
         difficultyField.setText(String.valueOf(tourLog.getDifficulty()));
         distanceField.setText(String.valueOf(tourLog.getDistance()));
@@ -98,7 +110,11 @@ public class TourLogEditViewController {
     public void onSaveButtonClick(ActionEvent actionEvent) {
         try {
             Tour selectedTour = tourComboBox.getValue();
-            Timestamp date = Timestamp.valueOf(dateField.getText());
+
+            LocalDateTime dateTime = LocalDateTime.of(datePicker.getValue(),
+                    java.time.LocalTime.parse(timeField.getText()));
+            Timestamp date = Timestamp.valueOf(dateTime);
+
             String comment = commentField.getText();
             int difficulty = Integer.parseInt(difficultyField.getText());
             double distance = Double.parseDouble(distanceField.getText());
@@ -128,14 +144,14 @@ public class TourLogEditViewController {
             }
 
             System.out.println("TourLog updated: " + tourLog);
-            WindowUtils.close(dateField);
+            WindowUtils.close(datePicker);
         } catch (Exception e) {
             showErrorAlert("Invalid input: " + e.getMessage());
         }
     }
 
     public void onCancelButtonClick(ActionEvent actionEvent) {
-        WindowUtils.close(dateField);
+        WindowUtils.close(datePicker);
     }
 
     //Fehlermeldung
@@ -149,7 +165,8 @@ public class TourLogEditViewController {
 
     //Felder leeren
     private void resetFieldStyles() {
-        dateField.setStyle("");
+        datePicker.setStyle("");
+        timeField.setStyle("");
         commentField.setStyle("");
         difficultyField.setStyle("");
         distanceField.setStyle("");
@@ -161,9 +178,9 @@ public class TourLogEditViewController {
     //Fehler markieren
     private void highlightErrors(Map<String, String> errors) {
         if (errors.containsKey("date")) {
-            dateField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            datePicker.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
         } else {
-            dateField.setStyle("");
+            datePicker.setStyle("");
         }
 
         if (errors.containsKey("comment")) {

@@ -53,7 +53,8 @@ public class TourLogCreateViewControllerTest extends TestFXBase {
 
         // Simulate user input and actions
         clickOn("#tourComboBox").clickOn(testTour.getName());
-        clickOn("#dateField").write("2023-01-01 10:00:00");
+        clickOn("#datePicker").write("2023-01-01");
+        clickOn("#timeField").write("10:00:00");
         clickOn("#commentField").write("Test Comment");
         clickOn("#difficultyField").write("3");
         clickOn("#distanceField").write("10");
