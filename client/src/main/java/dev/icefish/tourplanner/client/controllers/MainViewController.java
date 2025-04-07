@@ -4,6 +4,7 @@ import dev.icefish.tourplanner.client.model.Tour;
 import dev.icefish.tourplanner.client.model.TourLog;
 import dev.icefish.tourplanner.client.utils.TourButtonHandler;
 import dev.icefish.tourplanner.client.utils.TourLogButtonHandler;
+import dev.icefish.tourplanner.client.utils.TourLogHandler;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.collections.ObservableList;
@@ -18,10 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MainViewController {
     @FXML
@@ -48,6 +46,7 @@ public class MainViewController {
     private final TourLogViewModel tourLogViewModel = new TourLogViewModel();
     private TourButtonHandler tourButtonHandler;
     private TourLogButtonHandler tourLogButtonHandler;
+    private TourLogButtonHandler tourLogHandler;
 
     @FXML
     public void initialize() {
@@ -55,6 +54,7 @@ public class MainViewController {
         setTourLogTableView();
         tourButtonHandler = new TourButtonHandler(deleteTourButton, editTourButton, newTourButton, tourListView);
         tourLogButtonHandler = new TourLogButtonHandler(tourListView, newTourLogButton, deleteTourLogButton, editTourLogButton, tourLogTableView);
+        // = new TourLogHandler(tourListView, tourLogTableView);
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
 
@@ -296,7 +296,15 @@ public class MainViewController {
 
     // Then update your setTourLogTableView method
     private void setTourLogTableView() {
-        tourLogTableView.setItems(tourLogViewModel.getAllTourLogs());
+
+        //ToDo Listener hinzufügen
+        TourLog selectedLog = tourLogTableView.getSelectionModel().getSelectedItem();
+        if (selectedLog != null) {
+            UUID id = selectedLog.getId(); // oder getTourId(), falls die ID dort gespeichert ist
+            tourLogTableView.setItems(tourLogViewModel.getTourLogsByTourId(id));
+        } else {
+            System.out.println("Kein Element ausgewählt!");
+        }
 
         // Set up the cell value factories for each column
         tourLogDateView.setCellValueFactory(new PropertyValueFactory<>("date"));
