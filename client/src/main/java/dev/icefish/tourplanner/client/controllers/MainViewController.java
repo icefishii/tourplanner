@@ -378,3 +378,5 @@ public class MainViewController {
         }
     }
 }
+
+//TODO if the last tourlog gets deleted the last tour is not selected/the tour delete button is not updated
