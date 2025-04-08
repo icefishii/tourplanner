@@ -16,9 +16,12 @@ public class TourLogServiceTemp {
     }
 
     public ObservableList<TourLog> getTourLogsfromTour(UUID tourId) {
+        if (tourId == null) {
+            return FXCollections.observableArrayList(); // Return an empty list if tourId is null
+        }
         ObservableList<TourLog> tourLogs = FXCollections.observableArrayList();
         for (TourLog tourLog : this.tourLogs) {
-            if (tourLog.getTourId().equals(tourId)) {
+            if (tourId.equals(tourLog.getTourId())) {
                 tourLogs.add(tourLog);
             }
         }
@@ -26,6 +29,7 @@ public class TourLogServiceTemp {
     }
 
     public void createNewTourLog(TourLog tourLog) {
+        System.out.println("Adding TourLog to ViewModel: " + tourLog + ", Tour ID: " + tourLog.getTourId());
         tourLogs.add(tourLog);
     }
 

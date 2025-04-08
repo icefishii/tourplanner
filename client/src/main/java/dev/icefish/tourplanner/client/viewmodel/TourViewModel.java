@@ -1,49 +1,39 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
-import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
 import dev.icefish.tourplanner.models.Tour;
-import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.services.TourServiceTemp;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class TourViewModel {
 
-    private ObservableList<Tour> toursList;
-    private TourServiceTemp tourService;
+    private final ObservableList<Tour> toursList;
+    private final TourServiceTemp tourService;
 
-    public TourViewModel() {
-        this.tourService = new TourServiceTemp();
-        this.toursList = tourService.getAllTours();
+    public TourViewModel(TourServiceTemp tourService) {
+        this.tourService = tourService;
+        this.toursList = FXCollections.observableArrayList(tourService.getAllTours());
     }
 
     public ObservableList<Tour> getAllTours() {
         return this.toursList;
     }
 
-    public void createNewTour(String name, String description, String fromLocation, String toLocation, String transportType) {
-        Tour newTour = new Tour(UUIDv7Generator.generateUUIDv7(),name, description, fromLocation, toLocation, transportType);
-        if (!toursList.contains(newTour)) {
-            tourService.createNewTour(newTour);
-        }
+    public void createNewTour(Tour tour) {
+        tourService.createNewTour(tour);
+        toursList.add(tour);
     }
 
     public void deleteTour(Tour tour) {
         tourService.deleteTour(tour);
+        toursList.remove(tour);
     }
 
     public void updateTour(Tour tour) {
-        for (int i = 0; i < toursList.size(); i++) {
-            if (toursList.get(i).getId().equals(tour.getId())) {
-                toursList.set(i, tour);
-                break;
-            }
-        }
         tourService.updateTour(tour);
-    }
-
-    public void createNewTour(Tour testTour) {
-        if (!toursList.contains(testTour)) {
-            tourService.createNewTour(testTour);
+        int index = toursList.indexOf(tour);
+        if (index >= 0) {
+            toursList.set(index, tour);
         }
     }
 }

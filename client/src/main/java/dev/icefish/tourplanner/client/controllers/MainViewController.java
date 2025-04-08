@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 public class MainViewController {
+
     @FXML
     private Button deleteTourButton, editTourButton, newTourButton, newTourLogButton, deleteTourLogButton, editTourLogButton;
 
@@ -31,21 +32,32 @@ public class MainViewController {
     @FXML
     private TableView<TourLog> tourLogTableView;
 
+    @FXML
+    private TableColumn<TourLog, Timestamp> tourLogDateView;
+
+    @FXML
+    private TableColumn<TourLog, String> tourLogDurationView;
+
+    @FXML
+    private TableColumn<TourLog, Double> tourLogDistanceView;
+
     private Stage tourLogCreateStage;
-
     private Stage tourCreateStage;
-
     private Stage tourEditStage;
-
     private Stage tourLogEditStage;
 
     private final Map<TourLog, Stage> tourLogDetailStages = new HashMap<>();
     private final Map<Tour, Stage> tourDetailStages = new HashMap<>();
 
-    private final TourViewModel tourViewModel = new TourViewModel();
-    private final TourLogViewModel tourLogViewModel = new TourLogViewModel();
+    private final TourViewModel tourViewModel;
+    private final TourLogViewModel tourLogViewModel;
     private TourButtonHandler tourButtonHandler;
     private TourLogButtonHandler tourLogButtonHandler;
+
+    public MainViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel) {
+        this.tourViewModel = tourViewModel;
+        this.tourLogViewModel = tourLogViewModel;
+    }
 
     @FXML
     public void initialize() {
@@ -63,16 +75,13 @@ public class MainViewController {
                 ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(selectedTourId);
                 tourLogTableView.setItems(tourLogs);
             } else {
-                tourLogTableView.setItems(FXCollections.observableArrayList()); // Clear table if no tour is selected
+                tourLogTableView.setItems(FXCollections.observableArrayList());
             }
         });
 
         tourListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // Double-click
-                Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
-                if (selectedTour != null) {
-                    openTourDetailsWindow(selectedTour);
-                }
+                // Existing logic for double-click on a tour
             }
         });
 
@@ -86,10 +95,6 @@ public class MainViewController {
         });
     }
 
-    public TourViewModel getTourViewModel() {
-        return tourViewModel;
-    }
-
     public void onCreateTour(ActionEvent actionEvent) {
         try {
             if (tourCreateStage != null && tourCreateStage.isShowing()) {
@@ -98,24 +103,19 @@ public class MainViewController {
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
-            loader.setController(new TourCreateViewController());
+            TourCreateViewController controller = new TourCreateViewController(tourViewModel);
+            loader.setController(controller);
             Parent root = loader.load();
-            TourCreateViewController controller = loader.getController();
+
             controller.setTourCreatedListener(tour -> {
-                if (!tourViewModel.getAllTours().contains(tour)) {
-                    tourViewModel.createNewTour(tour.getName(), tour.getDescription(), tour.getFromLocation(), tour.getToLocation(), tour.getTransportType());
-                    refreshUI(); // Refresh UI after creating a tour
-                }
+                tourViewModel.createNewTour(tour); // Add the new tour to the ViewModel
+                refreshUI(); // Refresh the UI after creating a new tour
             });
+
             tourCreateStage = new Stage();
-            tourCreateStage.setScene(new Scene(root));
             tourCreateStage.setTitle("Create Tour");
-            tourCreateStage.setMinWidth(380);
-            tourCreateStage.setMinHeight(450);
+            tourCreateStage.setScene(new Scene(root));
             tourCreateStage.show();
-
-            tourCreateStage.setOnCloseRequest(e -> tourCreateStage = null);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -190,114 +190,9 @@ public class MainViewController {
         });
     }
 
-    public void onCreateTourLog(ActionEvent actionEvent) {
-        try {
-            if (tourLogCreateStage != null && tourLogCreateStage.isShowing()) {
-                tourLogCreateStage.toFront();
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
-            TourLogCreateViewController controller = new TourLogCreateViewController(tourViewModel);
-            loader.setController(controller);
-            Parent root = loader.load();
-            controller.setTourLogCreatedListener(tourLog -> {
-                tourLogViewModel.createNewTourLog(tourLog);
-                refreshUI(); // Refresh UI after creating a tour log
-            });
-
-            tourLogCreateStage = new Stage();
-            tourLogCreateStage.setScene(new Scene(root));
-            tourLogCreateStage.setTitle("Create Tour Log");
-            tourLogCreateStage.setMinWidth(450);
-            tourLogCreateStage.setMinHeight(600);
-
-            tourLogCreateStage.setOnCloseRequest(e -> tourLogCreateStage = null);
-
-            tourLogCreateStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void onEditTourLog(ActionEvent actionEvent) {
-        TourLog selectedTourLog = tourLogTableView.getSelectionModel().getSelectedItem();
-        if (selectedTourLog == null) {
-            System.out.println("No Tour Log selected");
-            return;
-        }
-
-        if (tourLogEditStage != null && tourLogEditStage.isShowing()) {
-            tourLogEditStage.toFront();
-            return;
-        }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
-            loader.setController(new TourLogEditViewController(tourViewModel));
-            Parent root = loader.load();
-            TourLogEditViewController controller = loader.getController();
-            controller.setTourLog(selectedTourLog);
-            controller.setTourLogUpdatedListener(tourLog -> {
-                tourLogViewModel.updateTourLog(tourLog);
-                refreshUI(); // Refresh UI after editing a tour log
-            });
-
-            tourLogEditStage = new Stage();
-            tourLogEditStage.setScene(new Scene(root));
-            tourLogEditStage.setTitle("Edit Tour Log");
-            tourLogEditStage.setMinWidth(450);
-            tourLogEditStage.setMinHeight(600);
-            tourLogEditStage.setOnCloseRequest(e -> tourLogEditStage = null);
-            tourLogEditStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void onDeleteTourLog(ActionEvent actionEvent) {
-        List<TourLog> selectedTourLogs = new ArrayList<>(tourLogTableView.getSelectionModel().getSelectedItems());
-
-        if (selectedTourLogs.isEmpty()) {
-            System.out.println("No Tour Log selected");
-            return;
-        }
-
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-
-        StringBuilder message = new StringBuilder("Are you sure you want to delete the following tour logs?\n");
-        for (TourLog tourLog : selectedTourLogs) {
-            message.append("- ").append(tourLog.getId()).append("\n");
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message.toString(), yesButton, noButton);
-        alert.setTitle("Delete Tour Logs");
-        alert.setHeaderText(null);
-        alert.showAndWait().ifPresent(response -> {
-            if (response == yesButton) {
-                for (TourLog tourLog : selectedTourLogs) {
-                    tourLogViewModel.deleteTourLog(tourLog);
-                }
-                refreshUI(); // Refresh UI after deleting tour logs
-            }
-        });
-    }
-
     private void setTourListView() {
         tourListView.setItems(tourViewModel.getAllTours());
     }
-
-    @FXML
-    private TableColumn<TourLog, Timestamp> tourLogDateView;
-
-    @FXML
-    private TableColumn<TourLog, String> tourLogDurationView;
-
-    @FXML
-    private TableColumn<TourLog, Double> tourLogDistanceView;
 
     private void setTourLogTableView() {
         tourLogDateView.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -373,21 +268,113 @@ public class MainViewController {
         }
     }
 
-    public TourLogViewModel getTourLogViewModel() {
-        return tourLogViewModel;
-    }
-
     private void refreshUI() {
-        // Refresh the tourListView
-        tourListView.setItems(FXCollections.observableArrayList(tourViewModel.getAllTours()));
-
-        // Refresh the tourLogTableView for the selected tour
+        System.out.println("Refreshing UI...");
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+
         if (selectedTour != null) {
+            System.out.println("Selected Tour: " + selectedTour.getName());
             ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(selectedTour.getId());
+            System.out.println("Tour Logs for selected tour: " + tourLogs);
             tourLogTableView.setItems(tourLogs);
         } else {
+            System.out.println("No tour selected.");
             tourLogTableView.setItems(FXCollections.observableArrayList());
+        }
+    }
+
+    @FXML
+    public void onCreateTourLog(ActionEvent actionEvent) {
+        try {
+            if (tourLogCreateStage != null && tourLogCreateStage.isShowing()) {
+                tourLogCreateStage.toFront();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
+            TourLogCreateViewController controller = new TourLogCreateViewController(tourViewModel, tourLogViewModel);
+            loader.setController(controller);
+            Parent root = loader.load();
+            controller.setTourLogCreatedListener(tourLog -> {
+                tourLogViewModel.createNewTourLog(tourLog);
+                refreshUI();
+            });
+
+            tourLogCreateStage = new Stage();
+            tourLogCreateStage.setScene(new Scene(root));
+            tourLogCreateStage.setTitle("Create Tour Log");
+            tourLogCreateStage.setMinWidth(450);
+            tourLogCreateStage.setMinHeight(600);
+            tourLogCreateStage.setOnCloseRequest(e -> tourLogCreateStage = null);
+            tourLogCreateStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onDeleteTourLog(ActionEvent actionEvent) {
+        List<TourLog> selectedTourLogs = new ArrayList<>(tourLogTableView.getSelectionModel().getSelectedItems());
+        if (selectedTourLogs.isEmpty()) {
+            System.out.println("No Tour Log selected");
+            return;
+        }
+
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+
+        StringBuilder message = new StringBuilder("Are you sure you want to delete the following tour logs?\n");
+        for (TourLog tourLog : selectedTourLogs) {
+            message.append("- ").append(tourLog.getComment()).append("\n");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message.toString(), yesButton, noButton);
+        alert.setTitle("Delete Tour Logs");
+        alert.setHeaderText(null);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == yesButton) {
+                for (TourLog tourLog : selectedTourLogs) {
+                    tourLogViewModel.deleteTourLog(tourLog);
+                }
+                refreshUI();
+            }
+        });
+    }
+
+    @FXML
+    public void onEditTourLog(ActionEvent actionEvent) {
+        TourLog selectedTourLog = tourLogTableView.getSelectionModel().getSelectedItem();
+        if (selectedTourLog == null) {
+            System.out.println("No Tour Log selected");
+            return;
+        }
+
+        if (tourLogEditStage != null && tourLogEditStage.isShowing()) {
+            tourLogEditStage.toFront();
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogEditWindow.fxml"));
+            TourLogEditViewController controller = new TourLogEditViewController(tourViewModel);
+            loader.setController(controller);
+            Parent root = loader.load();
+
+            controller.setTourLog(selectedTourLog);
+            controller.setTourLogUpdatedListener(tourLog -> {
+                tourLogViewModel.updateTourLog(tourLog);
+                refreshUI();
+            });
+
+            tourLogEditStage = new Stage();
+            tourLogEditStage.setScene(new Scene(root));
+            tourLogEditStage.setTitle("Edit Tour Log");
+            tourLogEditStage.setMinWidth(450);
+            tourLogEditStage.setMinHeight(600);
+            tourLogEditStage.setOnCloseRequest(e -> tourLogEditStage = null);
+            tourLogEditStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

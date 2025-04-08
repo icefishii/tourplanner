@@ -4,6 +4,7 @@ import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.utils.TourLogChecker;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
+import dev.icefish.tourplanner.client.services.TourLogServiceTemp;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.event.ActionEvent;
@@ -41,16 +42,17 @@ public class TourLogEditViewController {
 
     public TourLogEditViewController(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
+        this.tourLogViewModel = new TourLogViewModel(new TourLogServiceTemp()); // Pass the correct dependency
     }
 
     public void setTourViewModel(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
+        tourComboBox.setItems(tourViewModel.getAllTours());
     }
 
     @FXML
     private void initialize() {
         createTourLogLabel.setText("Edit Tour Log");
-        tourLogViewModel = new TourLogViewModel(tourViewModel);
         tourComboBox.setItems(tourViewModel.getAllTours());
 
         // Set the cell factory to display the tour name
@@ -66,7 +68,6 @@ public class TourLogEditViewController {
             }
         });
 
-        // Set the button cell to display the selected tour name
         tourComboBox.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Tour item, boolean empty) {
@@ -79,144 +80,63 @@ public class TourLogEditViewController {
             }
         });
 
-        tourComboBox.setDisable(true);
-        createButton.setText("Save");
         createButton.setOnAction(this::onSaveButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
     }
 
     public void setTourLog(TourLog tourLog) {
         this.tourLog = tourLog;
-        tourComboBox.setValue(tourViewModel.getAllTours().stream()
-                .filter(tour -> tour.getId().equals(tourLog.getTourId()))
-                .findFirst()
-                .orElse(null));
-
-        LocalDateTime dateTime = tourLog.getDate().toLocalDateTime();
-        datePicker.setValue(dateTime.toLocalDate());
-        timeField.setText(dateTime.toLocalTime().toString());
-
+        // Populate fields with the existing TourLog data
+        datePicker.setValue(tourLog.getDate().toLocalDateTime().toLocalDate());
+        timeField.setText(tourLog.getDate().toLocalDateTime().toLocalTime().toString());
         commentField.setText(tourLog.getComment());
         difficultyField.setText(String.valueOf(tourLog.getDifficulty()));
         distanceField.setText(String.valueOf(tourLog.getDistance()));
         durationField.setText(tourLog.getDurationText());
         ratingField.setText(String.valueOf(tourLog.getRating()));
+
+        // Set the selected tour in the ComboBox
+        tourComboBox.getSelectionModel().select(
+                tourViewModel.getAllTours().stream()
+                        .filter(t -> t.getId().equals(tourLog.getTourId()))
+                        .findFirst()
+                        .orElse(null)
+        );
     }
 
     public void setTourLogUpdatedListener(Consumer<TourLog> listener) {
         this.tourLogUpdatedListener = listener;
     }
 
-    public void onSaveButtonClick(ActionEvent actionEvent) {
+    private void onSaveButtonClick(ActionEvent actionEvent) {
+        // Update the TourLog with the new data
         try {
-            Tour selectedTour = tourComboBox.getValue();
-
-            LocalDateTime dateTime = LocalDateTime.of(datePicker.getValue(),
-                    java.time.LocalTime.parse(timeField.getText()));
-            Timestamp date = Timestamp.valueOf(dateTime);
-
-            String comment = commentField.getText();
-            int difficulty = Integer.parseInt(difficultyField.getText());
-            double distance = Double.parseDouble(distanceField.getText());
-            String durationText = durationField.getText();
-            int rating = Integer.parseInt(ratingField.getText());
-
-            resetFieldStyles();
-
-            Map<String, String> errors = TourLogChecker.validateTourLogWithStringDuration(
-                    selectedTour, date, comment, difficulty, distance, durationText, rating);
-
-            if (!errors.isEmpty()) {
-                highlightErrors(errors);
-                return;
-            }
-
-            tourLog.setTourId(selectedTour.getId());
-            tourLog.setDate(date);
-            tourLog.setComment(comment);
-            tourLog.setDifficulty(difficulty);
-            tourLog.setDistance(distance);
-            tourLog.setDurationText(durationText);
-            tourLog.setRating(rating);
+            tourLog.setDate(Timestamp.valueOf(LocalDateTime.of(datePicker.getValue(), LocalDateTime.parse(timeField.getText()).toLocalTime())));
+            tourLog.setComment(commentField.getText());
+            tourLog.setDifficulty(Integer.parseInt(difficultyField.getText()));
+            tourLog.setDistance(Double.parseDouble(distanceField.getText()));
+            tourLog.setDurationText(durationField.getText());
+            tourLog.setRating(Integer.parseInt(ratingField.getText()));
 
             if (tourLogUpdatedListener != null) {
                 tourLogUpdatedListener.accept(tourLog);
             }
 
-            System.out.println("TourLog updated: " + tourLog);
-            WindowUtils.close(datePicker);
+            WindowUtils.close(commentField);
         } catch (Exception e) {
             showErrorAlert("Invalid input: " + e.getMessage());
         }
     }
 
-    public void onCancelButtonClick(ActionEvent actionEvent) {
-        WindowUtils.close(datePicker);
+    private void onCancelButtonClick(ActionEvent actionEvent) {
+        WindowUtils.close(commentField);
     }
 
-    //Fehlermeldung
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    //Felder leeren
-    private void resetFieldStyles() {
-        datePicker.setStyle("");
-        timeField.setStyle("");
-        commentField.setStyle("");
-        difficultyField.setStyle("");
-        distanceField.setStyle("");
-        durationField.setStyle("");
-        ratingField.setStyle("");
-        tourComboBox.setStyle("");
-    }
-
-    //Fehler markieren
-    private void highlightErrors(Map<String, String> errors) {
-        if (errors.containsKey("date")) {
-            datePicker.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            datePicker.setStyle("");
-        }
-
-        if (errors.containsKey("comment")) {
-            commentField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            commentField.setStyle("");
-        }
-
-        if (errors.containsKey("difficulty")) {
-            difficultyField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            difficultyField.setStyle("");
-        }
-
-        if (errors.containsKey("distance")) {
-            distanceField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            distanceField.setStyle("");
-        }
-
-        if (errors.containsKey("duration")) {
-            durationField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            durationField.setStyle("");
-        }
-
-        if (errors.containsKey("rating")) {
-            ratingField.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            ratingField.setStyle("");
-        }
-
-        if (errors.containsKey("tour")) {
-            tourComboBox.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            tourComboBox.setStyle("");
-        }
     }
 }
