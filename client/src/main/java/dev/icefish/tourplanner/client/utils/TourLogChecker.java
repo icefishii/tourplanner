@@ -1,6 +1,7 @@
 package dev.icefish.tourplanner.client.utils;
 
-import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.HashMap;

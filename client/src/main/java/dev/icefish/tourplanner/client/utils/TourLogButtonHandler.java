@@ -1,7 +1,7 @@
 package dev.icefish.tourplanner.client.utils;
 
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;

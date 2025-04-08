@@ -1,8 +1,9 @@
 package dev.icefish.tourplanner.client.test;
 
 import dev.icefish.tourplanner.client.controllers.TourLogCreateViewController;
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.util.WaitForAsyncUtils;
-
-import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -41,7 +40,7 @@ public class TourLogCreateViewControllerTest extends TestFXBase {
         assertNotNull(controller, "Controller should not be null");
 
         // Create a tour first
-        Tour testTour = new Tour("Test Tour", "Description", "Vienna", "Salzburg", "Car");
+        Tour testTour = new Tour(UUIDv7Generator.generateUUIDv7(),"Test Tour", "Description", "Vienna", "Salzburg", "Car");
         tourViewModel.createNewTour(testTour);
 
         // Wait for the UI to update

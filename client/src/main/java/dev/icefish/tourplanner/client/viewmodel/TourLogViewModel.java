@@ -1,7 +1,7 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.services.TourLogServiceTemp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,10 +1,9 @@
 package dev.icefish.tourplanner.client.controllers;
 
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.utils.TourButtonHandler;
 import dev.icefish.tourplanner.client.utils.TourLogButtonHandler;
-import dev.icefish.tourplanner.client.utils.TourLogHandler;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.collections.ObservableList;

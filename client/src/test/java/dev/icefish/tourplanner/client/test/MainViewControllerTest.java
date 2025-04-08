@@ -1,8 +1,9 @@
 package dev.icefish.tourplanner.client.test;
 
 import dev.icefish.tourplanner.client.controllers.MainViewController;
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -38,7 +39,7 @@ public class MainViewControllerTest extends TestFXBase {
     @Test
     public void testDeleteTour() {
         // Add a test tour
-        Tour testTour = new Tour("Test Tour", "Description", "Vienna", "Salzburg", "Car");
+        Tour testTour = new Tour(UUIDv7Generator.generateUUIDv7(),"Test Tour", "Description", "Vienna", "Salzburg", "Car");
         controller.getTourViewModel().createNewTour(testTour);
 
         // Wait for the UI to update
@@ -59,7 +60,7 @@ public class MainViewControllerTest extends TestFXBase {
     @Test
     public void testDeleteTourLog() {
         // Add a test tour
-        Tour testTour = new Tour("Test Tour", "Description", "Vienna", "Salzburg", "Car");
+        Tour testTour = new Tour(UUIDv7Generator.generateUUIDv7(),"Test Tour", "Description", "Vienna", "Salzburg", "Car");
         controller.getTourViewModel().createNewTour(testTour);
 
         // Wait for the UI to update

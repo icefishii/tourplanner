@@ -2,9 +2,9 @@ package dev.icefish.tourplanner.client.utils;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
-import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 
 public class TourButtonHandler {
 
