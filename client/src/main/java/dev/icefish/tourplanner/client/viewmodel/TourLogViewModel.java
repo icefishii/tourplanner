@@ -46,12 +46,8 @@ public class TourLogViewModel {
     }
 
     public ObservableList<TourLog> getTourLogsByTourId(UUID tourId) {
-        ObservableList<TourLog> tourLogsByTourId = FXCollections.observableArrayList();
-        for (TourLog tourLog : tourLogsList) {
-            if (tourLog.getTourId().equals(tourId)) {
-                tourLogsByTourId.add(tourLog);
-            }
-        }
-        return tourLogsByTourId;
+        ObservableList<TourLog> tourLogs = FXCollections.observableArrayList();
+        tourLogs = tourLogService.getTourLogsfromTour(tourId);
+        return tourLogs;
     }
 }
