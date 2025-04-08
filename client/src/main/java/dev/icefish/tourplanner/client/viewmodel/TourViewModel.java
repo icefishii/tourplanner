@@ -1,6 +1,8 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
-import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.services.TourServiceTemp;
 import javafx.collections.ObservableList;
 
@@ -19,7 +21,7 @@ public class TourViewModel {
     }
 
     public void createNewTour(String name, String description, String fromLocation, String toLocation, String transportType) {
-        Tour newTour = new Tour(name, description, fromLocation, toLocation, transportType);
+        Tour newTour = new Tour(UUIDv7Generator.generateUUIDv7(),name, description, fromLocation, toLocation, transportType);
         if (!toursList.contains(newTour)) {
             tourService.createNewTour(newTour);
         }

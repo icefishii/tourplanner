@@ -1,14 +1,27 @@
 package dev.icefish.tourplanner.client.services;
 
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.UUID;
 
 public class TourLogServiceTemp {
 
     private final ObservableList<TourLog> tourLogs = FXCollections.observableArrayList();
 
     public ObservableList<TourLog> getAllTourLogs() {
+        return tourLogs;
+    }
+
+    public ObservableList<TourLog> getTourLogsfromTour(UUID tourId) {
+        ObservableList<TourLog> tourLogs = FXCollections.observableArrayList();
+        for (TourLog tourLog : this.tourLogs) {
+            if (tourLog.getTourId().equals(tourId)) {
+                tourLogs.add(tourLog);
+            }
+        }
         return tourLogs;
     }
 

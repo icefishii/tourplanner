@@ -1,7 +1,8 @@
 package dev.icefish.tourplanner.client.test;
 
 import dev.icefish.tourplanner.client.controllers.TourCreateViewController;
-import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

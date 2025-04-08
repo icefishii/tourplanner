@@ -1,12 +1,11 @@
 package dev.icefish.tourplanner.client.controllers;
 
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 public class TourLogDetailViewController {
 

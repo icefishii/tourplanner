@@ -1,7 +1,6 @@
-package dev.icefish.tourplanner.client.model;
+package dev.icefish.tourplanner.models;
 
 import java.sql.Timestamp;
-import java.time.Duration;
 import java.util.UUID;
 
 public class TourLog {

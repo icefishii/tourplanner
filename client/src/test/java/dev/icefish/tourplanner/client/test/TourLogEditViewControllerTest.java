@@ -1,8 +1,9 @@
 package dev.icefish.tourplanner.client.test;
 
 import dev.icefish.tourplanner.client.controllers.TourLogEditViewController;
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -42,7 +43,7 @@ public class TourLogEditViewControllerTest extends TestFXBase {
         assertNotNull(controller, "Controller should not be null");
 
         // Create a tour first
-        Tour testTour = new Tour("Test Tour", "Description", "Vienna", "Salzburg", "Car");
+        Tour testTour = new Tour(UUIDv7Generator.generateUUIDv7(),"Test Tour", "Description", "Vienna", "Salzburg", "Car");
         tourViewModel.createNewTour(testTour);
 
         // Create a tour log

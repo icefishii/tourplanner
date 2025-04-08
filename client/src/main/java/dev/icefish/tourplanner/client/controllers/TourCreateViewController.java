@@ -1,8 +1,10 @@
 package dev.icefish.tourplanner.client.controllers;
 
 import dev.icefish.tourplanner.client.utils.TourChecker;
+import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
-import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -54,7 +56,7 @@ public class TourCreateViewController {
             return;
         }
 
-        Tour newTour = new Tour(name, description, fromLocation, toLocation, transportType);
+        Tour newTour = new Tour(UUIDv7Generator.generateUUIDv7(),name, description, fromLocation, toLocation, transportType);
 
         if (tourCreatedListener != null) {
             tourCreatedListener.accept(newTour);

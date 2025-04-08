@@ -1,7 +1,7 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
-import dev.icefish.tourplanner.client.model.Tour;
-import dev.icefish.tourplanner.client.model.TourLog;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.services.TourLogServiceTemp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,12 +46,8 @@ public class TourLogViewModel {
     }
 
     public ObservableList<TourLog> getTourLogsByTourId(UUID tourId) {
-        ObservableList<TourLog> tourLogsByTourId = FXCollections.observableArrayList();
-        for (TourLog tourLog : tourLogsList) {
-            if (tourLog.getTourId().equals(tourId)) {
-                tourLogsByTourId.add(tourLog);
-            }
-        }
-        return tourLogsByTourId;
+        ObservableList<TourLog> tourLogs = FXCollections.observableArrayList();
+        tourLogs = tourLogService.getTourLogsfromTour(tourId);
+        return tourLogs;
     }
 }

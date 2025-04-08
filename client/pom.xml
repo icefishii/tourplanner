@@ -13,6 +13,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>dev.icefish.tourplanner</groupId>
+            <artifactId>models</artifactId>
+            <version>1.0</version>
+        </dependency>
         <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,6 +1,7 @@
-/*package dev.icefish.tourplanner.client.services;
+package dev.icefish.tourplanner.client.services;
 
-import dev.icefish.tourplanner.client.model.Tour;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -9,7 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-import static com.google.gson.internal.bind.TypeAdapters.URI;
 
 //TODO: Implement the REST API in he server
 
@@ -63,6 +63,3 @@ public class TourService {
         }
     }
 }
-
-
- */
