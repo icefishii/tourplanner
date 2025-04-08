@@ -9,45 +9,39 @@ import java.util.UUID;
 
 public class TourLogViewModel {
 
-    private ObservableList<TourLog> tourLogsList;
-    private TourLogServiceTemp tourLogService;
-    private TourViewModel tourViewModel;
+    private final ObservableList<TourLog> tourLogsList;
+    private final TourLogServiceTemp tourLogService;
 
-    public TourLogViewModel() {
-        this.tourLogService = new TourLogServiceTemp();
-        this.tourLogsList = tourLogService.getAllTourLogs();
-        this.tourViewModel = new TourViewModel(); // Default constructor still creates one if needed
-    }
-
-    public TourLogViewModel(TourViewModel tourViewModel) {
-        this.tourLogService = new TourLogServiceTemp();
-        this.tourLogsList = tourLogService.getAllTourLogs();
-        this.tourViewModel = tourViewModel;
+    public TourLogViewModel(TourLogServiceTemp tourLogService) {
+        this.tourLogService = tourLogService;
+        this.tourLogsList = FXCollections.observableArrayList(tourLogService.getAllTourLogs());
     }
 
     public ObservableList<TourLog> getAllTourLogs() {
         return this.tourLogsList;
     }
 
-    public ObservableList<Tour> getAllTours() {
-        return tourViewModel.getAllTours();
+    public ObservableList<TourLog> getTourLogsByTourId(UUID tourId) {
+        if (tourId == null) {
+            System.out.println("Tour ID is null, returning empty list.");
+            return FXCollections.observableArrayList();
+        }
+        System.out.println("Fetching TourLogs for Tour ID: " + tourId);
+        return FXCollections.observableArrayList(tourLogService.getTourLogsfromTour(tourId));
     }
 
     public void createNewTourLog(TourLog tourLog) {
+        System.out.println("TourLog Created: " + tourLog);
         tourLogService.createNewTourLog(tourLog);
+        tourLogsList.add(tourLog);
     }
 
     public void deleteTourLog(TourLog tourLog) {
         tourLogService.deleteTourLog(tourLog);
+        tourLogsList.remove(tourLog);
     }
 
     public void updateTourLog(TourLog tourLog) {
         tourLogService.updateTourLog(tourLog);
-    }
-
-    public ObservableList<TourLog> getTourLogsByTourId(UUID tourId) {
-        ObservableList<TourLog> tourLogs = FXCollections.observableArrayList();
-        tourLogs = tourLogService.getTourLogsfromTour(tourId);
-        return tourLogs;
     }
 }

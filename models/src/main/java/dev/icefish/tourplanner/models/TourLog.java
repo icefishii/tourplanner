@@ -10,8 +10,9 @@ public class TourLog {
     private String comment;
     private int difficulty;
 
-    public TourLog(UUID id, Timestamp date, String comment, int difficulty, double distance, String durationText, int rating) {
+    public TourLog(UUID id, UUID tourId, Timestamp date, String comment, int difficulty, double distance, String durationText, int rating) {
         this.id = id;
+        this.tourId = tourId;
         this.date = date;
         this.comment = comment;
         this.difficulty = difficulty;

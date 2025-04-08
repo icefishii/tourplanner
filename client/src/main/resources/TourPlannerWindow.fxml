@@ -102,9 +102,9 @@
                         </Label>
                         <Region prefWidth="20.0" HBox.hgrow="ALWAYS" />
                         <HBox spacing="5.0">
-                           <Button fx:id="newTourLogButton" onAction="#onCreateTourLog" text="+" />
-                           <Button fx:id="deleteTourLogButton" onAction="#onDeleteTourLog" text="-" />
-                           <Button fx:id="editTourLogButton" onAction="#onEditTourLog" text="...">
+                           <Button fx:id="newTourLogButton" text="+" onAction="#onCreateTourLog" />
+                           <Button fx:id="deleteTourLogButton" text="-" onAction="#onDeleteTourLog" />
+                           <Button fx:id="editTourLogButton" text="..." onAction="#onEditTourLog">
                               <HBox.margin>
                                  <Insets right="10.0" />
                               </HBox.margin>
