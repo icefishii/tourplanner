@@ -87,30 +87,32 @@ public class TourLogCreateViewController {
     }
 
     private void onCreateButtonClick(ActionEvent actionEvent) {
+        resetFieldStyles();
         try {
-            Tour selectedTour = tourComboBox.getValue();
-            System.out.println("Selected Tour: " + selectedTour);
-            if (selectedTour == null) {
-                System.out.println("No tour selected!");
-                showErrorAlert(Map.of("tour", "No tour selected!"));
-                return;
-            }
-            System.out.println("Selected Tour: " + selectedTour.getName() + ", ID: " + selectedTour.getId());
-            LocalDate date = datePicker.getValue();
-            LocalTime time = LocalTime.parse(timeField.getText());
-            String comment = commentField.getText();
-            int difficulty = Integer.parseInt(difficultyField.getText());
-            double distance = Double.parseDouble(distanceField.getText());
-            String duration = durationField.getText();
-            int rating = Integer.parseInt(ratingField.getText());
 
-            Map<String, String> errors = TourLogChecker.validateTourLogWithStringDuration(
-                    selectedTour, Timestamp.valueOf(LocalDateTime.of(date, time)), comment, difficulty, distance, duration, rating);
+            Tour selectedTour = tourComboBox.getValue();
+            LocalDate date = datePicker.getValue();
+            String timeText = timeField.getText();
+            String comment = commentField.getText();
+            String difficultyText = difficultyField.getText();
+            String distanceText = distanceField.getText();
+            String durationText = durationField.getText();
+            String ratingText = ratingField.getText();
+
+            Map<String, String> errors = TourLogChecker.validateTourLogRaw(
+                    selectedTour, date, timeText, comment, difficultyText, distanceText, durationText, ratingText);
 
             if (!errors.isEmpty()) {
+                highlightErrorFields(errors);
                 showErrorAlert(errors);
                 return;
             }
+
+            LocalTime time = LocalTime.parse(timeText);
+            Timestamp timestamp = Timestamp.valueOf(LocalDateTime.of(date, time));
+            int difficulty = Integer.parseInt(difficultyText);
+            double distance = Double.parseDouble(distanceText);
+            int rating = Integer.parseInt(ratingText);
 
             TourLog newTourLog = new TourLog(
                     UUIDv7Generator.generateUUIDv7(),
@@ -119,9 +121,11 @@ public class TourLogCreateViewController {
                     comment,
                     difficulty,
                     distance,
-                    duration,
+                    durationText,
                     rating
             );
+
+
 
             if (tourLogCreatedListener != null) {
                 tourLogCreatedListener.accept(newTourLog);
@@ -129,12 +133,50 @@ public class TourLogCreateViewController {
 
             WindowUtils.close(commentField);
         } catch (Exception e) {
-            showErrorAlert(Map.of("error", "Invalid input: " + e.getMessage()));
+            showErrorAlert(Map.of("error", "Unexpected Error: " + e.getMessage()));
         }
     }
 
     private void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(commentField);
+    }
+
+    private void resetFieldStyles() {
+        timeField.setStyle(null);
+        difficultyField.setStyle(null);
+        distanceField.setStyle(null);
+        durationField.setStyle(null);
+        ratingField.setStyle(null);
+        commentField.setStyle(null);
+        tourComboBox.setStyle(null);
+        datePicker.setStyle(null);
+    }
+
+    private void highlightErrorFields(Map<String, String> errors) {
+        if (errors.containsKey("tour")) {
+            tourComboBox.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("date")) {
+            datePicker.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("comment")) {
+            commentField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("difficulty")) {
+            difficultyField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("distance")) {
+            distanceField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("duration")) {
+            durationField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("rating")) {
+            ratingField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("time")) {
+            timeField.setStyle("-fx-border-color: red;");
+        }
     }
 
     private void showErrorAlert(Map<String, String> errors) {

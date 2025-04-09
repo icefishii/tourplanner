@@ -42,6 +42,8 @@ public class TourCreateViewController {
 
     private void onCreateButtonClick(ActionEvent actionEvent) {
         try {
+            resetFieldStyles();
+
             String name = tourNameField.getText();
             String description = tourDescriptionField.getText();
             String fromLocation = fromLocationField.getText();
@@ -52,6 +54,7 @@ public class TourCreateViewController {
                     name, description, fromLocation, toLocation, transportType);
 
             if (!errors.isEmpty()) {
+                highlightErrorFields(errors);
                 showErrorAlert(errors);
                 return;
             }
@@ -70,6 +73,33 @@ public class TourCreateViewController {
 
     private void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(tourNameField);
+    }
+
+    private void resetFieldStyles() {
+        tourNameField.setStyle(null);
+        tourDescriptionField.setStyle(null);
+        fromLocationField.setStyle(null);
+        toLocationField.setStyle(null);
+        transportTypeBox.setStyle(null);
+    }
+
+
+    private void highlightErrorFields(Map<String, String> errors) {
+        if (errors.containsKey("name")) {
+            tourNameField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("description")) {
+            tourDescriptionField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("fromLocation")) {
+            fromLocationField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("toLocation")) {
+            toLocationField.setStyle("-fx-border-color: red;");
+        }
+        if (errors.containsKey("transportType")) {
+            transportTypeBox.setStyle("-fx-border-color: red;");
+        }
     }
 
     private void showErrorAlert(Map<String, String> errors) {

@@ -380,3 +380,21 @@ public class MainViewController {
 }
 
 //TODO if the last tourlog gets deleted the last tour is not selected/the tour delete button is not updated
+
+//ToDo Rewrite Tests
+
+//ToDo Close window when application terminated
+
+//ToDo TourLog change when tour is selected
+
+//ToDo Button Controller
+
+//ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
+
+//ToDo Keyboard-Shortcuts
+
+//ToDo Mondbutton für Darkmode
+
+//ToDo Mandatory Feature (Language, ???)
+
+//ToDo das mit den , . in der Eingabe
