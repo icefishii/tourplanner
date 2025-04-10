@@ -355,7 +355,7 @@ public class MainViewController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogEditWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
             TourLogEditViewController controller = new TourLogEditViewController(tourViewModel);
             loader.setController(controller);
             Parent root = loader.load();

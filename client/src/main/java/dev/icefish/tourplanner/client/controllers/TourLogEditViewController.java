@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -109,9 +110,8 @@ public class TourLogEditViewController {
     }
 
     private void onSaveButtonClick(ActionEvent actionEvent) {
-        // Update the TourLog with the new data
         try {
-            tourLog.setDate(Timestamp.valueOf(LocalDateTime.of(datePicker.getValue(), LocalDateTime.parse(timeField.getText()).toLocalTime())));
+            tourLog.setDate(Timestamp.valueOf(LocalDateTime.of(datePicker.getValue(), LocalTime.parse(timeField.getText()))));
             tourLog.setComment(commentField.getText());
             tourLog.setDifficulty(Integer.parseInt(difficultyField.getText()));
             tourLog.setDistance(Double.parseDouble(distanceField.getText()));
