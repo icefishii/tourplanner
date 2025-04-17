@@ -81,7 +81,10 @@ public class MainViewController {
 
         tourListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // Double-click
-                // Existing logic for double-click on a tour
+                Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();// Existing logic for double-click on a tour
+                if (selectedTour != null) {
+                    openTourDetailsWindow(selectedTour);
+                }
             }
         });
 
@@ -379,22 +382,21 @@ public class MainViewController {
     }
 }
 
-//TODO if the last tourlog gets deleted the last tour is not selected/the tour delete button is not updated
+//ToDo Maps
 
 //ToDo Rewrite Tests
 
 //ToDo Close window when application terminated
 
-//ToDo TourLog change when tour is selected
+//ToDo Keyboard-Shortcuts
 
 //ToDo Button Controller
 
 //ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
-
-//ToDo Keyboard-Shortcuts
 
 //ToDo Mondbutton für Darkmode
 
 //ToDo Mandatory Feature (Language, ???)
 
 //ToDo das mit den , . in der Eingabe
+
