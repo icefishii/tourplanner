@@ -13,7 +13,7 @@ public class TourDetailViewController {
     private Button closeButton;
 
     @FXML
-    private Label nameLabel, descriptionLabel, fromLocationLabel, toLocationLabel, transportTypeLabel;
+    private Label nameLabel, descriptionLabel, fromLocationLabel, toLocationLabel, transportTypeLabel, distanceLabel, timeLabel;
 
     //Ausgabe der Details
     public void setTourDetails(Tour tour) {
@@ -22,11 +22,19 @@ public class TourDetailViewController {
         fromLocationLabel.setText(tour.getFromLocation());
         toLocationLabel.setText(tour.getToLocation());
         transportTypeLabel.setText( tour.getTransportType());
+        distanceLabel.setText(String.format("%.2f km", tour.getDistance()));
+        timeLabel.setText(formatDuration(tour.getEstimatedTime()));
     }
 
     //schließen des Fensters
     public void handleClose() {
         WindowUtils.close(nameLabel); //Unsere eigene Klasse in utils
+    }
+
+    private String formatDuration(double durationInHours) {
+        int hours = (int) durationInHours;
+        int minutes = (int) Math.round((durationInHours - hours) * 60);
+        return String.format("%dh %02dmin", hours, minutes);
     }
 
 }

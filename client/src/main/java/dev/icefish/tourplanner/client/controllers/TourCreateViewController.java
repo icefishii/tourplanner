@@ -4,6 +4,9 @@ import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
+
+import dev.icefish.tourplanner.client.services.OpenRouteService;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
@@ -60,6 +63,15 @@ public class TourCreateViewController {
             }
 
             Tour newTour = new Tour(UUIDv7Generator.generateUUIDv7(), name, description, fromLocation, toLocation, transportType);
+
+            try {
+                OpenRouteService.RouteInfo info = OpenRouteService.getRouteInfo(fromLocation, toLocation, transportType);
+                newTour.setDistance(info.distanceInKm());
+                newTour.setEstimatedTime(info.durationInHours());
+            } catch (Exception e) {
+                showErrorAlert(Map.of("error", "Route info couldn't be retrieved: " + e.getMessage()));
+                return;
+            }
 
             if (tourCreatedListener != null) {
                 tourCreatedListener.accept(newTour); // Notify listener

@@ -37,6 +37,16 @@
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Time:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="timeLabel" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Distance:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="distanceLabel" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox spacing="10" VBox.vgrow="ALWAYS">
         <Label text="Transport:" style="-fx-font-weight: bold;"/>
         <Label fx:id="transportTypeLabel" HBox.hgrow="ALWAYS"/>
     </HBox>

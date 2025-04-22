@@ -2,8 +2,9 @@ module dev.icefish.tourplanner.client {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
-    requires java.sql;
     requires dev.icefish.tourplanner.models;
+    requires java.sql;
+    requires com.google.gson;
 
 
     opens dev.icefish.tourplanner.client to javafx.fxml;
