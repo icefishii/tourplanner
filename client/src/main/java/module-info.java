@@ -5,7 +5,7 @@ module dev.icefish.tourplanner.client {
     requires dev.icefish.tourplanner.models;
     requires java.sql;
     requires com.google.gson;
-
+    requires java.net.http;
 
 
     opens dev.icefish.tourplanner.client to javafx.fxml;

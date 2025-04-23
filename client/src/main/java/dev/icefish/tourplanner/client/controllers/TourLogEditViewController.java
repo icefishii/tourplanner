@@ -1,5 +1,6 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.utils.TourLogChecker;
@@ -43,7 +44,7 @@ public class TourLogEditViewController {
 
     public TourLogEditViewController(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
-        this.tourLogViewModel = new TourLogViewModel(new TourLogServiceTemp()); // Pass the correct dependency
+        this.tourLogViewModel = new TourLogViewModel(new TourLogService()); // Pass the correct dependency
     }
 
     public void setTourViewModel(TourViewModel tourViewModel) {

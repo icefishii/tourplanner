@@ -1,6 +1,21 @@
 module dev.icefish.tourplanner.server {
-    requires java.sql;
+    requires spring.boot;
+    requires spring.boot.autoconfigure;
+    requires spring.context;
+    requires spring.web;
+    requires spring.data.jpa;
+    requires dev.icefish.tourplanner.models;
+    requires jakarta.persistence;
+    requires spring.webmvc;
+    requires spring.core;
+    requires spring.beans;
+    requires spring.orm;
 
+    opens dev.icefish.tourplanner.server to spring.core, spring.beans, spring.context;
+    opens dev.icefish.tourplanner.server.config to spring.core, spring.beans, spring.context;
+    opens dev.icefish.tourplanner.server.repository;
 
+    // Exports for Spring components
     exports dev.icefish.tourplanner.server;
+    exports dev.icefish.tourplanner.server.repository;
 }

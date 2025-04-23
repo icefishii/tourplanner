@@ -1,8 +1,8 @@
 package dev.icefish.tourplanner.client;
 
 import dev.icefish.tourplanner.client.controllers.MainViewController;
-import dev.icefish.tourplanner.client.services.TourLogServiceTemp;
-import dev.icefish.tourplanner.client.services.TourServiceTemp;
+import dev.icefish.tourplanner.client.services.TourLogService;
+import dev.icefish.tourplanner.client.services.TourService;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.application.Application;
@@ -13,9 +13,9 @@ import javafx.stage.Stage;
 public class Client extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        // Initialize services
-        TourServiceTemp tourService = new TourServiceTemp();
-        TourLogServiceTemp tourLogService = new TourLogServiceTemp();
+        // Initialize services with API connections
+        TourService tourService = new TourService();
+        TourLogService tourLogService = new TourLogService();
 
         // Initialize ViewModels
         TourViewModel tourViewModel = new TourViewModel(tourService);
