@@ -40,7 +40,7 @@ public class TourLogDetailViewController {
         this.tourViewModel = tourViewModel;
 
         Tour tour = tourViewModel.getAllTours().stream()
-                .filter(t -> t.getId().equals(tourLog.getTourId()))
+                .filter(t -> t.getId().equals(tourLog.getTour().getId()))
                 .findFirst()
                 .orElse(null);
 

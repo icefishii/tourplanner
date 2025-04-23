@@ -1,4 +1,5 @@
 module dev.icefish.tourplanner.models {
-    requires java.sql;
+    requires jakarta.persistence;
+    requires static lombok;
     exports dev.icefish.tourplanner.models;
 }

@@ -62,7 +62,8 @@ public class TourCreateViewController {
                 return;
             }
 
-            Tour newTour = new Tour(UUIDv7Generator.generateUUIDv7(), name, description, fromLocation, toLocation, transportType);
+            Tour newTour = new Tour(name, description, fromLocation, toLocation, transportType);
+            newTour.setId(UUIDv7Generator.generateUUIDv7());
 
             try {
                 OpenRouteService.RouteInfo info = OpenRouteService.getRouteInfo(fromLocation, toLocation, transportType);

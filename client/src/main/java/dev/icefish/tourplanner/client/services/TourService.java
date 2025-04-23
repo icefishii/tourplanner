@@ -5,61 +5,23 @@ import dev.icefish.tourplanner.models.TourLog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Scanner;
-
-
-//TODO: Implement the REST API in he server
-
 public class TourService {
 
-    private static final String BASE_URL = "http://localhost/api/tours";
+    private final ObservableList<Tour> tours = FXCollections.observableArrayList();
 
     public ObservableList<Tour> getAllTours() {
-        ObservableList<Tour> tours = FXCollections.observableArrayList();
-        try {
-            URL url = new URL(BASE_URL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.connect();
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                throw new RuntimeException("HttpResponseCode: " + responseCode);
-            } else {
-                Scanner scanner = new Scanner(url.openStream());
-                while (scanner.hasNext()) {
-                    // Parse the response and add to tours list
-                    //tours.add(parseTour(scanner.nextLine()));
-                }
-                scanner.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return tours;
+        return null;
     }
 
-
     public void createNewTour(Tour tour) {
-        try {
-            URL url = new URL(BASE_URL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("PUT");
-            conn.setDoOutput(true);
-            // Write tour data to the output stream
-            // Example: conn.getOutputStream().write(tour.toJson().getBytes());
-            conn.getOutputStream().flush();
-            conn.getOutputStream().close();
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                throw new RuntimeException("HttpResponseCode: " + responseCode);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    }
+
+    public void deleteTour(Tour tour) {
+
+    }
+
+    public void updateTour(Tour tour) {
+
     }
 }

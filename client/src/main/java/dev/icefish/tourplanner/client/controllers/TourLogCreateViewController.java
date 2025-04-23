@@ -114,16 +114,15 @@ public class TourLogCreateViewController {
             double distance = Double.parseDouble(distanceText);
             int rating = Integer.parseInt(ratingText);
 
-            TourLog newTourLog = new TourLog(
-                    UUIDv7Generator.generateUUIDv7(),
-                    selectedTour.getId(),
-                    Timestamp.valueOf(LocalDateTime.of(date, time)),
-                    comment,
-                    difficulty,
-                    distance,
-                    durationText,
-                    rating
-            );
+            TourLog newTourLog = new TourLog();
+            newTourLog.setId(UUIDv7Generator.generateUUIDv7());
+            newTourLog.setTour(selectedTour);
+            newTourLog.setDate(Timestamp.valueOf(LocalDateTime.of(date, time)));
+            newTourLog.setComment(comment);
+            newTourLog.setDifficulty(difficulty);
+            newTourLog.setDistance(distance);
+            newTourLog.setDurationText(durationText);
+            newTourLog.setRating(rating);
 
 
 

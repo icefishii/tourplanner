@@ -382,6 +382,8 @@ public class MainViewController {
     }
 }
 
+//ToDo When a Tour is selected it should be Pre-Selected when creating a TourLog in the Dropdown
+
 //ToDo Maps
 
 //ToDo Rewrite Tests
