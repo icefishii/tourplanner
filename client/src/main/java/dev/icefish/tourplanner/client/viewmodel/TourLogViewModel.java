@@ -1,6 +1,6 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
-import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.services.TourLogServiceTemp;
 import javafx.collections.FXCollections;
@@ -10,9 +10,9 @@ import java.util.UUID;
 public class TourLogViewModel {
 
     private final ObservableList<TourLog> tourLogsList;
-    private final TourLogServiceTemp tourLogService;
+    private final TourLogService tourLogService;
 
-    public TourLogViewModel(TourLogServiceTemp tourLogService) {
+    public TourLogViewModel(TourLogService tourLogService) {
         this.tourLogService = tourLogService;
         this.tourLogsList = FXCollections.observableArrayList(tourLogService.getAllTourLogs());
     }
