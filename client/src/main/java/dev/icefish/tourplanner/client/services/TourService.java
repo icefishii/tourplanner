@@ -1,32 +1,32 @@
 package dev.icefish.tourplanner.client.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import dev.icefish.tourplanner.models.Tour;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class TourService {
 
     private final HttpClient httpClient;
-    private final Gson gson;
+    private final ObjectMapper objectMapper;
     private final String BASE_URL = "http://localhost:8080/api/tours";
     private final ObservableList<Tour> tours = FXCollections.observableArrayList();
 
     public TourService() {
         this.httpClient = HttpClient.newHttpClient();
-        this.gson = new GsonBuilder().create();
+        this.objectMapper = new ObjectMapper()
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .setDateFormat(new StdDateFormat());
         fetchToursFromServer();
     }
 
@@ -40,8 +40,8 @@ public class TourService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                Type tourListType = new TypeToken<List<Tour>>(){}.getType();
-                List<Tour> fetchedTours = gson.fromJson(response.body(), tourListType);
+                List<Tour> fetchedTours = objectMapper.readValue(response.body(),
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, Tour.class));
                 tours.setAll(fetchedTours);
             }
         } catch (IOException | InterruptedException e) {
@@ -56,7 +56,7 @@ public class TourService {
 
     public void createNewTour(Tour tour) {
         try {
-            String tourJson = gson.toJson(tour);
+            String tourJson = objectMapper.writeValueAsString(tour);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL))
@@ -67,7 +67,7 @@ public class TourService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 201) {
-                Tour createdTour = gson.fromJson(response.body(), Tour.class);
+                Tour createdTour = objectMapper.readValue(response.body(), Tour.class);
                 tours.add(createdTour);
             }
         } catch (IOException | InterruptedException e) {
@@ -77,7 +77,7 @@ public class TourService {
 
     public void updateTour(Tour tour) {
         try {
-            String tourJson = gson.toJson(tour);
+            String tourJson = objectMapper.writeValueAsString(tour);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/" + tour.getId()))
@@ -88,7 +88,7 @@ public class TourService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                Tour updatedTour = gson.fromJson(response.body(), Tour.class);
+                Tour updatedTour = objectMapper.readValue(response.body(), Tour.class);
                 int index = -1;
                 for (int i = 0; i < tours.size(); i++) {
                     if (tours.get(i).getId().equals(tour.getId())) {

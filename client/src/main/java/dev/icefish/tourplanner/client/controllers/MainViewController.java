@@ -382,6 +382,8 @@ public class MainViewController {
     }
 }
 
+//ToDo Start and Destionation shuld not be able to be edited after creating a Tour -> Doesnt trigger an update of the route
+
 //ToDo When a Tour is selected it should be Pre-Selected when creating a TourLog in the Dropdown
 
 //ToDo Maps
