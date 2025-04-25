@@ -28,7 +28,11 @@ public class TourService {
     }
 
     public Tour saveTour(Tour tour) {
-        return tourRepository.save(tour);
+        System.out.println(tour);
+        Tour t = tourRepository.save(tour);
+        tourRepository.flush();
+        return t;
+
     }
 
     public void deleteTour(UUID id) {

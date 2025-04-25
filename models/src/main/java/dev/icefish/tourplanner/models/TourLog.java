@@ -13,8 +13,10 @@ import java.util.UUID;
 public class TourLog {
 
     @Id
-    @GeneratedValue
     private UUID id;
+
+    @Version
+    private Long version = 0L;
 
     @ManyToOne
     @JoinColumn(name = "tour_id", nullable = false)

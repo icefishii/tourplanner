@@ -3,9 +3,10 @@ module dev.icefish.tourplanner.client {
     requires javafx.fxml;
     requires javafx.graphics;
     requires dev.icefish.tourplanner.models;
-    requires java.sql;
     requires com.google.gson;
     requires java.net.http;
+    requires com.fasterxml.jackson.databind;
+    requires java.sql;
 
 
     opens dev.icefish.tourplanner.client to javafx.fxml;
