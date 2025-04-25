@@ -3,7 +3,6 @@ package dev.icefish.tourplanner.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
 @Entity
@@ -12,8 +11,10 @@ import java.util.UUID;
 public class Tour {
 
     @Id
-    @GeneratedValue
     private UUID id;
+
+    @Version
+    private Long version = 0L;
 
     private String name;
     private String description;
@@ -24,6 +25,7 @@ public class Tour {
     private double estimatedTime;
     private String routeImagePath;
 
+    // Constructor - No need to include 'version' here, JPA manages it.
     public Tour(String name, String description, String fromLocation, String toLocation, String transportType) {
         this.name = name;
         this.description = description;
@@ -31,4 +33,7 @@ public class Tour {
         this.toLocation = toLocation;
         this.transportType = transportType;
     }
+
+    // Lombok's @Data will generate getVersion() and setVersion()
+    // but you generally shouldn't manually set the version.
 }
