@@ -18,3 +18,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/tourplanner
       SPRING_DATASOURCE_USERNAME: tourplanner
       SPRING_DATASOURCE_PASSWORD: password
+#      LOGGING_LEVEL_ROOT: DEBUG
+      JAVA_OPTS: -Dlog4j2.debug=true
+    volumes:
+      - ./files:/app/files
