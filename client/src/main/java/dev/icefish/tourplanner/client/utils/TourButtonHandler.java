@@ -5,9 +5,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TourButtonHandler {
-
+    private final static Logger logger = LogManager.getLogger(TourButtonHandler.class);
     private Button deleteTourButton;
     private Button editTourButton;
     private Button newTourButton;
@@ -28,6 +30,7 @@ public class TourButtonHandler {
     }
 
     private void updateButtonState() {
+        logger.info("Updating tour button state");
         int selectedCount = tourListView.getSelectionModel().getSelectedItems().size();
 
         if (selectedCount == 0) {
@@ -43,6 +46,7 @@ public class TourButtonHandler {
     }
 
     public void resetButtons() {
+        logger.info("Resetting tour button state");
         deleteTourButton.setDisable(true);
         editTourButton.setDisable(true);
     }

@@ -3,6 +3,8 @@ import dev.icefish.tourplanner.client.utils.ConfigLoader;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -12,7 +14,7 @@ import java.util.Scanner;
 //This was created with the help of ChatGPT Model-4o
 
 public class OpenRouteService {
-
+    public static final Logger logger = LogManager.getLogger(OpenRouteService.class);
     private static final String API_KEY = ConfigLoader.get("openrouteservice.api.key");
     private static final String BASE_URL = "https://api.openrouteservice.org/v2/directions/";
 

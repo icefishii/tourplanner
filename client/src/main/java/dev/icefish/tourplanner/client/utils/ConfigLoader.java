@@ -1,10 +1,14 @@
 package dev.icefish.tourplanner.client.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigLoader {
+    private final static Logger logger = LogManager.getLogger(ConfigLoader.class);
     private static final Properties properties = new Properties();
 
     static {
@@ -12,9 +16,11 @@ public class ConfigLoader {
             if (input != null) {
                 properties.load(input);
             } else {
+                logger.error("config.properties not found in classpath!");
                 throw new RuntimeException("config.properties not found in classpath!");
             }
         } catch (IOException e) {
+            logger.error("Error loading config.properties: {}", e.getMessage());
             throw new RuntimeException("Failed to load config.properties", e);
         }
     }

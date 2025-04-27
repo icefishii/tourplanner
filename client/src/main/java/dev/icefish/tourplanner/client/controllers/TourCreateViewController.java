@@ -10,12 +10,14 @@ import dev.icefish.tourplanner.client.services.OpenRouteService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.function.Consumer;
 
 public class TourCreateViewController {
-
+    private final static Logger logger = LogManager.getLogger(TourCreateViewController.class);
     @FXML
     private TextField tourNameField, tourDescriptionField, fromLocationField, toLocationField;
 
@@ -67,9 +69,11 @@ public class TourCreateViewController {
 
             try {
                 OpenRouteService.RouteInfo info = OpenRouteService.getRouteInfo(fromLocation, toLocation, transportType);
+                logger.info(info.toString());
                 newTour.setDistance(info.distanceInKm());
                 newTour.setEstimatedTime(info.durationInHours());
             } catch (Exception e) {
+                logger.warn("Error retrieving route info: {}", e.getMessage());
                 showErrorAlert(Map.of("error", "Route info couldn't be retrieved: " + e.getMessage()));
                 return;
             }
@@ -98,19 +102,25 @@ public class TourCreateViewController {
 
 
     private void highlightErrorFields(Map<String, String> errors) {
+
         if (errors.containsKey("name")) {
+            logger.error(errors.get("name"));
             tourNameField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("description")) {
+            logger.error(errors.get("description"));
             tourDescriptionField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("fromLocation")) {
+            logger.error(errors.get("fromLocation"));
             fromLocationField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("toLocation")) {
+            logger.error(errors.get("toLocation"));
             toLocationField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("transportType")) {
+            logger.error(errors.get("transportType"));
             transportTypeBox.setStyle("-fx-border-color: red;");
         }
     }

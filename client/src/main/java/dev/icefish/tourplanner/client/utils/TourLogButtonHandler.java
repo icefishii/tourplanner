@@ -7,10 +7,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.SelectionMode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class TourLogButtonHandler {
-
+    private final static Logger logger = LogManager.getLogger(TourLogButtonHandler.class);
     @FXML
     private ListView<Tour> tourListView;
 
@@ -35,10 +37,12 @@ public class TourLogButtonHandler {
         tourListView.getItems().addListener((javafx.collections.ListChangeListener<Tour>) change -> updateButtonState());
 
         updateButtonState();
+        logger.info("Initializing Button State");
     }
 
     //Aus und einblenden
     private void updateButtonState() {
+        logger.info("Updating tour log button state");
         int selectedCount = tourLogTableView.getSelectionModel().getSelectedItems().size();
         boolean isListEmpty = tourListView.getItems().isEmpty(); // Prüfen, ob die Liste leer ist
 
@@ -59,5 +63,6 @@ public class TourLogButtonHandler {
     public void resetButtons() {
         deleteTourLogButton.setDisable(true);
         editTourLogButton.setDisable(true);
+        logger.info("Reset tour log button state");
     }
 }

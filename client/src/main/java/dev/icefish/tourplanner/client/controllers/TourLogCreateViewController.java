@@ -10,6 +10,8 @@ import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -19,6 +21,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class TourLogCreateViewController {
+
+    private final static Logger logger = LogManager.getLogger(TourLogCreateViewController.class);
+
     @FXML
     private Button createButton, cancelButton;
 
@@ -105,6 +110,7 @@ public class TourLogCreateViewController {
             if (!errors.isEmpty()) {
                 highlightErrorFields(errors);
                 showErrorAlert(errors);
+                logger.error(errors.toString());
                 return;
             }
 
@@ -132,6 +138,7 @@ public class TourLogCreateViewController {
 
             WindowUtils.close(commentField);
         } catch (Exception e) {
+            logger.error("Error creating TourLog: {}", e.getMessage());
             showErrorAlert(Map.of("error", "Unexpected Error: " + e.getMessage()));
         }
     }
@@ -153,27 +160,35 @@ public class TourLogCreateViewController {
 
     private void highlightErrorFields(Map<String, String> errors) {
         if (errors.containsKey("tour")) {
+            logger.error(errors.get("tour"));
             tourComboBox.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("date")) {
+            logger.error(errors.get("date"));
             datePicker.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("comment")) {
+            logger.error(errors.get("comment"));
             commentField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("difficulty")) {
+            logger.error(errors.get("difficulty"));
             difficultyField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("distance")) {
+            logger.error(errors.get("distance"));
             distanceField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("duration")) {
+            logger.error(errors.get("duration"));
             durationField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("rating")) {
+            logger.error(errors.get("rating"));
             ratingField.setStyle("-fx-border-color: red;");
         }
         if (errors.containsKey("time")) {
+            logger.error(errors.get("time"));
             timeField.setStyle("-fx-border-color: red;");
         }
     }
