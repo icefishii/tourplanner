@@ -16,12 +16,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
 
 public class MainViewController {
+
+    public final static Logger logger = LogManager.getLogger(MainViewController.class);
 
     @FXML
     private Button deleteTourButton, editTourButton, newTourButton, newTourLogButton, deleteTourLogButton, editTourLogButton;
@@ -120,6 +124,7 @@ public class MainViewController {
             tourCreateStage.setScene(new Scene(root));
             tourCreateStage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -156,6 +161,7 @@ public class MainViewController {
             tourEditStage.setOnCloseRequest(e -> tourEditStage = null);
             tourEditStage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -241,6 +247,7 @@ public class MainViewController {
 
             stage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -267,6 +274,7 @@ public class MainViewController {
 
             stage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -311,6 +319,7 @@ public class MainViewController {
             tourLogCreateStage.setOnCloseRequest(e -> tourLogCreateStage = null);
             tourLogCreateStage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -377,6 +386,7 @@ public class MainViewController {
             tourLogEditStage.setOnCloseRequest(e -> tourLogEditStage = null);
             tourLogEditStage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }

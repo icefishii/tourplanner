@@ -10,6 +10,7 @@ public class WindowUtils {
             Stage stage = (Stage) node.getScene().getWindow();
             if (stage != null) {
                 stage.close();
+
             }
         }
     }

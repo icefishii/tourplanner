@@ -2,7 +2,6 @@ package dev.icefish.tourplanner.client.viewmodel;
 
 import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.models.TourLog;
-import dev.icefish.tourplanner.client.services.TourLogServiceTemp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.UUID;

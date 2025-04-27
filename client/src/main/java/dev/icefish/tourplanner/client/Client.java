@@ -9,10 +9,15 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Client extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        // Set up logging
+        Logger logger = LogManager.getLogger(Client.class);
+        logger.info("Starting Tour Planner Client...");
         // Initialize services with API connections
         TourService tourService = new TourService();
         TourLogService tourLogService = new TourLogService();
