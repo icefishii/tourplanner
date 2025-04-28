@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.util.StdDateFormat;
 import dev.icefish.tourplanner.models.Tour;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,6 +19,7 @@ import java.util.UUID;
 
 public class TourService {
 
+    private final static Logger logger = LogManager.getLogger(TourService.class);
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final String BASE_URL = "http://localhost:8080/api/tours";
@@ -31,6 +34,7 @@ public class TourService {
     }
 
     private void fetchToursFromServer() {
+        logger.info("Fetching tours from server...");
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL))
@@ -45,6 +49,7 @@ public class TourService {
                 tours.setAll(fetchedTours);
             }
         } catch (IOException | InterruptedException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -55,6 +60,7 @@ public class TourService {
     }
 
     public void createNewTour(Tour tour) {
+        logger.info("Creating new tour: {}", tour.getName());
         try {
             String tourJson = objectMapper.writeValueAsString(tour);
 
@@ -71,11 +77,13 @@ public class TourService {
                 tours.add(createdTour);
             }
         } catch (IOException | InterruptedException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
 
     public void updateTour(Tour tour) {
+        logger.info("Updating tour: {}", tour.getId());
         try {
             String tourJson = objectMapper.writeValueAsString(tour);
 
@@ -101,11 +109,13 @@ public class TourService {
                 }
             }
         } catch (IOException | InterruptedException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
 
     public void deleteTour(Tour tour) {
+        logger.info("Deleting tour: {}", tour.getId());
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/" + tour.getId()))
@@ -118,6 +128,7 @@ public class TourService {
                 tours.removeIf(t -> t.getId().equals(tour.getId()));
             }
         } catch (IOException | InterruptedException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }

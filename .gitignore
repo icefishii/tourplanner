@@ -39,3 +39,5 @@ build/
 
 .idea/
 .idea
+
+client/src/main/resources/config.properties

@@ -3,9 +3,7 @@ package dev.icefish.tourplanner.client.controllers;
 import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
-import dev.icefish.tourplanner.client.utils.TourLogChecker;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
-import dev.icefish.tourplanner.client.services.TourLogServiceTemp;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.event.ActionEvent;
@@ -15,7 +13,6 @@ import javafx.scene.control.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class TourLogEditViewController {

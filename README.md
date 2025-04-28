@@ -48,6 +48,12 @@ Run:
   ./mvnw test -f client/pom.xml
 ```
 
+### Backend:
+```shell
+  docker compose build
+  docker compose up
+```
+
 ## Documentation
 
 - [Documentation](./Protokoll_Intermediate_TP_Lampart_Unger.pdf)

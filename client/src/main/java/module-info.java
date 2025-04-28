@@ -6,6 +6,8 @@ module dev.icefish.tourplanner.client {
     requires com.google.gson;
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
+    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires java.sql;
     requires javafx.web;
     requires java.desktop;

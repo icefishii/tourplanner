@@ -21,6 +21,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +31,8 @@ import java.sql.Timestamp;
 import java.util.*;
 
 public class MainViewController {
+
+    public final static Logger logger = LogManager.getLogger(MainViewController.class);
 
     @FXML
     private Button deleteTourButton, editTourButton, newTourButton, newTourLogButton, deleteTourLogButton, editTourLogButton;
@@ -150,6 +154,7 @@ public class MainViewController {
             tourCreateStage.show();
 
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -186,6 +191,7 @@ public class MainViewController {
             tourEditStage.setOnCloseRequest(e -> tourEditStage = null);
             tourEditStage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -271,6 +277,7 @@ public class MainViewController {
 
             stage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -297,6 +304,7 @@ public class MainViewController {
 
             stage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -341,6 +349,7 @@ public class MainViewController {
             tourLogCreateStage.setOnCloseRequest(e -> tourLogCreateStage = null);
             tourLogCreateStage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -407,6 +416,7 @@ public class MainViewController {
             tourLogEditStage.setOnCloseRequest(e -> tourLogEditStage = null);
             tourLogEditStage.show();
         } catch (IOException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
