@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Tour Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <style>
+        html, body { height: 100%; margin: 0; }
+        #map { height: 100%; width: 100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    const startLat = LAT_FROM;
+    const startLon = LON_FROM;
+    const destLat = LAT_TO;
+    const destLon = LON_TO;
+    const transportMode = 'TRANSPORT_MODE'; // walk, bike, car
+    const apiKey = 'API_KEY';
+
+    const map = L.map('map');
+    const bounds = [[startLat, startLon], [destLat, destLon]];
+
+    map.fitBounds(bounds);
+
+    // Korrekte Tile-Layer URL
+    const tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+        minZoom: 5,
+        detectRetina: true,
+        reuseTiles: true,
+        updateWhenIdle: true,
+        errorTileUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WiAnW0AAAAASUVORK5CYII='
+    }).addTo(map);
+
+    L.marker([startLat, startLon]).addTo(map).bindPopup('Start');
+    L.marker([destLat, destLon]).addTo(map).bindPopup('Destination');
+
+    // Warten auf Tile-Load
+    let tilesLoaded = false;
+    tileLayer.on('load', () => {
+        console.log('Tiles geladen.');
+        tilesLoaded = true;
+        checkIfReady();
+    });
+
+    // Warten auf Route-Load
+    let routeLoaded = false;
+
+    const url = `https://api.openrouteservice.org/v2/directions/${transportMode}?api_key=${apiKey}&start=${startLon},${startLat}&end=${destLon},${destLat}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.features && data.features.length > 0) {
+                const routeGeoJson = data.features[0].geometry;
+                L.geoJSON(routeGeoJson, { style: { color: 'blue', weight: 4 } }).addTo(map);
+                console.log('Route geladen.');
+                routeLoaded = true;
+                checkIfReady();
+            } else {
+                alert('Keine Route gefunden.');
+            }
+        })
+        .catch(error => {
+            console.error('Fehler beim Abrufen der Route:', error);
+            alert('Fehler beim Abrufen der Route: ' + error.message);
+        });
+
+</script>
+</body>
+</html>

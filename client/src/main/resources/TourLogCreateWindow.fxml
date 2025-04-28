@@ -13,6 +13,7 @@
 <!-- Responsive GridPane für Create Tour Log Formular -->
 
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.web.WebView?>
 <GridPane prefHeight="380.0" prefWidth="480.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <padding>

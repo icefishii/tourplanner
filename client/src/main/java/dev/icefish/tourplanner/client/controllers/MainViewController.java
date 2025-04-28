@@ -1,5 +1,7 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.services.GeoCoder;
+import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.utils.TourButtonHandler;
@@ -15,9 +17,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -41,6 +48,12 @@ public class MainViewController {
     @FXML
     private TableColumn<TourLog, Double> tourLogDistanceView;
 
+    @FXML
+    private ImageView mapImageView;
+
+    @FXML
+    private WebView mapView;
+
     private Stage tourLogCreateStage;
     private Stage tourCreateStage;
     private Stage tourEditStage;
@@ -51,12 +64,14 @@ public class MainViewController {
 
     private final TourViewModel tourViewModel;
     private final TourLogViewModel tourLogViewModel;
+    private final MapViewModel mapViewModel;
     private TourButtonHandler tourButtonHandler;
     private TourLogButtonHandler tourLogButtonHandler;
 
-    public MainViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel) {
+    public MainViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel, MapViewModel mapViewModel) {
         this.tourViewModel = tourViewModel;
         this.tourLogViewModel = tourLogViewModel;
+        this.mapViewModel = mapViewModel;
     }
 
     @FXML
@@ -74,8 +89,11 @@ public class MainViewController {
                 UUID selectedTourId = newValue.getId();
                 ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(selectedTourId);
                 tourLogTableView.setItems(tourLogs);
+
+                mapViewModel.setMapImageForTour(selectedTourId);
             } else {
                 tourLogTableView.setItems(FXCollections.observableArrayList());
+                mapViewModel.setMapImageForTour(null);
             }
         });
 
@@ -96,6 +114,10 @@ public class MainViewController {
                 }
             }
         });
+
+        mapImageView.imageProperty().bind(mapViewModel.currentMapImageProperty());
+
+
     }
 
     public void onCreateTour(ActionEvent actionEvent) {
@@ -117,8 +139,16 @@ public class MainViewController {
 
             tourCreateStage = new Stage();
             tourCreateStage.setTitle("Create Tour");
-            tourCreateStage.setScene(new Scene(root));
+
+            // Set the size of the window here (z.B. 800x600)
+            Scene scene = new Scene(root, 800, 600); // Höhe und Breite nach Wunsch anpassen
+            tourCreateStage.setScene(scene);
+
+            // Optional: Wenn du willst, dass die Fenstergröße dynamisch angepasst wird:
+            tourCreateStage.setResizable(true); // Um das Fenster vergrößern/verkleinern zu können.
+
             tourCreateStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -382,13 +412,7 @@ public class MainViewController {
     }
 }
 
-//ToDo Start and Destionation shuld not be able to be edited after creating a Tour -> Doesnt trigger an update of the route
-
-//ToDo When a Tour is selected it should be Pre-Selected when creating a TourLog in the Dropdown
-
-//ToDo Maps
-
-//ToDo Rewrite Tests
+//ToDo delete Map Image when tour is deleted (-> DB)
 
 //ToDo Close window when application terminated
 
@@ -396,11 +420,18 @@ public class MainViewController {
 
 //ToDo Button Controller
 
-//ToDo the distance, and the time should be retrieved by a REST request using the OpenRouteservice.org API
+//ToDo Search (& Child friendly, Rating)
+
+//ToDo generate Report
+
+//ToDo import and export of tour data (file format of your choice)
+
+//ToDo Rewrite Tests
 
 //ToDo Mondbutton für Darkmode
 
 //ToDo Mandatory Feature (Language, ???)
 
 //ToDo das mit den , . in der Eingabe
+
 

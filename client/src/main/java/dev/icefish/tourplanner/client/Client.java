@@ -3,6 +3,7 @@ package dev.icefish.tourplanner.client;
 import dev.icefish.tourplanner.client.controllers.MainViewController;
 import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.client.services.TourService;
+import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.application.Application;
@@ -20,14 +21,23 @@ public class Client extends Application {
         // Initialize ViewModels
         TourViewModel tourViewModel = new TourViewModel(tourService);
         TourLogViewModel tourLogViewModel = new TourLogViewModel(tourLogService);
+        MapViewModel mapViewModel = new MapViewModel();
 
         // Load FXML and inject dependencies
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourPlannerWindow.fxml"));
-        loader.setControllerFactory(param -> new MainViewController(tourViewModel, tourLogViewModel));
+        loader.setControllerFactory(param -> new MainViewController(tourViewModel, tourLogViewModel,mapViewModel));
 
         Scene scene = new Scene(loader.load(), 620, 440);
+
         stage.setTitle("Tour Planner System");
         stage.setScene(scene);
+
+
+        stage.setMinWidth(800);
+        stage.setMinHeight(600);
+
+        stage.setMaximized(true);
+
         stage.show();
     }
 

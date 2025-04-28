@@ -1,16 +1,21 @@
 package dev.icefish.tourplanner.client.controllers;
 
-import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
-import dev.icefish.tourplanner.models.Tour;
-import dev.icefish.tourplanner.client.utils.WindowUtils;
-import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
-
+import dev.icefish.tourplanner.client.services.GeoCoder;
+import dev.icefish.tourplanner.client.services.MapService;
 import dev.icefish.tourplanner.client.services.OpenRouteService;
+import dev.icefish.tourplanner.client.utils.ConfigLoader;
+import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
+import dev.icefish.tourplanner.client.utils.WindowUtils;
+import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
+import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
+import dev.icefish.tourplanner.models.Tour;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.web.WebView;
 import javafx.event.ActionEvent;
 
+import java.io.File;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -23,13 +28,18 @@ public class TourCreateViewController {
     private ComboBox<String> transportTypeBox;
 
     @FXML
-    private Button createButton, cancelButton;
+    private WebView mapWebView;
 
-    private Consumer<Tour> tourCreatedListener;
+    @FXML
+    private Button createButton, cancelButton, loadMapButton;
+
     private final TourViewModel tourViewModel;
+    private final MapViewModel mapViewModel;
+    private Consumer<Tour> tourCreatedListener;
 
     public TourCreateViewController(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
+        this.mapViewModel = new MapViewModel();
     }
 
     @FXML
@@ -37,6 +47,45 @@ public class TourCreateViewController {
         transportTypeBox.getItems().addAll("Walk", "Car", "Bike");
         createButton.setOnAction(this::onCreateButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
+        loadMapButton.setOnAction(this::onLoadMapButtonClick);
+    }
+
+    private void onLoadMapButtonClick(ActionEvent event) {
+        try {
+            double[] fromCoords = GeoCoder.getCoordinates(fromLocationField.getText());
+            double[] toCoords = GeoCoder.getCoordinates(toLocationField.getText());
+            String transportType = transportTypeBox.getValue().toLowerCase();
+
+            String orsTransport = switch (transportType) {
+                case "walk" -> "foot-walking";
+                case "bike" -> "cycling-regular";
+                case "car" -> "driving-car";
+                default -> throw new IllegalArgumentException("Unsupported transport type: " + transportType);
+            };
+
+            String htmlTemplate = new String(getClass().getResourceAsStream("/MapTemplate.html").readAllBytes());
+            String apiKey = ConfigLoader.get("openrouteservice.api.key");
+
+            String htmlContent = htmlTemplate
+                    .replace("LAT_FROM", String.valueOf(fromCoords[0]))
+                    .replace("LON_FROM", String.valueOf(fromCoords[1]))
+                    .replace("LAT_TO", String.valueOf(toCoords[0]))
+                    .replace("LON_TO", String.valueOf(toCoords[1]))
+                    .replace("TRANSPORT_MODE", orsTransport)
+                    .replace("API_KEY", apiKey);
+
+            mapWebView.getEngine().loadContent(htmlContent);
+
+            mapWebView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    // Karte ist fertig geladen
+                    System.out.println("Map fully loaded.");
+                }
+            });
+
+        } catch (Exception e) {
+            showErrorAlert(Map.of("error", "Couldn't load map: " + e.getMessage()));
+        }
     }
 
     public void setTourCreatedListener(Consumer<Tour> listener) {
@@ -75,8 +124,11 @@ public class TourCreateViewController {
             }
 
             if (tourCreatedListener != null) {
-                tourCreatedListener.accept(newTour); // Notify listener
+                tourCreatedListener.accept(newTour);
             }
+
+            // Hier neuer Aufruf MapService
+            MapService.saveWebViewSnapshot(mapWebView, newTour, mapViewModel);
 
             WindowUtils.close(tourNameField);
         } catch (Exception e) {
@@ -95,7 +147,6 @@ public class TourCreateViewController {
         toLocationField.setStyle(null);
         transportTypeBox.setStyle(null);
     }
-
 
     private void highlightErrorFields(Map<String, String> errors) {
         if (errors.containsKey("name")) {

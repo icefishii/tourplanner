@@ -13,7 +13,6 @@ import java.util.Map;
  * This was created  with the help of ChatGPT Model-4o
  */
 
-
 public class TourLogChecker {
     public static Map<String, String> validateTourLogRaw(
             Tour tour, LocalDate date, String time, String comment,

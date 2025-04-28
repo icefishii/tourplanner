@@ -7,6 +7,8 @@ module dev.icefish.tourplanner.client {
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
     requires java.sql;
+    requires javafx.web;
+    requires java.desktop;
 
 
     opens dev.icefish.tourplanner.client to javafx.fxml;
