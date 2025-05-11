@@ -42,7 +42,7 @@
     <Button fx:id="loadMapButton" text="Load Map" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" />
 
     <!-- WebView für Map -->
-    <WebView fx:id="mapWebView" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="2" prefHeight="400.0" prefWidth="600.0" minHeight="300.0" minWidth="400.0"/>
+    <WebView fx:id="mapWebView" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="2" prefHeight="350.0" prefWidth="600.0" minHeight="300.0" minWidth="400.0"/>
 
     <Button fx:id="createButton" text="Create" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" />
     <Button fx:id="cancelButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" />
