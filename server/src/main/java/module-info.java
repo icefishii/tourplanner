@@ -12,7 +12,6 @@ module dev.icefish.tourplanner.server {
     requires spring.orm;
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.core;
-    requires org.slf4j;
 
     opens dev.icefish.tourplanner.server to spring.core, spring.beans, spring.context;
     opens dev.icefish.tourplanner.server.config to spring.core, spring.beans, spring.context;

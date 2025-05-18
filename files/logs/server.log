@@ -1,0 +1,36 @@
+Starting TourPlanner Server
+Starting Server using Java 21.0.7 with PID 1 (/app/server.jar started by appuser in /app)
+No active profile set, falling back to 1 default profile: "default"
+Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+Finished Spring Data repository scanning in 37 ms. Found 2 JPA repository interfaces.
+Tomcat initialized with port 8080 (http)
+Root WebApplicationContext: initialization completed in 1042 ms
+No LoadTimeWeaver setup: ignoring JPA class transformer
+Initialized JPA EntityManagerFactory for persistence unit 'default'
+spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+Tomcat started on port 8080 (http) with context path '/'
+Started Server in 4.022 seconds (process running for 4.932)
+Initializing Servlet 'dispatcherServlet'
+Completed initialization in 2 ms
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Fetching all tours
+Fetching all tour logs
+Saving tour: Tour(id=0196e4ee-5f81-7000-bb75-0f5a08168047, version=0, name=Test, description=1, fromLocation=Wien, toLocation=Graz, transportType=Walk, distance=183.0832, estimatedTime=36.61636111111111, routeImagePath=null)
+Fetching tour logs for tour id: 0196e4ee-5f81-7000-bb75-0f5a08168047
