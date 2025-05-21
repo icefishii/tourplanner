@@ -58,6 +58,17 @@ public class MainViewController {
     @FXML
     private WebView mapView;
 
+    //MenuBar
+
+
+    //Search
+    @FXML
+    private TextField tourSearchField, tourLogSearchField;
+
+    @FXML
+    private Button tourSearchButton, tourClearButton, tourLogClearButton, tourLogSearchButton;
+
+
     private Stage tourLogCreateStage;
     private Stage tourCreateStage;
     private Stage tourEditStage;
@@ -420,9 +431,48 @@ public class MainViewController {
             e.printStackTrace();
         }
     }
+
+    //----Menu Bar-----
+    public void onImport(ActionEvent actionEvent) {
+    }
+
+    public void onExport(ActionEvent actionEvent) {
+    }
+
+    public void onExit(ActionEvent actionEvent) {
+    }
+
+    public void onGenerateTourReport(ActionEvent actionEvent) {
+    }
+
+    public void onGenerateSummaryReport(ActionEvent actionEvent) {
+    }
+
+    public void onToggleDarkMode(ActionEvent actionEvent) {
+    }
+
+    public void onAbout(ActionEvent actionEvent) {
+    }
+
+    //----Search Bars-----
+    public void onSearchTours(ActionEvent actionEvent) {
+    }
+
+    public void onClearTourSearch(ActionEvent actionEvent) {
+        tourSearchField.clear();
+    }
+
+    public void onSearchTourLogs(ActionEvent actionEvent) {
+    }
+
+    public void onClearTourLogSearch(ActionEvent actionEvent) {
+        tourLogSearchField.clear();
+    }
 }
 
 //ToDo delete Map Image when tour is deleted (-> DB)
+
+//ToDo Computed Attributes (popularity, Childfriendlyness, full-text-search also considers the computed values)
 
 //ToDo Close window when application terminated
 
@@ -430,15 +480,11 @@ public class MainViewController {
 
 //ToDo Button Controller
 
-//ToDo Search (& Child friendly, Rating)
-
 //ToDo generate Report
 
 //ToDo import and export of tour data (file format of your choice)
 
 //ToDo Rewrite Tests
-
-//ToDo Mondbutton für Darkmode
 
 //ToDo Mandatory Feature (Language, ???)
 
