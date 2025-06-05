@@ -436,6 +436,22 @@ public class MainViewController {
 
     //----Menu Bar-----
     public void onImport(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ImportWindow.fxml"));
+            Parent root = loader.load();
+
+            Stage importStage = new Stage();
+            importStage.setTitle("Import");
+
+            Scene scene = new Scene(root);
+            importStage.setScene(scene);
+            importStage.setResizable(false);
+            importStage.show();
+
+        } catch (IOException e) {
+            logger.error("Fehler beim Öffnen des Import-Dialogs: " + e.getMessage(), e);
+        }
+
     }
 
     public void onExport(ActionEvent actionEvent) {
