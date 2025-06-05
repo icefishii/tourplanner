@@ -236,8 +236,10 @@ public class MainViewController {
                     tourViewModel.deleteTour(tour);
                 }
                 refreshUI(); // Refresh UI after deleting tours
+
             }
         });
+
     }
 
     private void setTourListView() {
@@ -470,15 +472,13 @@ public class MainViewController {
     }
 }
 
-//ToDo delete Map Image when tour is deleted (-> DB)
-
 //ToDo Computed Attributes (popularity, Childfriendlyness, full-text-search also considers the computed values)
 
 //ToDo Close window when application terminated
 
 //ToDo Keyboard-Shortcuts
 
-//ToDo Button Controller
+//ToDo Button Controller/Mediator
 
 //ToDo generate Report
 

@@ -3,12 +3,14 @@ package dev.icefish.tourplanner.client.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
+import dev.icefish.tourplanner.client.utils.ConfigLoader;
 import dev.icefish.tourplanner.models.Tour;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -125,11 +127,33 @@ public class TourService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 204) {
+                //Tour aus Liste entfernen
                 tours.removeIf(t -> t.getId().equals(tour.getId()));
+
+                //Bild dazu löschen
+                deleteMapImage(tour.getId());
             }
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
             e.printStackTrace();
+        }
+    }
+    private void deleteMapImage(UUID tourId) {
+        String basePath = ConfigLoader.get("image.basePath");
+        if (basePath == null) {
+            logger.warn("No image.basePath set in config.properties");
+            return;
+        }
+
+        File imageFile = new File(basePath, tourId + ".png");
+        if (imageFile.exists()) {
+            if (imageFile.delete()) {
+                logger.info("Deleted image file: " + imageFile.getAbsolutePath());
+            } else {
+                logger.warn("Could not delete image file: " + imageFile.getAbsolutePath());
+            }
+        } else {
+            logger.info("No image file found to delete: " + imageFile.getAbsolutePath());
         }
     }
 }
