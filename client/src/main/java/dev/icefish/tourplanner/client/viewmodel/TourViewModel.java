@@ -1,12 +1,16 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
+import dev.icefish.tourplanner.client.controllers.MainViewController;
 import dev.icefish.tourplanner.client.services.ReportService;
 import dev.icefish.tourplanner.client.services.TourService;
+import dev.icefish.tourplanner.client.utils.TourAttributeHelper;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TourViewModel {
-
+    public final static Logger logger = LogManager.getLogger(TourViewModel.class);
     private final ObservableList<Tour> toursList;
     private final TourService tourService;
     private final ReportService reportService;
@@ -71,6 +75,79 @@ public class TourViewModel {
         reportService.generateSummaryReport(logsByTour, filePath);
     }
 
+    public ObservableList<Tour> searchTours(String searchText) {
+        if (searchText == null || searchText.trim().isEmpty()) {
+            return toursList; // Return all tours if search text is empty
+        }
+
+        ObservableList<Tour> filteredTours = FXCollections.observableArrayList();
+        searchText = searchText.toLowerCase().trim(); // Normalize search text
+
+        for (Tour tour : toursList) {
+            if (searchText.startsWith("name:")) {
+                String nameFilter = searchText.substring(5).trim(); // Extract and trim after "name:"
+                if (tour.getName().toLowerCase().contains(nameFilter)) {
+                    filteredTours.add(tour);
+                }
+            } else if (searchText.startsWith("description:")) {
+                String descriptionFilter = searchText.substring(12).trim();
+                if (tour.getDescription().toLowerCase().contains(descriptionFilter)) {
+                    filteredTours.add(tour);
+                }
+            } else if (searchText.startsWith("from:")) {
+                String fromFilter = searchText.substring(5).trim();
+                if (tour.getFromLocation().toLowerCase().contains(fromFilter)) {
+                    filteredTours.add(tour);
+                }
+            } else if (searchText.startsWith("to:")) {
+                String toFilter = searchText.substring(3).trim();
+                if (tour.getToLocation().toLowerCase().contains(toFilter)) {
+                    filteredTours.add(tour);
+                }
+            } else if (searchText.startsWith("transport:")) {
+                String transportFilter = searchText.substring(10).trim();
+                if (tour.getTransportType().toLowerCase().contains(transportFilter)) {
+                    filteredTours.add(tour);
+                }
+            } else if (searchText.startsWith("popularity:")) {
+                String popularityFilter = searchText.substring(11).trim();
+                int popularity = getPopularity(tour);
+                if (String.valueOf(popularity).contains(popularityFilter)) {
+                    filteredTours.add(tour);
+                }
+            } else if (searchText.startsWith("child-friendliness:")) {
+                String childFriendlinessFilter = searchText.substring(18).trim();
+                String childFriendliness = getChildFriendliness(tour);
+                if (childFriendliness.toLowerCase().contains(childFriendlinessFilter)) {
+                    filteredTours.add(tour);
+                }
+            } else {
+                // Default full-text search
+                int popularity = getPopularity(tour);
+                String childFriendliness = getChildFriendliness(tour);
+                if (tour.getName().toLowerCase().contains(searchText) ||
+                        tour.getDescription().toLowerCase().contains(searchText) ||
+                        tour.getFromLocation().toLowerCase().contains(searchText) ||
+                        tour.getToLocation().toLowerCase().contains(searchText) ||
+                        tour.getTransportType().toLowerCase().contains(searchText) ||
+                        String.valueOf(popularity).contains(searchText) ||
+                        childFriendliness.toLowerCase().contains(searchText)) {
+                    filteredTours.add(tour);
+                }
+            }
+        }
+        return filteredTours;
+    }
+
+    public int getPopularity(Tour tour) {
+        ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(tour.getId());
+        return TourAttributeHelper.computePopularity(tourLogs);
+    }
+
+    public String getChildFriendliness(Tour tour) {
+        ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(tour.getId());
+        return TourAttributeHelper.computeChildFriendliness(tourLogs, tour);
+    }
 
 
 

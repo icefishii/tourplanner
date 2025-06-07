@@ -280,7 +280,7 @@ public class MainViewController {
             Parent root = loader.load();
 
             TourDetailViewController controller = loader.getController();
-            controller.setTourDetails(tour);
+            controller.setTourDetails(tour, tourLogViewModel.getTourLogsByTourId(tour.getId()));
 
             Stage stage = new Stage();
             stage.setTitle("Tour Details");
@@ -511,22 +511,41 @@ public class MainViewController {
     }
 
     //----Search Bars-----
-    public void onSearchTours(ActionEvent actionEvent) {
-    }
 
     public void onClearTourSearch(ActionEvent actionEvent) {
         tourSearchField.clear();
-    }
-
-    public void onSearchTourLogs(ActionEvent actionEvent) {
+        tourListView.setItems(tourViewModel.getAllTours());
     }
 
     public void onClearTourLogSearch(ActionEvent actionEvent) {
         tourLogSearchField.clear();
+        Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+        if (selectedTour != null) {
+            ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(selectedTour.getId());
+            tourLogTableView.setItems(tourLogs);
+        } else {
+            tourLogTableView.setItems(FXCollections.observableArrayList());
+        }
+    }
+
+    @FXML
+    public void onSearchTours(ActionEvent actionEvent) {
+        String searchText = tourSearchField.getText().trim().toLowerCase();
+        tourListView.setItems(tourViewModel.searchTours(searchText));
+    }
+
+    @FXML
+    public void onSearchTourLogs(ActionEvent actionEvent) {
+        String searchText = tourLogSearchField.getText().trim().toLowerCase();
+        Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+        if (selectedTour != null) {
+            ObservableList<TourLog> currentTourLogs = tourLogViewModel.getTourLogsByTourId(selectedTour.getId());
+            tourLogTableView.setItems(tourLogViewModel.searchTourLogs(searchText, currentTourLogs));
+        }
     }
 }
 
-//ToDo Computed Attributes (popularity, Childfriendlyness, full-text-search also considers the computed values)
+
 
 //ToDo Close window when application terminated
 

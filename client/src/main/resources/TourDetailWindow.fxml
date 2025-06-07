@@ -6,8 +6,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 
-<!--ToDo Style auslagern-->
-
 <VBox spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.TourDetailViewController">
 
     <padding>
@@ -49,6 +47,16 @@
     <HBox spacing="10" VBox.vgrow="ALWAYS">
         <Label text="Transport:" style="-fx-font-weight: bold;"/>
         <Label fx:id="transportTypeLabel" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Popularity:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="popularityLabel" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Child-Friendliness:" style="-fx-font-weight: bold;"/>
+        <Label fx:id="childFriendlinessLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <Button text="OK" style="-fx-font-size: 14px; -fx-padding: 5px 15px;" onAction="#handleClose" VBox.vgrow="ALWAYS"/>
