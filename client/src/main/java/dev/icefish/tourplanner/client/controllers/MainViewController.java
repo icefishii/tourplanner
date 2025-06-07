@@ -482,6 +482,26 @@ public class MainViewController {
     }
 
     public void onGenerateSummaryReport(ActionEvent actionEvent) {
+        if (tourListView.getItems().isEmpty()) {
+            // Optional: Alert anzeigen
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Summary Report");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+        File file = fileChooser.showSaveDialog(((MenuItem) actionEvent.getSource()).getParentPopup().getOwnerWindow());
+
+        if (file != null) {
+            try {
+                tourViewModel.generateSummaryReport(file.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Optional: Fehlerdialog anzeigen
+            }
+        }
+
+
     }
 
     public void onToggleDarkMode(ActionEvent actionEvent) {

@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TourViewModel {
 
@@ -55,6 +57,18 @@ public class TourViewModel {
         List<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(tour.getId()); // delegieren oder direkt laden
         reportService.generateTourReport(tour, tourLogs, filePath);
 
+    }
+
+    public void generateSummaryReport(Path filePath) throws IOException {
+        List<Tour> tours = toursList.stream().toList(); // alle Touren aus aktueller Liste
+        // Zu jeder Tour die zugehörigen Logs holen
+        Map<Tour, List<TourLog>> logsByTour = new HashMap<>();
+        for (Tour tour : tours) {
+            List<TourLog> logs = tourLogViewModel.getTourLogsByTourId(tour.getId());
+            logsByTour.put(tour, logs);
+        }
+        // Jetzt ReportService rufen mit allen Daten
+        reportService.generateSummaryReport(logsByTour, filePath);
     }
 
 
