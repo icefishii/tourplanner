@@ -6,6 +6,7 @@ import dev.icefish.tourplanner.client.services.TourService;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
+import dev.icefish.tourplanner.client.services.ReportService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,15 +23,17 @@ public class Client extends Application {
         // Initialize services with API connections
         TourService tourService = new TourService();
         TourLogService tourLogService = new TourLogService();
+        ReportService reportService = new ReportService();
+        TourLogViewModel tourLogViewModel = new TourLogViewModel(tourLogService);
 
         // Initialize ViewModels
-        TourViewModel tourViewModel = new TourViewModel(tourService);
-        TourLogViewModel tourLogViewModel = new TourLogViewModel(tourLogService);
+        TourViewModel tourViewModel = new TourViewModel(tourService, reportService, tourLogViewModel);
+
         MapViewModel mapViewModel = new MapViewModel();
 
         // Load FXML and inject dependencies
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourPlannerWindow.fxml"));
-        loader.setControllerFactory(param -> new MainViewController(tourViewModel, tourLogViewModel,mapViewModel));
+        loader.setControllerFactory(param -> new MainViewController(tourViewModel, tourLogViewModel, mapViewModel));
 
         Scene scene = new Scene(loader.load(), 620, 440);
 

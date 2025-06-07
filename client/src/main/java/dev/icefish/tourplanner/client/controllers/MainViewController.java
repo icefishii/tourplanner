@@ -20,10 +20,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -461,6 +463,22 @@ public class MainViewController {
     }
 
     public void onGenerateTourReport(ActionEvent actionEvent) {
+        Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
+
+        if (selectedTour == null) {
+            //showAlert("No Tour Selected", "Please select a tour to generate the report.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Tour Report");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf")); // oder .txt, .json
+        File file = fileChooser.showSaveDialog(((MenuItem) actionEvent.getSource()).getParentPopup().getOwnerWindow());
+
+        if (file != null) {
+            tourViewModel.generateTourReport(selectedTour, file.toPath());
+        }
+
     }
 
     public void onGenerateSummaryReport(ActionEvent actionEvent) {

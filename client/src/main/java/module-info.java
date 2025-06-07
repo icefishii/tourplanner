@@ -9,6 +9,7 @@ module dev.icefish.tourplanner.client {
     requires org.apache.logging.log4j;
     requires java.sql;
     requires javafx.web;
+    requires com.github.librepdf.openpdf;
     requires java.desktop;
 
 
