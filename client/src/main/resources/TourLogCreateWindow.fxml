@@ -44,7 +44,7 @@
     <TextField fx:id="durationField" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.hgrow="ALWAYS" promptText="z.B. 45 (in min)" />
 
     <Label fx:id="ratingLabel" text="Rating:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-    <TextField fx:id="ratingField" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" promptText="1(sehr gut) - 5 (sehr schlecht)"/>
+    <TextField fx:id="ratingField" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" promptText="1(sehr schlecht) - 5 (sehr gut)"/>
 
     <Button fx:id="createButton" text="Create" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />
     <Button fx:id="cancelButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />

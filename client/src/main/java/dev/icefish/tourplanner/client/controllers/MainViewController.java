@@ -63,6 +63,12 @@ public class MainViewController {
     //MenuBar
 
 
+    @FXML
+    private CheckBox childFriendlyCheckBox;
+
+    @FXML
+    private Spinner<Integer> ratingSpinner;
+
     //Search
     @FXML
     private TextField tourSearchField, tourLogSearchField;
@@ -134,6 +140,7 @@ public class MainViewController {
 
         mapImageView.imageProperty().bind(mapViewModel.currentMapImageProperty());
 
+        ratingSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 3)); // min=1, max=5, initial=3
 
     }
 

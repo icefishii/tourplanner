@@ -22,6 +22,8 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Spinner?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.MainViewController">
 
 <top>
@@ -97,6 +99,31 @@
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" />
                      </VBox.margin>
+                  </HBox>
+
+                  <HBox spacing="10.0" alignment="CENTER_LEFT">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="15.0" right="10.0" />
+                     </VBox.margin>
+
+                     <!-- Childfriendly Checkbox -->
+                     <Label text="Childfriendly">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                     </Label>
+                     <CheckBox fx:id="childFriendlyCheckBox" />
+
+                     <!-- Rating Spinner -->
+                     <Label text="Rating:">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                        <HBox.margin>
+                           <Insets left="20.0" />
+                        </HBox.margin>
+                     </Label>
+                     <Spinner fx:id="ratingSpinner" prefWidth="100.0" prefHeight="30.0" style="-fx-font-size: 14px;" />
                   </HBox>
 
                   <ListView fx:id="tourListView" prefHeight="291.0" prefWidth="334.0" VBox.vgrow="ALWAYS">
