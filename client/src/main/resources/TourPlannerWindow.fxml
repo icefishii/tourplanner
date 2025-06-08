@@ -56,8 +56,6 @@
    </VBox>
 </top>
 
-
-   <!-- TODO: New Fields for Search,Import and Report (maybe Darkmode) -->
 <center>
 <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
    <children>

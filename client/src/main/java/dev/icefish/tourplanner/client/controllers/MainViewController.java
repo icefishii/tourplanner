@@ -457,10 +457,13 @@ public class MainViewController {
     }
 
     public void onExport(ActionEvent actionEvent) {
+
     }
 
     public void onExit(ActionEvent actionEvent) {
     }
+
+    //----Report-----
 
     public void onGenerateTourReport(ActionEvent actionEvent) {
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
@@ -508,6 +511,7 @@ public class MainViewController {
     }
 
     public void onAbout(ActionEvent actionEvent) {
+        //ToDo Description
     }
 
     //----Search Bars-----
@@ -552,8 +556,6 @@ public class MainViewController {
 //ToDo Keyboard-Shortcuts
 
 //ToDo Button Controller/Mediator
-
-//ToDo generate Report
 
 //ToDo import and export of tour data (file format of your choice)
 
