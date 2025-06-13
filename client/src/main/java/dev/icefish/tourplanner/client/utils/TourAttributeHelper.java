@@ -7,7 +7,14 @@ import javafx.collections.ObservableList;
 public class TourAttributeHelper {
 
     public static int computePopularity(ObservableList<TourLog> tourLogs) {
-        return tourLogs.size(); // Number of logs determines popularity
+        if (tourLogs.isEmpty()) {
+            return 0;
+        }
+        double averageRating = tourLogs.stream()
+                .mapToInt(TourLog::getRating)
+                .average()
+                .orElse(0);
+        return (int) Math.round(averageRating);
     }
 
     public static String computeChildFriendliness(ObservableList<TourLog> tourLogs, Tour tour) {

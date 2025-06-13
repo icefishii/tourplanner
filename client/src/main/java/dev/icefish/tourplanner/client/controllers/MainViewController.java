@@ -1,6 +1,5 @@
 package dev.icefish.tourplanner.client.controllers;
 
-import dev.icefish.tourplanner.client.services.GeoCoder;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
@@ -18,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -27,8 +25,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -88,8 +84,6 @@ public class MainViewController {
     private final TourViewModel tourViewModel;
     private final TourLogViewModel tourLogViewModel;
     private final MapViewModel mapViewModel;
-    private TourButtonHandler tourButtonHandler;
-    private TourLogButtonHandler tourLogButtonHandler;
 
     public MainViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel, MapViewModel mapViewModel) {
         this.tourViewModel = tourViewModel;
@@ -101,8 +95,8 @@ public class MainViewController {
     public void initialize() {
         setTourListView();
         setTourLogTableView();
-        tourButtonHandler = new TourButtonHandler(deleteTourButton, editTourButton, newTourButton, tourListView);
-        tourLogButtonHandler = new TourLogButtonHandler(tourListView, newTourLogButton, deleteTourLogButton, editTourLogButton, tourLogTableView);
+        TourButtonHandler tourButtonHandler = new TourButtonHandler(deleteTourButton, editTourButton, newTourButton, tourListView);
+        TourLogButtonHandler tourLogButtonHandler = new TourLogButtonHandler(tourListView, newTourLogButton, deleteTourLogButton, editTourLogButton, tourLogTableView);
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
 
@@ -140,8 +134,12 @@ public class MainViewController {
 
         mapImageView.imageProperty().bind(mapViewModel.currentMapImageProperty());
 
-        ratingSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 3)); // min=1, max=5, initial=3
+        ratingSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0)); // min=1, max=5, initial=3
 
+        // Temporary gets own Handler
+        //TODO Implement above (handlers)
+        ratingSpinner.valueProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
+        childFriendlyCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
     }
 
     public void onCreateTour(ActionEvent actionEvent) {
@@ -541,8 +539,12 @@ public class MainViewController {
 
     @FXML
     public void onSearchTours(ActionEvent actionEvent) {
-        String searchText = tourSearchField.getText().trim().toLowerCase();
-        tourListView.setItems(tourViewModel.searchTours(searchText));
+        String searchText = tourSearchField.getText().trim();
+        Integer selectedRating = ratingSpinner.getValue();
+        boolean isChildFriendly = childFriendlyCheckBox.isSelected();
+
+        ObservableList<Tour> filteredTours = tourViewModel.searchTours(searchText, selectedRating, isChildFriendly);
+        tourListView.setItems(filteredTours);
     }
 
     @FXML
