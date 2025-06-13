@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class TourService {
-
+    //TODO LOGGING!!!!!
     private final static Logger logger = LogManager.getLogger(TourService.class);
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
@@ -148,12 +148,12 @@ public class TourService {
         File imageFile = new File(basePath, tourId + ".png");
         if (imageFile.exists()) {
             if (imageFile.delete()) {
-                logger.info("Deleted image file: " + imageFile.getAbsolutePath());
+                logger.info("Deleted image file: {}", imageFile.getAbsolutePath());
             } else {
-                logger.warn("Could not delete image file: " + imageFile.getAbsolutePath());
+                logger.warn("Could not delete image file: {}", imageFile.getAbsolutePath());
             }
         } else {
-            logger.info("No image file found to delete: " + imageFile.getAbsolutePath());
+            logger.info("No image file found to delete: {}", imageFile.getAbsolutePath());
         }
     }
 }

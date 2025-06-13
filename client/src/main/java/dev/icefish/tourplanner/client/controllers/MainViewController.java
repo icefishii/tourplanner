@@ -1,6 +1,8 @@
 package dev.icefish.tourplanner.client.controllers;
 
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
+import dev.icefish.tourplanner.client.services.ImportService;
+import dev.icefish.tourplanner.client.services.ExportService;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
 import dev.icefish.tourplanner.client.utils.TourButtonHandler;
@@ -84,11 +86,15 @@ public class MainViewController {
     private final TourViewModel tourViewModel;
     private final TourLogViewModel tourLogViewModel;
     private final MapViewModel mapViewModel;
+    private final ImportService importService;
+    private final ExportService exportService;
 
     public MainViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel, MapViewModel mapViewModel) {
         this.tourViewModel = tourViewModel;
         this.tourLogViewModel = tourLogViewModel;
         this.mapViewModel = mapViewModel;
+        this.importService = new ImportService();
+        this.exportService = new ExportService();
     }
 
     @FXML
@@ -329,17 +335,17 @@ public class MainViewController {
         }
     }
 
-    private void refreshUI() {
-        System.out.println("Refreshing UI...");
+    public void refreshUI() {
+        tourViewModel.fetchToursFromServer();
+        tourLogViewModel.fetchTourLogsFromServer();
+
+        tourListView.setItems(tourViewModel.getAllTours());
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
 
         if (selectedTour != null) {
-            System.out.println("Selected Tour: " + selectedTour.getName());
             ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(selectedTour.getId());
-            System.out.println("Tour Logs for selected tour: " + tourLogs);
             tourLogTableView.setItems(tourLogs);
         } else {
-            System.out.println("No tour selected.");
             tourLogTableView.setItems(FXCollections.observableArrayList());
         }
     }
@@ -447,22 +453,51 @@ public class MainViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ImportWindow.fxml"));
             Parent root = loader.load();
 
-            Stage importStage = new Stage();
-            importStage.setTitle("Import");
+            ImportViewController controller = loader.getController();
+            controller.setMainViewController(this); // Pass the current MainViewController instance
 
-            Scene scene = new Scene(root);
-            importStage.setScene(scene);
-            importStage.setResizable(false);
-            importStage.show();
-
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Import Data");
+            stage.show();
         } catch (IOException e) {
-            logger.error("Fehler beim Öffnen des Import-Dialogs: " + e.getMessage(), e);
+            logger.error(e.getMessage());
+            e.printStackTrace();
         }
-
     }
 
+    @FXML
     public void onExport(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
 
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            String result = exportService.exportToursAndLogs(file);
+            if (result.startsWith("Error")) {
+                showError(result);
+            } else {
+                showSuccess(result);
+            }
+        }
+    }
+
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void onExit(ActionEvent actionEvent) {
@@ -556,6 +591,8 @@ public class MainViewController {
             tourLogTableView.setItems(tourLogViewModel.searchTourLogs(searchText, currentTourLogs));
         }
     }
+
+
 }
 
 
@@ -573,5 +610,4 @@ public class MainViewController {
 //ToDo Mandatory Feature (Language, ???)
 
 //ToDo das mit den , . in der Eingabe
-
 

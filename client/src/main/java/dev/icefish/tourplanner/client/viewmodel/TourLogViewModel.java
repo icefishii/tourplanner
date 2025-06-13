@@ -16,6 +16,10 @@ public class TourLogViewModel {
         this.tourLogsList = FXCollections.observableArrayList(tourLogService.getAllTourLogs());
     }
 
+    public void fetchTourLogsFromServer() {
+        this.tourLogsList.setAll(tourLogService.getAllTourLogs());
+    }
+
     public ObservableList<TourLog> getAllTourLogs() {
         return this.tourLogsList;
     }

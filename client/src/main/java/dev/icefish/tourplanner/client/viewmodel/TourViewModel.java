@@ -31,6 +31,10 @@ public class TourViewModel {
         this.toursList = FXCollections.observableArrayList(tourService.getAllTours());
     }
 
+    public void fetchToursFromServer() {
+        this.toursList.setAll(tourService.getAllTours());
+    }
+
     public ObservableList<Tour> getAllTours() {
         return this.toursList;
     }

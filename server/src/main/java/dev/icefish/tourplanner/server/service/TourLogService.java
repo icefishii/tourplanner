@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @Service
 public class TourLogService {
@@ -46,5 +47,17 @@ public class TourLogService {
     public void deleteTourLog(UUID id) {
         logger.info("Deleting tour log with id: {}", id);
         tourLogRepository.deleteById(id);
+    }
+
+    public List<TourLog> importTourLogs(List<TourLog> tourLogs) {
+        List<TourLog> importedTourLogs = new ArrayList<>();
+        for (TourLog tourLog : tourLogs) {
+            if (!tourLogRepository.existsById(tourLog.getId())) {
+                importedTourLogs.add(tourLogRepository.save(tourLog));
+            } else {
+                logger.warn("TourLog with ID {} already exists. Skipping import.", tourLog.getId());
+            }
+        }
+        return importedTourLogs;
     }
 }

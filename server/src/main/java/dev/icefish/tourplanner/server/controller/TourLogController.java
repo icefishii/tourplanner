@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/tourlogs")
@@ -57,5 +58,16 @@ public class TourLogController {
     public ResponseEntity<Void> deleteTourLog(@PathVariable UUID id) {
         tourLogService.deleteTourLog(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<List<TourLog>> importTourLogs(@RequestBody List<TourLog> tourLogs) {
+        List<TourLog> importedTourLogs = tourLogService.importTourLogs(tourLogs);
+        return ResponseEntity.ok(importedTourLogs);
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<List<TourLog>> exportTourLogs() {
+        return ResponseEntity.ok(tourLogService.getAllTourLogs());
     }
 }
