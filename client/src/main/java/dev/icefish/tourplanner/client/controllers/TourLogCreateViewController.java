@@ -1,5 +1,6 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
@@ -7,9 +8,12 @@ import dev.icefish.tourplanner.client.utils.TourLogChecker;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -89,6 +93,16 @@ public class TourLogCreateViewController {
         // Rebind the create and cancel button actions
         createButton.setOnAction(this::onCreateButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
+
+        Platform.runLater(() -> {
+            Scene scene = createButton.getScene();
+            if (scene != null) {
+                ShortcutUtils.addShortcuts(scene, Map.of(
+                        ShortcutUtils.ctrl(KeyCode.S), () -> onCreateButtonClick(null),
+                        ShortcutUtils.esc(), () -> onCancelButtonClick(null)
+                ));
+            }
+        });
     }
 
     private void onCreateButtonClick(ActionEvent actionEvent) {

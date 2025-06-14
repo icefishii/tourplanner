@@ -1,5 +1,6 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.client.services.ImportService;
 import dev.icefish.tourplanner.client.services.ExportService;
@@ -9,6 +10,7 @@ import dev.icefish.tourplanner.client.utils.TourButtonHandler;
 import dev.icefish.tourplanner.client.utils.TourLogButtonHandler;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -150,6 +153,29 @@ public class MainViewController {
 
         ratingSpinner.valueProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
         childFriendlyCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
+
+        Platform.runLater(() -> {
+            Scene scene = deleteTourButton.getScene();
+            if (scene != null) {
+                ShortcutUtils.addShortcuts(scene, Map.of(
+                        // Tour Shortcuts (Ctrl + Key)
+                        ShortcutUtils.ctrl(KeyCode.N), () -> onCreateTour(null),
+                        ShortcutUtils.ctrl(KeyCode.E), () -> onEditTour(null),
+                        ShortcutUtils.ctrl(KeyCode.D), () -> onDeleteTour(null),
+                        ShortcutUtils.ctrl(KeyCode.R), () -> onGenerateTourReport(null),
+                        ShortcutUtils.ctrl(KeyCode.I), () -> onImport(null),
+                        ShortcutUtils.ctrl(KeyCode.A), () -> onAbout(null),
+                        ShortcutUtils.ctrl(KeyCode.M), () -> onToggleDarkMode(null),
+
+                        // TourLog Shortcuts (Ctrl + Shift + Key)
+                        ShortcutUtils.ctrlShift(KeyCode.N), () -> onCreateTourLog(null),
+                        ShortcutUtils.ctrlShift(KeyCode.E), () -> onEditTourLog(null),
+                        ShortcutUtils.ctrlShift(KeyCode.D), () -> onDeleteTourLog(null)
+
+                ));
+            }
+        });
+
     }
 
     public void onCreateTour(ActionEvent actionEvent) {
@@ -616,8 +642,6 @@ public class MainViewController {
 
 
 }
-
-
 
 //ToDo Keyboard-Shortcuts (M)
 

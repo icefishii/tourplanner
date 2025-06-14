@@ -4,14 +4,18 @@ import dev.icefish.tourplanner.client.services.GeoCoder;
 import dev.icefish.tourplanner.client.services.MapService;
 import dev.icefish.tourplanner.client.services.OpenRouteService;
 import dev.icefish.tourplanner.client.utils.ConfigLoader;
+import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import dev.icefish.tourplanner.models.Tour;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.web.WebView;
 import javafx.event.ActionEvent;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +54,20 @@ public class TourCreateViewController {
         createButton.setOnAction(this::onCreateButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
         loadMapButton.setOnAction(this::onLoadMapButtonClick);
+
+        Platform.runLater(() -> {
+            Scene scene = createButton.getScene();
+            if (scene != null) {
+                ShortcutUtils.addShortcuts(scene, Map.of(
+                        ShortcutUtils.ctrl(KeyCode.S), () -> onCreateButtonClick(null),
+                        ShortcutUtils.esc(), () -> onCancelButtonClick(null),
+                        ShortcutUtils.ctrl(KeyCode.L), () -> onLoadMapButtonClick(null)
+                ));
+            }
+        });
     }
+
+
 
     private void onLoadMapButtonClick(ActionEvent event) {
         try {
