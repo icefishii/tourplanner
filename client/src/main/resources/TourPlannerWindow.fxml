@@ -155,9 +155,8 @@
                      </VBox.margin>
                   </HBox>
 
-                  <!-- Bild (responsive) -->
-                  <StackPane prefWidth="700" prefHeight="300" alignment="CENTER">
-                  <ImageView fx:id="mapImageView" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
+                  <StackPane prefWidth="600" prefHeight="400"  alignment="CENTER">
+                  <ImageView fx:id="mapImageView" fitWidth="700.0" fitHeight="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/maps.jpeg" />
                      </image>
