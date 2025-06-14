@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class TourService {
-    //TODO LOGGING!!!!!
+    //TODO LOGGING!!!!! (B)
     private final static Logger logger = LogManager.getLogger(TourService.class);
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;

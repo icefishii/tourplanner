@@ -45,7 +45,7 @@ public class ImportViewController {
             filePathField.setText(selectedFile.getAbsolutePath());
         }
     }
-    //TODO weiß ich nicht ob wir das brauchen, aber validation von dem zugs was vom json kommt (ka ob das die datenbank nciht eh macht)
+
     public void onImport(ActionEvent actionEvent) {
         File file = new File(filePathField.getText());
         if (!file.exists()) {

@@ -21,8 +21,6 @@ public class Server {
     }
 }
 
-//Todo Move config into a file read at runtime instead of compile time (DB, logging, etc.)
+//Todo Add logging (B)
 
-//Todo Add logging
-
-//Todo Add tests
+//Todo Add tests (B)

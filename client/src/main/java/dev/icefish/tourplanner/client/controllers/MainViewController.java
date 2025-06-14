@@ -142,8 +142,6 @@ public class MainViewController {
 
         ratingSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0)); // min=1, max=5, initial=3
 
-        // Temporary gets own Handler
-        //TODO Implement above (handlers)
         ratingSpinner.valueProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
         childFriendlyCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
     }
@@ -548,6 +546,7 @@ public class MainViewController {
     }
 
     public void onToggleDarkMode(ActionEvent actionEvent) {
+        //ToDo oder Sprache
     }
 
     public void onAbout(ActionEvent actionEvent) {
@@ -597,17 +596,15 @@ public class MainViewController {
 
 
 
-//ToDo Close window when application terminated
+//ToDo Keyboard-Shortcuts (M)
 
-//ToDo Keyboard-Shortcuts
-
-//ToDo Button Controller/Mediator
-
-//ToDo import and export of tour data (file format of your choice)
+//ToDo Button Controller/Mediator (B)
 
 //ToDo Rewrite Tests
 
-//ToDo Mandatory Feature (Language, ???)
+//ToDo Mandatory Feature (Language, Darkmode) (M)
 
-//ToDo das mit den , . in der Eingabe
+//ToDo das mit den , . in der Eingabe (wenn wir das mit Language nicht machen (Fehlerbeandlung) (M)
+
+//ToDo Tour Log List View (mehr anzeigen) (M)
 

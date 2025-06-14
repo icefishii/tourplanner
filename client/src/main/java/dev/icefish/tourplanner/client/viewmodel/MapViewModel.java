@@ -11,7 +11,7 @@ public class MapViewModel {
 
     private final ObjectProperty<Image> currentMapImage = new SimpleObjectProperty<>();
 
-    private static final String MAPS_FOLDER_PATH = "C:/Users/miria/IdeaProjects/tourplanner/client/maps/";
+    private static final String MAPS_FOLDER_PATH = "C:/Users/miria/IdeaProjects/tourplanner/client/maps/"; //ToDo Pfad
     private static final String DEFAULT_IMAGE_PATH = "/images/maps.jpeg"; // Dein Fallback-Bild aus dem Ressourcenordner
 
     public MapViewModel() {
