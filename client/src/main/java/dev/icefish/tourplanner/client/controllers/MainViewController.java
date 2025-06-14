@@ -643,8 +643,6 @@ public class MainViewController {
 
 }
 
-//ToDo Keyboard-Shortcuts (M)
-
 //ToDo Button Controller/Mediator (B)
 
 //ToDo Rewrite Tests
