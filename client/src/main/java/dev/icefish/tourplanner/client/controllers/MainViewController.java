@@ -53,6 +53,12 @@ public class MainViewController {
     private TableColumn<TourLog, Double> tourLogDistanceView;
 
     @FXML
+    private TableColumn<TourLog, Integer> tourLogDifficultyView;
+
+    @FXML
+    private TableColumn<TourLog, Integer> tourLogRatingView;
+
+    @FXML
     private ImageView mapImageView;
 
     @FXML
@@ -261,6 +267,23 @@ public class MainViewController {
         tourLogDateView.setCellValueFactory(new PropertyValueFactory<>("date"));
         tourLogDurationView.setCellValueFactory(new PropertyValueFactory<>("durationText"));
         tourLogDistanceView.setCellValueFactory(new PropertyValueFactory<>("distance"));
+        tourLogDifficultyView.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
+
+        // Sterne anzeigen statt Zahl bei Rating
+        tourLogRatingView.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        tourLogRatingView.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer rating, boolean empty) {
+                super.updateItem(rating, empty);
+                if (empty || rating == null) {
+                    setText(null);
+                } else {
+                    String stars = "★".repeat(rating) + "☆".repeat(5 - rating);
+                    setText(stars);
+                    setStyle("-fx-alignment: CENTER;");
+                }
+            }
+        });
 
         tourLogTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
@@ -606,5 +629,4 @@ public class MainViewController {
 
 //ToDo das mit den , . in der Eingabe (wenn wir das mit Language nicht machen (Fehlerbeandlung) (M)
 
-//ToDo Tour Log List View (mehr anzeigen) (M)
 

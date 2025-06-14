@@ -142,3 +142,8 @@
     -fx-text-fill: #FFFFFF;
 }
 
+.table-view {
+    -fx-font-size: 14px; /* Ändere hier die gewünschte Größe */
+}
+
+
