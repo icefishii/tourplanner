@@ -2,6 +2,7 @@ package dev.icefish.tourplanner.client.services;
 
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.draw.LineSeparator;
 import dev.icefish.tourplanner.client.utils.ConfigLoader;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class ReportService {
 
@@ -26,13 +28,15 @@ public class ReportService {
             document.open();
 
             // Title
-            Paragraph title = new Paragraph("Tour Report");
+            Paragraph title = new Paragraph("Tour Report", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
-
+            document.add(new LineSeparator(0.5f, 100, null, Element.ALIGN_CENTER, -2));
             document.add(Chunk.NEWLINE);
 
-            // Tour basic info
+            // Tour Information Section
+            addUnderlinedSectionHeader(document, "Tour Information");
+
             document.add(new Paragraph("Name: " + tour.getName()));
             document.add(new Paragraph("From: " + tour.getFromLocation()));
             document.add(new Paragraph("To: " + tour.getToLocation()));
@@ -43,7 +47,7 @@ public class ReportService {
 
             document.add(Chunk.NEWLINE);
 
-            // Add tour image if exists
+            // Add tour image
             try {
                 String basePath = ConfigLoader.get("image.basePath");
                 String imagePath = basePath + "/" + tour.getId() + ".png";
@@ -57,30 +61,21 @@ public class ReportService {
                 System.out.println("Tour image not found or could not be loaded: " + e.getMessage());
             }
 
-            // Tour Logs header
-            Paragraph logsHeader = new Paragraph("Tour Logs");
-            logsHeader.setSpacingBefore(10);
-            logsHeader.setSpacingAfter(5);
-            logsHeader.setAlignment(Element.ALIGN_LEFT);
-            document.add(logsHeader);
+            // Tour Logs Section
+            addUnderlinedSectionHeader(document, "Tour Logs");
 
             if (tourLogs.isEmpty()) {
                 document.add(new Paragraph("No logs available."));
             } else {
-                // Table with headers: Date, Comment, Difficulty, Distance, Duration, Rating
                 PdfPTable table = new PdfPTable(6);
                 table.setWidthPercentage(100);
                 table.setWidths(new float[]{2f, 4f, 1.5f, 1.5f, 2f, 1.5f});
 
                 // Headers
-                table.addCell("Date");
-                table.addCell("Comment");
-                table.addCell("Difficulty");
-                table.addCell("Distance (km)");
-                table.addCell("Duration");
-                table.addCell("Rating");
+                Stream.of("Date", "Comment", "Difficulty", "Distance (km)", "Duration", "Rating")
+                        .map(header -> new Phrase(header, FontFactory.getFont(FontFactory.HELVETICA_BOLD)))
+                        .forEach(table::addCell);
 
-                // Rows
                 for (TourLog log : tourLogs) {
                     table.addCell(log.getDate() != null ? log.getDate().toString() : "N/A");
                     table.addCell(log.getComment() != null ? log.getComment() : "");
@@ -106,10 +101,10 @@ public class ReportService {
             PdfWriter.getInstance(document, new FileOutputStream(filePath.toFile()));
             document.open();
 
-            // Title
-            Paragraph title = new Paragraph("Summary Report - Statistical Analysis");
+            Paragraph title = new Paragraph("Summary Report - Statistical Analysis", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18));
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
+            document.add(new LineSeparator(0.5f, 100, null, Element.ALIGN_CENTER, -2));
             document.add(Chunk.NEWLINE);
 
             if (logsByTour.isEmpty()) {
@@ -119,13 +114,8 @@ public class ReportService {
                     Tour tour = entry.getKey();
                     List<TourLog> tourLogs = entry.getValue();
 
-                    // Tour title
-                    Paragraph tourTitle = new Paragraph("Tour: " + tour.getName());
-                    tourTitle.setSpacingBefore(10);
-                    tourTitle.setSpacingAfter(5);
-                    document.add(tourTitle);
+                    addUnderlinedSectionHeader(document, "Tour: " + tour.getName());
 
-                    // Tour image
                     try {
                         String basePath = ConfigLoader.get("image.basePath");
                         String imagePath = basePath + "/" + tour.getId() + ".png";
@@ -139,11 +129,9 @@ public class ReportService {
                         System.out.println("Tour image not found or could not be loaded: " + e.getMessage());
                     }
 
-
                     if (tourLogs.isEmpty()) {
                         document.add(new Paragraph("No tour logs available."));
                     } else {
-
                         double avgDistance = tourLogs.stream().mapToDouble(TourLog::getDistance).average().orElse(0);
                         double avgTime = tourLogs.stream()
                                 .mapToDouble(log -> parseDurationToHours(log.getDurationText()))
@@ -175,5 +163,13 @@ public class ReportService {
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    private void addUnderlinedSectionHeader(Document doc, String title) throws DocumentException {
+        Paragraph p = new Paragraph(title, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14));
+        p.setSpacingBefore(10f);
+        doc.add(p);
+        doc.add(new LineSeparator(0.5f, 100, null, Element.ALIGN_LEFT, -2));
+        doc.add(Chunk.NEWLINE);
     }
 }
