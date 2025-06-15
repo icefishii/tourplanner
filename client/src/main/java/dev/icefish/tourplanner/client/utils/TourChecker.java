@@ -30,4 +30,22 @@ public class TourChecker {
 
         return errors; // Gibt eine Map mit allen Fehlern zurück
     }
+
+    public static Map<String, String> validateForMapLoad(String fromLocation, String toLocation, String transportType) {
+        Map<String, String> errors = new HashMap<>();
+
+        if (fromLocation == null || fromLocation.trim().isEmpty()) {
+            errors.put("fromLocation", "From location must not be empty.");
+        }
+
+        if (toLocation == null || toLocation.trim().isEmpty()) {
+            errors.put("toLocation", "To location must not be empty.");
+        }
+
+        if (transportType == null || transportType.trim().isEmpty()) {
+            errors.put("transportType", "Transport type must be selected.");
+        }
+
+        return errors;
+    }
 }

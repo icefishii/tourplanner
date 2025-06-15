@@ -12,6 +12,7 @@ import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import dev.icefish.tourplanner.models.Tour;
 
 import javafx.application.Platform;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -43,6 +44,8 @@ public class TourCreateViewController {
     private final MapViewModel mapViewModel;
     private Consumer<Tour> tourCreatedListener;
 
+    private boolean mapLoaded = false;
+
     public TourCreateViewController(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
         this.mapViewModel = new MapViewModel();
@@ -71,11 +74,27 @@ public class TourCreateViewController {
 
     private void onLoadMapButtonClick(ActionEvent event) {
         try {
-            double[] fromCoords = GeoCoder.getCoordinates(fromLocationField.getText());
-            double[] toCoords = GeoCoder.getCoordinates(toLocationField.getText());
-            String transportType = transportTypeBox.getValue().toLowerCase();
+            resetFieldStyles();
 
-            String orsTransport = switch (transportType) {
+            String name = tourNameField.getText();
+            String description = tourDescriptionField.getText();
+            String fromLocation = fromLocationField.getText();
+            String toLocation = toLocationField.getText();
+            String transportType = transportTypeBox.getValue();
+
+
+            Map<String, String> errors = dev.icefish.tourplanner.client.utils.TourChecker.validateTour(
+                    name, description, fromLocation, toLocation, transportType);
+
+            if (!errors.isEmpty()) {
+                highlightErrorFields(errors);
+                showErrorAlert(errors);
+                return;
+            }
+
+            double[] fromCoords = GeoCoder.getCoordinates(fromLocation);
+            double[] toCoords = GeoCoder.getCoordinates(toLocation);
+            String orsTransport = switch (transportType.toLowerCase()) {
                 case "walk" -> "foot-walking";
                 case "bike" -> "cycling-regular";
                 case "car" -> "driving-car";
@@ -93,12 +112,13 @@ public class TourCreateViewController {
                     .replace("TRANSPORT_MODE", orsTransport)
                     .replace("API_KEY", apiKey);
 
-            mapWebView.getEngine().loadContent(htmlContent);
+            mapLoaded = false;
 
+            mapWebView.getEngine().loadContent(htmlContent);
             mapWebView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                    // Karte ist fertig geladen
-                    System.out.println("Map fully loaded.");
+                if (newState == Worker.State.SUCCEEDED) {
+                    mapLoaded = true;
+                    logger.info("Map fully loaded.");
                 }
             });
 
@@ -127,6 +147,11 @@ public class TourCreateViewController {
             if (!errors.isEmpty()) {
                 highlightErrorFields(errors);
                 showErrorAlert(errors);
+                return;
+            }
+
+            if (!mapLoaded) {
+                showErrorAlert(Map.of("error", "Please load the map before creating the tour."));
                 return;
             }
 
