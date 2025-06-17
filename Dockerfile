@@ -14,6 +14,8 @@ COPY client/pom.xml /app/client/
 COPY models/src /app/models/src
 COPY server/src /app/server/src
 COPY client/src /app/client/src
+# Caching dependencies to speed up builds
+RUN mvn dependency:go-offline
 
 # Build the project with models first, then server
 # Use -pl to specify which modules to build
