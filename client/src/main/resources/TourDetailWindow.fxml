@@ -6,59 +6,59 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 
-<VBox spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.TourDetailViewController">
+<VBox id="tourRoot" spacing="15.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.TourDetailViewController">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <Label text="Tour Details" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 5px;" />
+    <Label text="Tour Details" id="bigLabel"/>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Name:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="nameLabel" HBox.hgrow="ALWAYS" />
+        <Label text="Name:" id="smallLabel"/>
+        <Label fx:id="nameLabel" id="detailLabel" HBox.hgrow="ALWAYS" />
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Description:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="descriptionLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="Description:" id="smallLabel"/>
+        <Label fx:id="descriptionLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="From:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="fromLocationLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="From:" id="smallLabel"/>
+        <Label fx:id="fromLocationLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="To:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="toLocationLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="To:" id="smallLabel"/>
+        <Label fx:id="toLocationLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Time:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="timeLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="Time:" id="smallLabel"/>
+        <Label fx:id="timeLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Distance:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="distanceLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="Distance:" id="smallLabel"/>
+        <Label fx:id="distanceLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Transport:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="transportTypeLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="Transport:" id="smallLabel"/>
+        <Label fx:id="transportTypeLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Popularity:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="popularityLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="Popularity:" id="smallLabel"/>
+        <Label fx:id="popularityLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <HBox spacing="10" VBox.vgrow="ALWAYS">
-        <Label text="Child-Friendliness:" style="-fx-font-weight: bold;"/>
-        <Label fx:id="childFriendlinessLabel" HBox.hgrow="ALWAYS"/>
+        <Label text="Child-Friendliness:" id="smallLabel"/>
+        <Label fx:id="childFriendlinessLabel" id="detailLabel" HBox.hgrow="ALWAYS"/>
     </HBox>
 
-    <Button text="OK" style="-fx-font-size: 14px; -fx-padding: 5px 15px;" onAction="#handleClose" VBox.vgrow="ALWAYS"/>
+    <Button text="OK" onAction="#handleClose" VBox.vgrow="ALWAYS"/>
 
 </VBox>

@@ -25,11 +25,12 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.StackPane?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.MainViewController">
+
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"  xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.icefish.tourplanner.client.controllers.MainViewController">
 
 <top>
    <VBox spacing="10.0">
-      <Label fx:id="TourPlannerLabel" text=" Tour Planner" BorderPane.alignment="TOP_LEFT">
+      <Label fx:id="TourPlannerLabel" id="TourPlannerLabel" text=" Tour Planner" BorderPane.alignment="TOP_LEFT">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -39,18 +40,18 @@
       </Label>
       <MenuBar>
          <menus>
-            <Menu text="File">
+            <Menu text="File" id="menu">
                <MenuItem fx:id="importMenuItem" text="Import File" onAction="#onImport" />
                <MenuItem fx:id="exportMenuItem" text="Export File" onAction="#onExport" />
             </Menu>
-            <Menu text="Report">
+            <Menu text="Report" id="menu">
                <MenuItem fx:id="generateTourReportItem" text="Generate Tour-Report" onAction="#onGenerateTourReport" />
                <MenuItem fx:id="generateSummaryReportItem" text="Generate Summary" onAction="#onGenerateSummaryReport" />
             </Menu>
-            <Menu text="View">
+            <Menu text="View" id="menu">
                <CheckMenuItem fx:id="darkModeToggle" text="Dark Mode" onAction="#onToggleDarkMode"/>
             </Menu>
-            <Menu text="Help">
+            <Menu text="Help" id="menu">
                <MenuItem text="About" onAction="#onAbout" />
             </Menu>
          </menus>
@@ -68,7 +69,7 @@
                <children>
                   <HBox prefHeight="21.0" prefWidth="289.0" spacing="5.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="93.0" text="Tours">
+                        <Label id="bigLabel" prefHeight="17.0" prefWidth="93.0" text="Tours">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -108,7 +109,7 @@
                      </VBox.margin>
 
                      <!-- Childfriendly Checkbox -->
-                     <Label text="Childfriendly">
+                     <Label id="bigLabel" text="Childfriendly">
                         <font>
                            <Font size="14.0" />
                         </font>
@@ -116,7 +117,7 @@
                      <CheckBox fx:id="childFriendlyCheckBox" />
 
                      <!-- Rating Spinner -->
-                     <Label text="Rating:">
+                     <Label id="bigLabel" text="Rating:">
                         <font>
                            <Font size="14.0" />
                         </font>
@@ -144,7 +145,7 @@
 
                   <HBox prefHeight="21.0" prefWidth="289.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="93.0" text="Route">
+                        <Label id="bigLabel" prefHeight="17.0" prefWidth="93.0" text="Route">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -165,7 +166,7 @@
 
                   <HBox prefHeight="21.0" prefWidth="289.0" spacing="5.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="93.0" text="Tour Logs">
+                        <Label id="bigLabel" prefHeight="17.0" prefWidth="93.0" text="Tour Logs">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -201,13 +202,11 @@
 
                   <TableView fx:id="tourLogTableView" VBox.vgrow="ALWAYS" prefHeight="200.0" prefWidth="200.0">
                     <columns>
-                       <!-- TODO: Ändern wie Daten ausgegeben werden & Formatieren (M)-->
                        <TableColumn fx:id="tourLogDateView" text="Date" prefWidth="200.0" />
                        <TableColumn fx:id="tourLogDurationView" text="Duration" prefWidth="150.0" />
                        <TableColumn fx:id="tourLogDistanceView" text="Distance" prefWidth="150.0" />
                        <TableColumn fx:id="tourLogDifficultyView" text="Difficulty" prefWidth="150.0"/>
                        <TableColumn fx:id="tourLogRatingView" text="Rating" prefWidth="150.0"/>
-
                     </columns>
                      <VBox.margin>
                         <Insets bottom="10.0" right="10.0" />

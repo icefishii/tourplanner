@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="importWindow" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane fx:id="importWindow" id="tourRoot" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="dev.icefish.tourplanner.client.controllers.ImportViewController"
           prefWidth="400.0" prefHeight="200.0" stylesheets="@stylesheet.css">
     <padding>
@@ -16,10 +16,10 @@
     </padding>
 
     <!-- Überschrift -->
-    <Label text="Import File" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    <Label text="Import File" id="bigLabel" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
     <!-- Dateipfad-Eingabe -->
-    <Label text="File Path:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <Label text="File Path:" id="smallLabel" GridPane.columnIndex="0" GridPane.rowIndex="1" />
     <TextField fx:id="filePathField" promptText="e.g. /Users/name/file.json" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" />
 
     <!-- Browse Button -->

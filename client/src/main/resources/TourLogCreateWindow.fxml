@@ -14,39 +14,39 @@
 
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.web.WebView?>
-<GridPane prefHeight="380.0" prefWidth="480.0" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane id="tourRoot" prefHeight="380.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <Label fx:id="createTourLogLabel" text="Create Tour Log" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <Label fx:id="createTourLogLabel" id="bigLabel" text="Create Tour Log" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
 
-    <Label fx:id="tourLabel" text="Tour:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <Label fx:id="tourLabel" id="smallLabel" text="Tour:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
     <ComboBox fx:id="tourComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" />
 
-    <Label fx:id="dateLabel" text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Label fx:id="dateLabel" id="smallLabel" text="Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.hgrow="ALWAYS" />
 
-    <Label fx:id="timeLabel" text="Time:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Label fx:id="timeLabel" id="smallLabel" text="Time:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
     <TextField fx:id="timeField" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.hgrow="ALWAYS" promptText="HH:MM:SS" />
 
-    <Label fx:id="commentLabel" text="Comment:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <Label fx:id="commentLabel" id="smallLabel" text="Comment:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
     <TextArea fx:id="commentField" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.hgrow="ALWAYS" promptText="z.B. Anspruchsvoller Weg mit schöner Aussicht!" />
 
-    <Label fx:id="difficultyLabel" text="Difficulty:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+    <Label fx:id="difficultyLabel" id="smallLabel" text="Difficulty:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
     <TextField fx:id="difficultyField" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.hgrow="ALWAYS" promptText="1 (leicht) - 5 (schwer)" />
 
-    <Label fx:id="distanceLabel" text="Distance:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+    <Label fx:id="distanceLabel" id="smallLabel" text="Distance:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
     <TextField fx:id="distanceField" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.hgrow="ALWAYS" promptText="z.B. 6 (in km)" />
 
-    <Label fx:id="durationLabel" text="Duration:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+    <Label fx:id="durationLabel" id="smallLabel" text="Duration:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
     <TextField fx:id="durationField" GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.hgrow="ALWAYS" promptText="z.B. 45 (in min)" />
 
-    <Label fx:id="ratingLabel" text="Rating:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+    <Label fx:id="ratingLabel" id="smallLabel" text="Rating:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
     <TextField fx:id="ratingField" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" promptText="1(sehr schlecht) - 5 (sehr gut)"/>
 
-    <Button fx:id="createButton" text="Create" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />
+    <Button fx:id="createButton"  text="Create" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />
     <Button fx:id="cancelButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />
 
     <columnConstraints>

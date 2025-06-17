@@ -18,6 +18,27 @@
     -fx-text-fill: #555555;
 }
 
+/*Andere Label*/
+#smallLabel{
+    -fx-text-fill: #555555;
+    -fx-text-color: #555555;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+#bigLabel{
+    -fx-text-fill: #555555;
+    -fx-text-color: #555555;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+#detailLabel{
+    -fx-text-fill: #555555;
+    -fx-text-color: #555555;
+    -fx-font-size: 15px;
+}
+
 /* Button */
 .button {
     -fx-background-color: #BDC3C7;
@@ -72,22 +93,13 @@
     -fx-border-radius: 5px;
 }
 
-#nameLabel,
-#descriptionLabel,
-#fromLabel,
-#toLabel,
-#transportationModeLabel {
-    -fx-font-size: 14px;
-    -fx-text-fill: #292929; /* Dunkleres Grau für bessere Lesbarkeit */
-    -fx-font-weight: bold;
-    -fx-padding: 5px;
-}
-
 /* Styling für TableView */
 .table-view {
     -fx-background-color: #FFFFFF;
     -fx-border-radius: 6px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial", sans-serif;
 }
 
 /* Styling für TableColumn Header */
@@ -96,6 +108,8 @@
     -fx-font-weight: bold;
     -fx-padding: 10px 5px;
     -fx-alignment: center;
+    -fx-font-size: 15px;
+    -fx-font-family: "Arial", sans-serif;
 }
 
 /* Styling für TableColumn Header, wenn sie ausgewählt ist */
@@ -106,7 +120,7 @@
 /* Styling für Zeilen */
 .table-view .table-row-cell {
     -fx-padding: 8px;
-    -fx-alignment: center-left;
+    -fx-alignment: center;
 }
 
 /* Hover-Effekt für Zeilen */
@@ -128,6 +142,7 @@
 .table-view .table-cell {
     -fx-padding: 8px 15px;
     -fx-text-fill: #797b7c;
+    -fx-alignment: center;
 }
 
 /* Styling für die Zellen, wenn sie fokussiert sind */
@@ -145,5 +160,12 @@
 .table-view {
     -fx-font-size: 14px; /* Ändere hier die gewünschte Größe */
 }
+
+.menu, .menu-item {
+    -fx-text-fill: #555555;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
 
 

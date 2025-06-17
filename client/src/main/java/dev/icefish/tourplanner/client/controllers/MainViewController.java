@@ -1,6 +1,7 @@
 package dev.icefish.tourplanner.client.controllers;
 
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
+import dev.icefish.tourplanner.client.utils.ThemeManager;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.client.services.ImportService;
 import dev.icefish.tourplanner.client.services.ExportService;
@@ -16,12 +17,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -83,6 +86,12 @@ public class MainViewController {
     @FXML
     private Button tourSearchButton, tourClearButton, tourLogClearButton, tourLogSearchButton;
 
+    @FXML
+    private CheckMenuItem darkModeToggle;
+
+    @FXML
+    private BorderPane rootPane;
+
 
     private Stage tourLogCreateStage;
     private Stage tourCreateStage;
@@ -97,6 +106,8 @@ public class MainViewController {
     private final MapViewModel mapViewModel;
     private final ImportService importService;
     private final ExportService exportService;
+
+
 
     public MainViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel, MapViewModel mapViewModel) {
         this.tourViewModel = tourViewModel;
@@ -157,6 +168,10 @@ public class MainViewController {
         Platform.runLater(() -> {
             Scene scene = deleteTourButton.getScene();
             if (scene != null) {
+
+                ThemeManager.registerScene(scene);
+
+
                 ShortcutUtils.addShortcuts(scene, Map.of(
                         // Tour Shortcuts (Ctrl + Key)
                         ShortcutUtils.ctrl(KeyCode.N), () -> onCreateTour(null),
@@ -200,6 +215,7 @@ public class MainViewController {
 
             // Set the size of the window here (z.B. 800x600)
             Scene scene = new Scene(root, 800, 600); // Höhe und Breite nach Wunsch anpassen
+            ThemeManager.applyCurrentTheme(scene);
             tourCreateStage.setScene(scene);
 
             // Optional: Wenn du willst, dass die Fenstergröße dynamisch angepasst wird:
@@ -238,7 +254,9 @@ public class MainViewController {
             });
 
             tourEditStage = new Stage();
-            tourEditStage.setScene(new Scene(root));
+            Scene scene = new Scene(root, 800, 600);
+            ThemeManager.applyCurrentTheme(scene);
+            tourEditStage.setScene(scene);
             tourEditStage.setTitle("Edit Tour");
             tourEditStage.setMinWidth(380);
             tourEditStage.setMinHeight(450);
@@ -342,7 +360,9 @@ public class MainViewController {
 
             Stage stage = new Stage();
             stage.setTitle("Tour Details");
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            stage.setScene(scene); // <-- Richtiges Stage-Objekt verwenden
 
             tourDetailStages.put(tour, stage);
 
@@ -370,7 +390,9 @@ public class MainViewController {
 
             Stage stage = new Stage();
             stage.setTitle("Tour Log Details");
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            stage.setScene(scene);
 
             tourLogDetailStages.put(tourLog, stage);
             stage.setOnCloseRequest(e -> tourLogDetailStages.remove(tourLog));
@@ -415,7 +437,9 @@ public class MainViewController {
             });
 
             tourLogCreateStage = new Stage();
-            tourLogCreateStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            tourLogCreateStage.setScene(scene);
             tourLogCreateStage.setTitle("Create Tour Log");
             tourLogCreateStage.setMinWidth(450);
             tourLogCreateStage.setMinHeight(600);
@@ -482,7 +506,9 @@ public class MainViewController {
             });
 
             tourLogEditStage = new Stage();
-            tourLogEditStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            tourLogEditStage.setScene(scene);
             tourLogEditStage.setTitle("Edit Tour Log");
             tourLogEditStage.setMinWidth(450);
             tourLogEditStage.setMinHeight(600);
@@ -504,7 +530,9 @@ public class MainViewController {
             controller.setMainViewController(this); // Pass the current MainViewController instance
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            stage.setScene(scene);
             stage.setTitle("Import Data");
             stage.show();
         } catch (IOException e) {
@@ -590,12 +618,10 @@ public class MainViewController {
                 // Optional: Fehlerdialog anzeigen
             }
         }
-
-
     }
 
     public void onToggleDarkMode(ActionEvent actionEvent) {
-        //ToDo oder Sprache
+        ThemeManager.setDarkMode(darkModeToggle.isSelected());
     }
 
     public void onAbout(ActionEvent actionEvent) {
