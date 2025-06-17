@@ -673,8 +673,4 @@ public class MainViewController {
 
 //ToDo Rewrite Tests
 
-//ToDo Mandatory Feature (Language, Darkmode) (M)
-
-//ToDo das mit den , . in der Eingabe (wenn wir das mit Language nicht machen (Fehlerbeandlung) (M)
-
 
