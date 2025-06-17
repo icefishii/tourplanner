@@ -2,6 +2,8 @@ package dev.icefish.tourplanner.client.viewmodel;
 
 import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.models.TourLog;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.UUID;
@@ -14,6 +16,18 @@ public class TourLogViewModel {
     public TourLogViewModel(TourLogService tourLogService) {
         this.tourLogService = tourLogService;
         this.tourLogsList = FXCollections.observableArrayList(tourLogService.getAllTourLogs());
+    }
+
+    private final BooleanProperty deleteTourLogButtonDisabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty editTourLogButtonDisabled = new SimpleBooleanProperty(true);
+
+    public BooleanProperty deleteTourLogButtonDisabledProperty() { return deleteTourLogButtonDisabled; }
+    public BooleanProperty editTourLogButtonDisabledProperty() { return editTourLogButtonDisabled; }
+
+    public void updateTourLogButtonStates(ObservableList<TourLog> selectedTourLogs) {
+        int count = selectedTourLogs.size();
+        deleteTourLogButtonDisabled.set(count == 0);
+        editTourLogButtonDisabled.set(count != 1);
     }
 
     public void fetchTourLogsFromServer() {

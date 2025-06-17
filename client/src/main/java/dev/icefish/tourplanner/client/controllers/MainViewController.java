@@ -7,17 +7,15 @@ import dev.icefish.tourplanner.client.services.ImportService;
 import dev.icefish.tourplanner.client.services.ExportService;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
-import dev.icefish.tourplanner.client.utils.TourButtonHandler;
-import dev.icefish.tourplanner.client.utils.TourLogButtonHandler;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -121,8 +119,21 @@ public class MainViewController {
     public void initialize() {
         setTourListView();
         setTourLogTableView();
-        TourButtonHandler tourButtonHandler = new TourButtonHandler(deleteTourButton, editTourButton, newTourButton, tourListView);
-        TourLogButtonHandler tourLogButtonHandler = new TourLogButtonHandler(tourListView, newTourLogButton, deleteTourLogButton, editTourLogButton, tourLogTableView);
+        deleteTourButton.disableProperty().bind(tourViewModel.deleteTourButtonDisabledProperty());
+        editTourButton.disableProperty().bind(tourViewModel.editTourButtonDisabledProperty());
+
+        tourListView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Tour>) c -> {
+            tourViewModel.updateTourButtonStates(tourListView.getSelectionModel().getSelectedItems());
+        });
+
+        deleteTourLogButton.disableProperty().bind(tourLogViewModel.deleteTourLogButtonDisabledProperty());
+        editTourLogButton.disableProperty().bind(tourLogViewModel.editTourLogButtonDisabledProperty());
+
+        tourLogTableView.getSelectionModel().getSelectedItems().addListener(
+                (ListChangeListener<TourLog>) c -> {
+                    tourLogViewModel.updateTourLogButtonStates(tourLogTableView.getSelectionModel().getSelectedItems());
+                }
+        );
         tourListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setTourCellFactory();
 

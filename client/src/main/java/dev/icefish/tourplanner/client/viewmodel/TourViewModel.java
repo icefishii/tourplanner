@@ -6,6 +6,8 @@ import dev.icefish.tourplanner.client.utils.TourAttributeHelper;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +31,18 @@ public class TourViewModel {
         this.reportService = reportService;
         this.tourLogViewModel = tourLogViewModel;
         this.toursList = FXCollections.observableArrayList(tourService.getAllTours());
+    }
+
+    private final BooleanProperty deleteTourButtonDisabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty editTourButtonDisabled = new SimpleBooleanProperty(true);
+
+    public BooleanProperty deleteTourButtonDisabledProperty() { return deleteTourButtonDisabled; }
+    public BooleanProperty editTourButtonDisabledProperty() { return editTourButtonDisabled; }
+
+    public void updateTourButtonStates(ObservableList<Tour> selectedTours) {
+        int count = selectedTours.size();
+        deleteTourButtonDisabled.set(count == 0);
+        editTourButtonDisabled.set(count != 1);
     }
 
     public void fetchToursFromServer() {
