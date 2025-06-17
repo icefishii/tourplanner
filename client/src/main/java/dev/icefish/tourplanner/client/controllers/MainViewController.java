@@ -208,19 +208,18 @@ public class MainViewController {
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
-            TourCreateViewController controller = new TourCreateViewController(tourViewModel);
+            TourCreateViewController controller = new TourCreateViewController();
             loader.setController(controller);
             Parent root = loader.load();
 
             controller.setTourCreatedListener(tour -> {
-                tourViewModel.createNewTour(tour); // Add the new tour to the ViewModel
-                refreshUI(); // Refresh the UI after creating a new tour
+                tourViewModel.createNewTour(tour);
+                refreshUI();
             });
 
             tourCreateStage = new Stage();
             tourCreateStage.setTitle("Create Tour");
 
-            // Set the size of the window here (z.B. 800x600)
             Scene scene = new Scene(root, 800, 600); // Höhe und Breite nach Wunsch anpassen
             ThemeManager.applyCurrentTheme(scene);
             tourCreateStage.setScene(scene);

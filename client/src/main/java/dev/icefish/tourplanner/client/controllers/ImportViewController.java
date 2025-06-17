@@ -16,12 +16,14 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.Map;
 
 public class ImportViewController {
-
+    public final static Logger logger = LogManager.getLogger(ImportViewController.class);
     public TextField filePathField;
     public Button browseButton;
     public Button importButton;
@@ -70,6 +72,9 @@ public class ImportViewController {
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             filePathField.setText(selectedFile.getAbsolutePath());
+            logger.info("Selected file for import: {}", selectedFile.getAbsolutePath());
+        } else {
+            logger.warn("File selection was cancelled.");
         }
     }
 
@@ -77,15 +82,18 @@ public class ImportViewController {
         File file = new File(filePathField.getText());
         if (!file.exists()) {
             showError("File not found!");
+            logger.error("File not found: {}", file.getAbsolutePath());
             return;
         }
 
         String result = importService.importToursAndLogs(file);
         if (result.startsWith("Error")) {
             showError(result);
+            logger.error("Import failed: {}", result);
         } else {
             showSuccess(result);
             mainViewController.refreshUI();
+            logger.info("Import successful: {}", result);
         }
     }
 

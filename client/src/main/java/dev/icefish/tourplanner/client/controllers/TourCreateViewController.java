@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class TourCreateViewController {
@@ -40,14 +41,12 @@ public class TourCreateViewController {
     @FXML
     private Button createButton, cancelButton, loadMapButton;
 
-    private final TourViewModel tourViewModel;
     private final MapViewModel mapViewModel;
     private Consumer<Tour> tourCreatedListener;
 
     private boolean mapLoaded = false;
 
-    public TourCreateViewController(TourViewModel tourViewModel) {
-        this.tourViewModel = tourViewModel;
+    public TourCreateViewController() {
         this.mapViewModel = new MapViewModel();
     }
 
@@ -57,7 +56,7 @@ public class TourCreateViewController {
         createButton.setOnAction(this::onCreateButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
         loadMapButton.setOnAction(this::onLoadMapButtonClick);
-
+        logger.info("TourCreateViewController initialized.");
         Platform.runLater(() -> {
             Scene scene = createButton.getScene();
             if (scene != null) {
@@ -89,6 +88,7 @@ public class TourCreateViewController {
             if (!errors.isEmpty()) {
                 highlightErrorFields(errors);
                 showErrorAlert(errors);
+                logger.error("Validation errors: {}", errors);
                 return;
             }
 
@@ -100,8 +100,14 @@ public class TourCreateViewController {
                 case "car" -> "driving-car";
                 default -> throw new IllegalArgumentException("Unsupported transport type: " + transportType);
             };
-
-            String htmlTemplate = new String(getClass().getResourceAsStream("/MapTemplate.html").readAllBytes());
+            String htmlTemplate;
+            try {
+                htmlTemplate = new String(Objects.requireNonNull(getClass().getResourceAsStream("/MapTemplate.html")).readAllBytes());
+            } catch (Exception e) {
+                logger.error("Error loading HTML template: {}", e.getMessage());
+                showErrorAlert(Map.of("error", "Couldn't load map template: " + e.getMessage()));
+                return;
+            }
             String apiKey = ConfigLoader.get("openrouteservice.api.key");
 
             String htmlContent = htmlTemplate
@@ -124,6 +130,7 @@ public class TourCreateViewController {
 
         } catch (Exception e) {
             showErrorAlert(Map.of("error", "Couldn't load map: " + e.getMessage()));
+            logger.error("Error loading map: {}", e.getMessage());
         }
     }
 
@@ -147,11 +154,13 @@ public class TourCreateViewController {
             if (!errors.isEmpty()) {
                 highlightErrorFields(errors);
                 showErrorAlert(errors);
+                logger.error("Validation errors: {}", errors);
                 return;
             }
 
             if (!mapLoaded) {
                 showErrorAlert(Map.of("error", "Please load the map before creating the tour."));
+                logger.error("Map not loaded before creating tour.");
                 return;
             }
 
