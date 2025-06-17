@@ -3,7 +3,6 @@ package dev.icefish.tourplanner.client.controllers;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.ThemeManager;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
-import dev.icefish.tourplanner.client.services.ImportService;
 import dev.icefish.tourplanner.client.services.ExportService;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
@@ -70,7 +69,6 @@ public class MainViewController {
 
     //MenuBar
 
-
     @FXML
     private CheckBox childFriendlyCheckBox;
 
@@ -102,7 +100,6 @@ public class MainViewController {
     private final TourViewModel tourViewModel;
     private final TourLogViewModel tourLogViewModel;
     private final MapViewModel mapViewModel;
-    private final ImportService importService;
     private final ExportService exportService;
 
 
@@ -111,7 +108,6 @@ public class MainViewController {
         this.tourViewModel = tourViewModel;
         this.tourLogViewModel = tourLogViewModel;
         this.mapViewModel = mapViewModel;
-        this.importService = new ImportService();
         this.exportService = new ExportService();
     }
 
@@ -173,8 +169,8 @@ public class MainViewController {
 
         ratingSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0)); // min=1, max=5, initial=3
 
-        ratingSpinner.valueProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
-        childFriendlyCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> onSearchTours(null));
+        ratingSpinner.valueProperty().addListener((observable, oldValue, newValue) -> onSearchTours());
+        childFriendlyCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> onSearchTours());
 
         Platform.runLater(() -> {
             Scene scene = deleteTourButton.getScene();
@@ -185,18 +181,18 @@ public class MainViewController {
 
                 ShortcutUtils.addShortcuts(scene, Map.of(
                         // Tour Shortcuts (Ctrl + Key)
-                        ShortcutUtils.ctrl(KeyCode.N), () -> onCreateTour(null),
-                        ShortcutUtils.ctrl(KeyCode.E), () -> onEditTour(null),
-                        ShortcutUtils.ctrl(KeyCode.D), () -> onDeleteTour(null),
+                        ShortcutUtils.ctrl(KeyCode.N), this::onCreateTour,
+                        ShortcutUtils.ctrl(KeyCode.E), this::onEditTour,
+                        ShortcutUtils.ctrl(KeyCode.D), this::onDeleteTour,
                         ShortcutUtils.ctrl(KeyCode.R), () -> onGenerateTourReport(null),
-                        ShortcutUtils.ctrl(KeyCode.I), () -> onImport(null),
-                        ShortcutUtils.ctrl(KeyCode.A), () -> onAbout(null),
-                        ShortcutUtils.ctrl(KeyCode.M), () -> onToggleDarkMode(null),
+                        ShortcutUtils.ctrl(KeyCode.I), this::onImport,
+                        ShortcutUtils.ctrl(KeyCode.A), this::onAbout,
+                        ShortcutUtils.ctrl(KeyCode.M), this::onToggleDarkMode,
 
                         // TourLog Shortcuts (Ctrl + Shift + Key)
-                        ShortcutUtils.ctrlShift(KeyCode.N), () -> onCreateTourLog(null),
-                        ShortcutUtils.ctrlShift(KeyCode.E), () -> onEditTourLog(null),
-                        ShortcutUtils.ctrlShift(KeyCode.D), () -> onDeleteTourLog(null)
+                        ShortcutUtils.ctrlShift(KeyCode.N), this::onCreateTourLog,
+                        ShortcutUtils.ctrlShift(KeyCode.E), this::onEditTourLog,
+                        ShortcutUtils.ctrlShift(KeyCode.D), this::onDeleteTourLog
 
                 ));
             }
@@ -204,7 +200,7 @@ public class MainViewController {
 
     }
 
-    public void onCreateTour(ActionEvent actionEvent) {
+    public void onCreateTour() {
         try {
             if (tourCreateStage != null && tourCreateStage.isShowing()) {
                 tourCreateStage.toFront();
@@ -236,11 +232,10 @@ public class MainViewController {
 
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
     }
 
-    public void onEditTour(ActionEvent actionEvent) {
+    public void onEditTour() {
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
         if (selectedTour == null) {
             System.out.println("No Tour selected");
@@ -275,11 +270,10 @@ public class MainViewController {
             tourEditStage.show();
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
     }
 
-    public void onDeleteTour(ActionEvent actionEvent) {
+    public void onDeleteTour() {
         List<Tour> selectedTours = new ArrayList<>(tourListView.getSelectionModel().getSelectedItems());
 
         if (selectedTours.isEmpty()) {
@@ -382,7 +376,6 @@ public class MainViewController {
             stage.show();
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -411,7 +404,6 @@ public class MainViewController {
             stage.show();
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -431,7 +423,7 @@ public class MainViewController {
     }
 
     @FXML
-    public void onCreateTourLog(ActionEvent actionEvent) {
+    public void onCreateTourLog() {
         try {
             if (tourLogCreateStage != null && tourLogCreateStage.isShowing()) {
                 tourLogCreateStage.toFront();
@@ -458,12 +450,11 @@ public class MainViewController {
             tourLogCreateStage.show();
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
     }
 
     @FXML
-    public void onDeleteTourLog(ActionEvent actionEvent) {
+    public void onDeleteTourLog() {
         List<TourLog> selectedTourLogs = new ArrayList<>(tourLogTableView.getSelectionModel().getSelectedItems());
         if (selectedTourLogs.isEmpty()) {
             System.out.println("No Tour Log selected");
@@ -492,7 +483,7 @@ public class MainViewController {
     }
 
     @FXML
-    public void onEditTourLog(ActionEvent actionEvent) {
+    public void onEditTourLog() {
         TourLog selectedTourLog = tourLogTableView.getSelectionModel().getSelectedItem();
         if (selectedTourLog == null) {
             System.out.println("No Tour Log selected");
@@ -527,12 +518,11 @@ public class MainViewController {
             tourLogEditStage.show();
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
     }
 
     //----Menu Bar-----
-    public void onImport(ActionEvent actionEvent) {
+    public void onImport() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ImportWindow.fxml"));
             Parent root = loader.load();
@@ -548,12 +538,11 @@ public class MainViewController {
             stage.show();
         } catch (IOException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
         }
     }
 
     @FXML
-    public void onExport(ActionEvent actionEvent) {
+    public void onExport() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Export File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
@@ -584,9 +573,6 @@ public class MainViewController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public void onExit(ActionEvent actionEvent) {
     }
 
     //----Report-----
@@ -625,28 +611,28 @@ public class MainViewController {
             try {
                 tourViewModel.generateSummaryReport(file.toPath());
             } catch (IOException e) {
-                e.printStackTrace();
-                // Optional: Fehlerdialog anzeigen
+                logger.error("Error generating summary report: {}", e.getMessage());
+                showError("Failed to generate summary report: " + e.getMessage());
             }
         }
     }
 
-    public void onToggleDarkMode(ActionEvent actionEvent) {
+    public void onToggleDarkMode() {
         ThemeManager.setDarkMode(darkModeToggle.isSelected());
     }
 
-    public void onAbout(ActionEvent actionEvent) {
+    public void onAbout() {
         //ToDo Description
     }
 
     //----Search Bars-----
 
-    public void onClearTourSearch(ActionEvent actionEvent) {
+    public void onClearTourSearch() {
         tourSearchField.clear();
         tourListView.setItems(tourViewModel.getAllTours());
     }
 
-    public void onClearTourLogSearch(ActionEvent actionEvent) {
+    public void onClearTourLogSearch() {
         tourLogSearchField.clear();
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
         if (selectedTour != null) {
@@ -658,7 +644,7 @@ public class MainViewController {
     }
 
     @FXML
-    public void onSearchTours(ActionEvent actionEvent) {
+    public void onSearchTours() {
         String searchText = tourSearchField.getText().trim();
         Integer selectedRating = ratingSpinner.getValue();
         boolean isChildFriendly = childFriendlyCheckBox.isSelected();
@@ -668,7 +654,7 @@ public class MainViewController {
     }
 
     @FXML
-    public void onSearchTourLogs(ActionEvent actionEvent) {
+    public void onSearchTourLogs() {
         String searchText = tourLogSearchField.getText().trim().toLowerCase();
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
         if (selectedTour != null) {
@@ -679,8 +665,6 @@ public class MainViewController {
 
 
 }
-
-//ToDo Button Controller/Mediator (B)
 
 //ToDo Rewrite Tests
 
