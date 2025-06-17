@@ -4,6 +4,8 @@ import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
 import javafx.collections.ObservableList;
 
+import java.util.Objects;
+
 public class TourAttributeHelper {
 
     public static int computePopularity(ObservableList<TourLog> tourLogs) {
@@ -24,6 +26,10 @@ public class TourAttributeHelper {
                 .orElse(0);
         double totalDistance = tour.getDistance();
         double totalTime = tour.getEstimatedTime();
+
+        if (Objects.equals(tour.getTransportType(), "Car")) {
+            return "Child-Friendly";
+        }
 
         if (averageDifficulty <= 2 && totalDistance <= 5 && totalTime <= 2) {
             return "Child-Friendly";
