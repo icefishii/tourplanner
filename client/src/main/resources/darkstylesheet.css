@@ -195,6 +195,7 @@ VBox, HBox, StackPane, BorderPane, Region {
 }
 
 .menu {
+    -fx-background-color: transparent;
     -fx-text-fill: #E0E0E0;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
@@ -205,6 +206,11 @@ VBox, HBox, StackPane, BorderPane, Region {
     -fx-text-fill: #E0E0E0;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
+}
+
+.context-menu {
+    -fx-background-color: #1E1E1E;  /* dunkler Hintergrund */
+    -fx-border-color: #1E1E1E;      /* optional dunkle Ränder */
 }
 
 
