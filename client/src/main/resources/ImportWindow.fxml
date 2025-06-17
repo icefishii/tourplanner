@@ -10,7 +10,7 @@
 
 <GridPane fx:id="importWindow" id="tourRoot" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="dev.icefish.tourplanner.client.controllers.ImportViewController"
-          prefWidth="400.0" prefHeight="200.0" stylesheets="@stylesheet.css">
+          prefWidth="400.0" prefHeight="200.0">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20" />
     </padding>
