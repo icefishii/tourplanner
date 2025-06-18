@@ -252,6 +252,7 @@ public class MainViewController {
             loader.setController(new TourEditViewController());
             Parent root = loader.load();
 
+
             TourEditViewController controller = loader.getController();
             controller.setTour(selectedTour);
             controller.setTourUpdatedListener(tour -> {

@@ -1,6 +1,8 @@
 # Use OpenJDK 21 on Alpine for a lightweight image
 FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
 
+# Optimized with Docker AI
+
 # Set working directory
 WORKDIR /app
 

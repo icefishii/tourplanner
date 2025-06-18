@@ -25,6 +25,9 @@ public class TourEditViewController {
     private TextField tourNameField, tourDescriptionField, fromLocationField, toLocationField;
 
     @FXML
+    private Label createTourLabel;
+
+    @FXML
     private ComboBox<String> transportTypeBox;
 
     private Consumer<Tour> tourUpdatedListener;
@@ -34,6 +37,7 @@ public class TourEditViewController {
     private void initialize() {
         transportTypeBox.getItems().addAll("Walk", "Car", "Bike");
         createButton.setText("Save");
+        createTourLabel.setText("Edit Tour");
         createButton.setOnAction(this::onSaveButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
 
