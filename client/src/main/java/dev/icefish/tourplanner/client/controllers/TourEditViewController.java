@@ -94,4 +94,5 @@ public class TourEditViewController {
         WindowUtils.close(tourNameField);
         logger.info("Edit window closed without saving.");
     }
+
 }
