@@ -1,5 +1,6 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.utils.ControllerUtils;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.ThemeManager;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
@@ -557,21 +558,12 @@ public class MainViewController {
         }
     }
 
-
     private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        ControllerUtils.showErrorAlert(message);
     }
 
     private void showSuccess(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        ControllerUtils.showInfoAlert(message);
     }
 
     //----Report-----

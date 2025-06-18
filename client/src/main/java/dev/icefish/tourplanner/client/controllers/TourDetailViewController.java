@@ -8,9 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TourDetailViewController {
 
+    private static final Logger logger = LogManager.getLogger(TourDetailViewController.class);
 
     @FXML
     private Button closeButton;
@@ -18,7 +21,6 @@ public class TourDetailViewController {
     @FXML
     private Label nameLabel, descriptionLabel, fromLocationLabel, toLocationLabel, transportTypeLabel, distanceLabel, timeLabel, popularityLabel, childFriendlinessLabel;
 
-    //Ausgabe der Details
     public void setTourDetails(Tour tour, ObservableList<TourLog> tourLogs) {
         nameLabel.setText(tour.getName());
         descriptionLabel.setText(tour.getDescription());
@@ -31,14 +33,15 @@ public class TourDetailViewController {
         int popularity = TourAttributeHelper.computePopularity(tourLogs);
         String childFriendliness = TourAttributeHelper.computeChildFriendliness(tourLogs, tour);
 
-        // Add labels or fields for popularity and child-friendliness
         popularityLabel.setText(String.valueOf(popularity));
         childFriendlinessLabel.setText(childFriendliness);
+
+        logger.info("Tour details set: {} with {} logs", tour, tourLogs != null ? tourLogs.size() : 0);
     }
 
-    //schließen des Fensters
     public void handleClose() {
-        WindowUtils.close(nameLabel); //Unsere eigene Klasse in utils
+        WindowUtils.close(nameLabel);
+        logger.info("Detail window closed.");
     }
 
     private String formatDuration(double durationInHours) {
@@ -46,5 +49,4 @@ public class TourDetailViewController {
         int minutes = (int) Math.round((durationInHours - hours) * 60);
         return String.format("%dh %02dmin", hours, minutes);
     }
-
 }

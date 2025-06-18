@@ -1,5 +1,6 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.utils.ControllerUtils;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
 import dev.icefish.tourplanner.models.Tour;
@@ -56,43 +57,22 @@ public class TourLogCreateViewController {
         this.tourLogCreatedListener = listener;
     }
 
-    // Call the listener when a new TourLog is created
     private void onTourLogCreated(TourLog tourLog) {
         if (tourLogCreatedListener != null) {
             tourLogCreatedListener.accept(tourLog);
+            logger.info("TourLog created listener notified.");
         }
     }
 
     @FXML
     private void initialize() {
-        // Ensure the ComboBox is populated and displays the tour names
         tourComboBox.setItems(tourViewModel.getAllTours());
-        tourComboBox.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Tour item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
-        tourComboBox.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(Tour item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
+        ControllerUtils.setupTourComboBox(tourComboBox);
 
-        // Rebind the create and cancel button actions
         createButton.setOnAction(this::onCreateButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
+
+        logger.info("TourLogCreateViewController initialized.");
 
         Platform.runLater(() -> {
             Scene scene = createButton.getScene();
@@ -106,9 +86,10 @@ public class TourLogCreateViewController {
     }
 
     private void onCreateButtonClick(ActionEvent actionEvent) {
-        resetFieldStyles();
+        ControllerUtils.resetFieldStyles(
+                timeField, difficultyField, distanceField, durationField, ratingField, commentField, tourComboBox, datePicker
+        );
         try {
-
             Tour selectedTour = tourComboBox.getValue();
             LocalDate date = datePicker.getValue();
             String timeText = timeField.getText();
@@ -122,9 +103,18 @@ public class TourLogCreateViewController {
                     selectedTour, date, timeText, comment, difficultyText, distanceText, durationText, ratingText);
 
             if (!errors.isEmpty()) {
-                highlightErrorFields(errors);
-                showErrorAlert(errors);
-                logger.error(errors.toString());
+                ControllerUtils.highlightErrorFields(errors, Map.of(
+                        "tour", tourComboBox,
+                        "date", datePicker,
+                        "comment", commentField,
+                        "difficulty", difficultyField,
+                        "distance", distanceField,
+                        "duration", durationField,
+                        "rating", ratingField,
+                        "time", timeField
+                ));
+                ControllerUtils.showErrorAlert(errors);
+                logger.error("Validation errors: {}", errors);
                 return;
             }
 
@@ -137,81 +127,30 @@ public class TourLogCreateViewController {
             TourLog newTourLog = new TourLog();
             newTourLog.setId(UUIDv7Generator.generateUUIDv7());
             newTourLog.setTour(selectedTour);
-            newTourLog.setDate(Timestamp.valueOf(LocalDateTime.of(date, time)));
+            newTourLog.setDate(timestamp);
             newTourLog.setComment(comment);
             newTourLog.setDifficulty(difficulty);
             newTourLog.setDistance(distance);
             newTourLog.setDurationText(durationText);
             newTourLog.setRating(rating);
 
-
+            logger.info("Creating new TourLog: {}", newTourLog);
 
             if (tourLogCreatedListener != null) {
                 tourLogCreatedListener.accept(newTourLog);
+                logger.info("TourLog created listener notified.");
             }
 
             WindowUtils.close(commentField);
+            logger.info("Create window closed after saving.");
         } catch (Exception e) {
             logger.error("Error creating TourLog: {}", e.getMessage());
-            showErrorAlert(Map.of("error", "Unexpected Error: " + e.getMessage()));
+            ControllerUtils.showErrorAlert(Map.of("error", "Unexpected Error: " + e.getMessage()));
         }
     }
 
     private void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(commentField);
-    }
-
-    private void resetFieldStyles() {
-        timeField.setStyle(null);
-        difficultyField.setStyle(null);
-        distanceField.setStyle(null);
-        durationField.setStyle(null);
-        ratingField.setStyle(null);
-        commentField.setStyle(null);
-        tourComboBox.setStyle(null);
-        datePicker.setStyle(null);
-    }
-
-    private void highlightErrorFields(Map<String, String> errors) {
-        if (errors.containsKey("tour")) {
-            logger.error(errors.get("tour"));
-            tourComboBox.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("date")) {
-            logger.error(errors.get("date"));
-            datePicker.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("comment")) {
-            logger.error(errors.get("comment"));
-            commentField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("difficulty")) {
-            logger.error(errors.get("difficulty"));
-            difficultyField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("distance")) {
-            logger.error(errors.get("distance"));
-            distanceField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("duration")) {
-            logger.error(errors.get("duration"));
-            durationField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("rating")) {
-            logger.error(errors.get("rating"));
-            ratingField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("time")) {
-            logger.error(errors.get("time"));
-            timeField.setStyle("-fx-border-color: red;");
-        }
-    }
-
-    private void showErrorAlert(Map<String, String> errors) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(String.join("\n", errors.values()));
-        alert.showAndWait();
+        logger.info("Create window closed without saving.");
     }
 }

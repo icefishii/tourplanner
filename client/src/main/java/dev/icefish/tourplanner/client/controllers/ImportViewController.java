@@ -1,6 +1,7 @@
 package dev.icefish.tourplanner.client.controllers;
 
 import dev.icefish.tourplanner.client.services.ImportService;
+import dev.icefish.tourplanner.client.utils.ControllerUtils;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
 import javafx.application.Platform;
@@ -8,12 +9,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -59,7 +57,6 @@ public class ImportViewController {
         });
     }
 
-
     public void onBrowse(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file to import");
@@ -74,46 +71,30 @@ public class ImportViewController {
             filePathField.setText(selectedFile.getAbsolutePath());
             logger.info("Selected file for import: {}", selectedFile.getAbsolutePath());
         } else {
+            ControllerUtils.showErrorAlert("No file selected.");
             logger.warn("File selection was cancelled.");
         }
     }
 
     public void onImport(ActionEvent actionEvent) {
-        File file = new File(filePathField.getText());
-        if (!file.exists()) {
-            showError("File not found!");
-            logger.error("File not found: {}", file.getAbsolutePath());
+        String filePath = filePathField.getText();
+        if (filePath == null || filePath.isBlank()) {
+            ControllerUtils.showErrorAlert("Please select a file to import.");
             return;
         }
-
-        String result = importService.importToursAndLogs(file);
+        String result = importService.importToursAndLogs(new File(filePath));
         if (result.startsWith("Error")) {
-            showError(result);
-            logger.error("Import failed: {}", result);
+            ControllerUtils.showErrorAlert(result);
         } else {
-            showSuccess(result);
-            mainViewController.refreshUI();
-            logger.info("Import successful: {}", result);
+            ControllerUtils.showInfoAlert(result);
+            if (mainViewController != null) {
+                mainViewController.refreshUI();
+            }
+            WindowUtils.close(filePathField);
         }
-    }
-
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Import Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showSuccess(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Import Success");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     public void onCancel(ActionEvent actionEvent) {
-        WindowUtils.close((Node) actionEvent.getSource());
+        WindowUtils.close(filePathField);
     }
 }

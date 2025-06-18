@@ -1,6 +1,7 @@
 package dev.icefish.tourplanner.client.controllers;
 
 import dev.icefish.tourplanner.client.services.TourLogService;
+import dev.icefish.tourplanner.client.utils.ControllerUtils;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
@@ -12,6 +13,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -20,6 +23,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class TourLogEditViewController {
+    private static final Logger logger = LogManager.getLogger(TourLogEditViewController.class);
+
     @FXML
     private Button createButton, cancelButton;
 
@@ -45,7 +50,7 @@ public class TourLogEditViewController {
 
     public TourLogEditViewController(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
-        this.tourLogViewModel = new TourLogViewModel(new TourLogService()); // Pass the correct dependency
+        this.tourLogViewModel = new TourLogViewModel(new TourLogService());
     }
 
     public void setTourViewModel(TourViewModel tourViewModel) {
@@ -57,34 +62,12 @@ public class TourLogEditViewController {
     private void initialize() {
         createTourLogLabel.setText("Edit Tour Log");
         tourComboBox.setItems(tourViewModel.getAllTours());
-
-        // Set the cell factory to display the tour name
-        tourComboBox.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Tour item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
-
-        tourComboBox.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(Tour item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
+        ControllerUtils.setupTourComboBox(tourComboBox);
 
         createButton.setOnAction(this::onSaveButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
+
+        logger.info("TourLogEditViewController initialized.");
 
         Platform.runLater(() -> {
             Scene scene = createButton.getScene();
@@ -95,12 +78,10 @@ public class TourLogEditViewController {
                 ));
             }
         });
-
     }
 
     public void setTourLog(TourLog tourLog) {
         this.tourLog = tourLog;
-        // Populate fields with the existing TourLog data
         datePicker.setValue(tourLog.getDate().toLocalDateTime().toLocalDate());
         timeField.setText(tourLog.getDate().toLocalDateTime().toLocalTime().toString());
         commentField.setText(tourLog.getComment());
@@ -109,13 +90,13 @@ public class TourLogEditViewController {
         durationField.setText(tourLog.getDurationText());
         ratingField.setText(String.valueOf(tourLog.getRating()));
 
-        // Set the selected tour in the ComboBox
         tourComboBox.getSelectionModel().select(
                 tourViewModel.getAllTours().stream()
                         .filter(t -> t.getId().equals(tourLog.getTour().getId()))
                         .findFirst()
                         .orElse(null)
         );
+        logger.info("TourLog set for editing: {}", tourLog);
     }
 
     public void setTourLogUpdatedListener(Consumer<TourLog> listener) {
@@ -123,6 +104,9 @@ public class TourLogEditViewController {
     }
 
     private void onSaveButtonClick(ActionEvent actionEvent) {
+        ControllerUtils.resetFieldStyles(
+                timeField, difficultyField, distanceField, durationField, ratingField, commentField, tourComboBox, datePicker
+        );
         try {
             tourLog.setDate(Timestamp.valueOf(LocalDateTime.of(datePicker.getValue(), LocalTime.parse(timeField.getText()))));
             tourLog.setComment(commentField.getText());
@@ -131,25 +115,23 @@ public class TourLogEditViewController {
             tourLog.setDurationText(durationField.getText());
             tourLog.setRating(Integer.parseInt(ratingField.getText()));
 
+            logger.info("Saving TourLog: {}", tourLog);
+
             if (tourLogUpdatedListener != null) {
                 tourLogUpdatedListener.accept(tourLog);
+                logger.info("TourLog updated listener notified.");
             }
 
             WindowUtils.close(commentField);
+            logger.info("Edit window closed after saving.");
         } catch (Exception e) {
-            showErrorAlert("Invalid input: " + e.getMessage());
+            logger.error("Error saving TourLog: {}", e.getMessage());
+            ControllerUtils.showErrorAlert("Invalid input: " + e.getMessage());
         }
     }
 
     private void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(commentField);
-    }
-
-    private void showErrorAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        logger.info("Edit window closed without saving.");
     }
 }

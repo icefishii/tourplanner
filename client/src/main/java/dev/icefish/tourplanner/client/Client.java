@@ -27,7 +27,7 @@ public class Client extends Application {
         TourLogViewModel tourLogViewModel = new TourLogViewModel(tourLogService);
 
         // Initialize ViewModels
-        TourViewModel tourViewModel = new TourViewModel(tourService, reportService, tourLogViewModel);
+        TourViewModel tourViewModel = new TourViewModel(tourService,tourLogService, reportService);
 
         MapViewModel mapViewModel = new MapViewModel();
 

@@ -4,13 +4,12 @@ import dev.icefish.tourplanner.client.services.GeoCoder;
 import dev.icefish.tourplanner.client.services.MapService;
 import dev.icefish.tourplanner.client.services.OpenRouteService;
 import dev.icefish.tourplanner.client.utils.ConfigLoader;
+import dev.icefish.tourplanner.client.utils.ControllerUtils;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.UUIDv7Generator;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
-import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import dev.icefish.tourplanner.models.Tour;
-
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
@@ -22,7 +21,6 @@ import javafx.event.ActionEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -69,11 +67,11 @@ public class TourCreateViewController {
         });
     }
 
-
-
     private void onLoadMapButtonClick(ActionEvent event) {
         try {
-            resetFieldStyles();
+            ControllerUtils.resetFieldStyles(
+                    tourNameField, tourDescriptionField, fromLocationField, toLocationField, transportTypeBox
+            );
 
             String name = tourNameField.getText();
             String description = tourDescriptionField.getText();
@@ -81,13 +79,18 @@ public class TourCreateViewController {
             String toLocation = toLocationField.getText();
             String transportType = transportTypeBox.getValue();
 
-
             Map<String, String> errors = dev.icefish.tourplanner.client.utils.TourChecker.validateTour(
                     name, description, fromLocation, toLocation, transportType);
 
             if (!errors.isEmpty()) {
-                highlightErrorFields(errors);
-                showErrorAlert(errors);
+                ControllerUtils.highlightErrorFields(errors, Map.of(
+                        "name", tourNameField,
+                        "description", tourDescriptionField,
+                        "fromLocation", fromLocationField,
+                        "toLocation", toLocationField,
+                        "transportType", transportTypeBox
+                ));
+                ControllerUtils.showErrorAlert(errors);
                 logger.error("Validation errors: {}", errors);
                 return;
             }
@@ -105,7 +108,7 @@ public class TourCreateViewController {
                 htmlTemplate = new String(Objects.requireNonNull(getClass().getResourceAsStream("/MapTemplate.html")).readAllBytes());
             } catch (Exception e) {
                 logger.error("Error loading HTML template: {}", e.getMessage());
-                showErrorAlert(Map.of("error", "Couldn't load map template: " + e.getMessage()));
+                ControllerUtils.showErrorAlert(Map.of("error", "Couldn't load map template: " + e.getMessage()));
                 return;
             }
             String apiKey = ConfigLoader.get("openrouteservice.api.key");
@@ -129,7 +132,7 @@ public class TourCreateViewController {
             });
 
         } catch (Exception e) {
-            showErrorAlert(Map.of("error", "Couldn't load map: " + e.getMessage()));
+            ControllerUtils.showErrorAlert(Map.of("error", "Couldn't load map: " + e.getMessage()));
             logger.error("Error loading map: {}", e.getMessage());
         }
     }
@@ -140,7 +143,9 @@ public class TourCreateViewController {
 
     private void onCreateButtonClick(ActionEvent actionEvent) {
         try {
-            resetFieldStyles();
+            ControllerUtils.resetFieldStyles(
+                    tourNameField, tourDescriptionField, fromLocationField, toLocationField, transportTypeBox
+            );
 
             String name = tourNameField.getText();
             String description = tourDescriptionField.getText();
@@ -152,14 +157,20 @@ public class TourCreateViewController {
                     name, description, fromLocation, toLocation, transportType);
 
             if (!errors.isEmpty()) {
-                highlightErrorFields(errors);
-                showErrorAlert(errors);
+                ControllerUtils.highlightErrorFields(errors, Map.of(
+                        "name", tourNameField,
+                        "description", tourDescriptionField,
+                        "fromLocation", fromLocationField,
+                        "toLocation", toLocationField,
+                        "transportType", transportTypeBox
+                ));
+                ControllerUtils.showErrorAlert(errors);
                 logger.error("Validation errors: {}", errors);
                 return;
             }
 
             if (!mapLoaded) {
-                showErrorAlert(Map.of("error", "Please load the map before creating the tour."));
+                ControllerUtils.showErrorAlert(Map.of("error", "Please load the map before creating the tour."));
                 logger.error("Map not loaded before creating tour.");
                 return;
             }
@@ -174,7 +185,7 @@ public class TourCreateViewController {
                 newTour.setEstimatedTime(info.durationInHours());
             } catch (Exception e) {
                 logger.warn("Error retrieving route info: {}", e.getMessage());
-                showErrorAlert(Map.of("error", "Route info couldn't be retrieved: " + e.getMessage()));
+                ControllerUtils.showErrorAlert(Map.of("error", "Route info couldn't be retrieved: " + e.getMessage()));
                 return;
             }
 
@@ -182,56 +193,15 @@ public class TourCreateViewController {
                 tourCreatedListener.accept(newTour);
             }
 
-            // Hier neuer Aufruf MapService
             MapService.saveWebViewSnapshot(mapWebView, newTour, mapViewModel);
 
             WindowUtils.close(tourNameField);
         } catch (Exception e) {
-            showErrorAlert(Map.of("error", "Invalid input: " + e.getMessage()));
+            ControllerUtils.showErrorAlert(Map.of("error", "Invalid input: " + e.getMessage()));
         }
     }
 
     private void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(tourNameField);
-    }
-
-    private void resetFieldStyles() {
-        tourNameField.setStyle(null);
-        tourDescriptionField.setStyle(null);
-        fromLocationField.setStyle(null);
-        toLocationField.setStyle(null);
-        transportTypeBox.setStyle(null);
-    }
-
-    private void highlightErrorFields(Map<String, String> errors) {
-
-        if (errors.containsKey("name")) {
-            logger.error(errors.get("name"));
-            tourNameField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("description")) {
-            logger.error(errors.get("description"));
-            tourDescriptionField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("fromLocation")) {
-            logger.error(errors.get("fromLocation"));
-            fromLocationField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("toLocation")) {
-            logger.error(errors.get("toLocation"));
-            toLocationField.setStyle("-fx-border-color: red;");
-        }
-        if (errors.containsKey("transportType")) {
-            logger.error(errors.get("transportType"));
-            transportTypeBox.setStyle("-fx-border-color: red;");
-        }
-    }
-
-    private void showErrorAlert(Map<String, String> errors) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(String.join("\n", errors.values()));
-        alert.showAndWait();
     }
 }

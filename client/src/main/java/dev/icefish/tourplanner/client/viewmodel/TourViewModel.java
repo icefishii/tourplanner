@@ -1,6 +1,7 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
 import dev.icefish.tourplanner.client.services.ReportService;
+import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.client.services.TourService;
 import dev.icefish.tourplanner.client.utils.TourAttributeHelper;
 import dev.icefish.tourplanner.models.Tour;
@@ -24,12 +25,12 @@ public class TourViewModel {
     private final ObservableList<Tour> toursList;
     private final TourService tourService;
     private final ReportService reportService;
-    private final TourLogViewModel tourLogViewModel;
+    private final TourLogService tourLogService; // Add this field
 
-    public TourViewModel(TourService tourService, ReportService reportService, TourLogViewModel tourLogViewModel) {
+    public TourViewModel(TourService tourService, TourLogService tourLogService, ReportService reportService) {
         this.tourService = tourService;
+        this.tourLogService = tourLogService; // Assign it here
         this.reportService = reportService;
-        this.tourLogViewModel = tourLogViewModel;
         this.toursList = FXCollections.observableArrayList(tourService.getAllTours());
     }
 
@@ -73,7 +74,7 @@ public class TourViewModel {
 
     public void generateTourReport(Tour tour, Path filePath) {
 
-        List<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(tour.getId()); // delegieren oder direkt laden
+        ObservableList<TourLog> tourLogs = tourLogService.getTourLogsfromTour(tour.getId());; // delegieren oder direkt laden
         reportService.generateTourReport(tour, tourLogs, filePath);
 
     }
@@ -83,8 +84,8 @@ public class TourViewModel {
         // Zu jeder Tour die zugehörigen Logs holen
         Map<Tour, List<TourLog>> logsByTour = new HashMap<>();
         for (Tour tour : tours) {
-            List<TourLog> logs = tourLogViewModel.getTourLogsByTourId(tour.getId());
-            logsByTour.put(tour, logs);
+            ObservableList<TourLog> tourLogs = tourLogService.getTourLogsfromTour(tour.getId());;
+            logsByTour.put(tour, tourLogs);
         }
         // Jetzt ReportService rufen mit allen Daten
         reportService.generateSummaryReport(logsByTour, filePath);
@@ -153,12 +154,12 @@ public class TourViewModel {
     }
 
     public int getPopularity(Tour tour) {
-        ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(tour.getId());
+        ObservableList<TourLog> tourLogs = tourLogService.getTourLogsfromTour(tour.getId());;
         return TourAttributeHelper.computePopularity(tourLogs);
     }
 
     public String getChildFriendliness(Tour tour) {
-        ObservableList<TourLog> tourLogs = tourLogViewModel.getTourLogsByTourId(tour.getId());
+        ObservableList<TourLog> tourLogs = tourLogService.getTourLogsfromTour(tour.getId());;
         return TourAttributeHelper.computeChildFriendliness(tourLogs, tour);
     }
 

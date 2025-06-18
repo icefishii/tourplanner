@@ -6,8 +6,12 @@ import dev.icefish.tourplanner.client.utils.WindowUtils;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TourLogDetailViewController {
+
+    private static final Logger logger = LogManager.getLogger(TourLogDetailViewController.class);
 
     @FXML
     private Label nameLabel;
@@ -33,8 +37,6 @@ public class TourLogDetailViewController {
     private TourLog tourLog;
     private TourViewModel tourViewModel;
 
-
-    // Setter für das TourLog, das angezeigt werden soll
     public void setTourLog(TourLog tourLog, TourViewModel tourViewModel) {
         this.tourLog = tourLog;
         this.tourViewModel = tourViewModel;
@@ -56,16 +58,17 @@ public class TourLogDetailViewController {
         distanceLabel.setText(String.format("%.2f km", tourLog.getDistance()));
         durationLabel.setText(String.format("%s min",tourLog.getDurationText()));
         setRatingStars(tourLog.getRating());
+
+        logger.info("TourLog details set: {}", tourLog);
     }
 
-    //Stern ausgeben
     private void setRatingStars(int rating) {
         StringBuilder stars = new StringBuilder();
         for (int i = 0; i < 5; i++) {
             if (i < rating) {
-                stars.append("★");  // Voller Stern
+                stars.append("★");
             } else {
-                stars.append("☆");  // Leerer Stern
+                stars.append("☆");
             }
         }
         ratingLabel.setText(stars.toString());
@@ -73,7 +76,7 @@ public class TourLogDetailViewController {
 
     @FXML
     private void handleClose() {
-        // Schließe das Fenster, wenn der OK-Button geklickt wird
         WindowUtils.close(dateLabel);
+        logger.info("Detail window closed.");
     }
 }
