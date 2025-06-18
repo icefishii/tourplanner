@@ -2,13 +2,11 @@ package dev.icefish.tourplanner.server.service;
 
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.exceptions.RepositoryException;
-import dev.icefish.tourplanner.models.exceptions.ServiceException;
 import dev.icefish.tourplanner.server.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
