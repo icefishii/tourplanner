@@ -1,7 +1,8 @@
 package dev.icefish.tourplanner.server.service;
 
 import dev.icefish.tourplanner.models.Tour;
-import dev.icefish.tourplanner.server.Server;
+import dev.icefish.tourplanner.models.exceptions.RepositoryException;
+import dev.icefish.tourplanner.models.exceptions.ServiceException;
 import dev.icefish.tourplanner.server.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,35 +25,59 @@ public class TourService {
     }
 
     public List<Tour> getAllTours() {
-        logger.info("Fetching all tours");
-        return tourRepository.findAll();
+        try {
+            logger.info("Fetching all tours");
+            return tourRepository.findAll();
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to fetch all tours");
+        }
     }
 
     public Optional<Tour> getTourById(UUID id) {
-        logger.info("Fetching tour with id: {}", id);
-        return tourRepository.findById(id);
+        try {
+            logger.info("Fetching tour with id: {}", id);
+            return tourRepository.findById(id);
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to fetch tour by id");
+        }
     }
 
     public Tour saveTour(Tour tour) {
-        logger.info("Saving tour: {}", tour);
-        Tour t = tourRepository.save(tour);
-        tourRepository.flush();
-        return t;
-
+        try {
+            logger.info("Saving tour: {}", tour);
+            Tour t = tourRepository.save(tour);
+            tourRepository.flush();
+            return t;
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to save tour");
+        }
     }
 
     public void deleteTour(UUID id) {
-        logger.info("Deleting tour with id: {}", id);
-        tourRepository.deleteById(id);
+        try {
+            logger.info("Deleting tour with id: {}", id);
+            tourRepository.deleteById(id);
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to delete tour");
+        }
     }
 
     public List<Tour> importTours(List<Tour> tours) {
         List<Tour> importedTours = new ArrayList<>();
         for (Tour tour : tours) {
-            if (!tourRepository.existsById(tour.getId())) {
-                importedTours.add(tourRepository.save(tour));
-            } else {
-                logger.warn("Tour with ID {} already exists. Skipping import.", tour.getId());
+            try {
+                if (!tourRepository.existsById(tour.getId())) {
+                    importedTours.add(tourRepository.save(tour));
+                } else {
+                    logger.warn("Tour with ID {} already exists. Skipping import.", tour.getId());
+                }
+            } catch (Exception e) {
+                logger.error("Repository error: {}", e.getMessage());
+                throw new RepositoryException("Failed to import tours");
             }
         }
         return importedTours;

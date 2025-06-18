@@ -6,4 +6,5 @@ module dev.icefish.tourplanner.models {
     opens dev.icefish.tourplanner.models;
 
     exports dev.icefish.tourplanner.models;
+    exports dev.icefish.tourplanner.models.exceptions;
 }

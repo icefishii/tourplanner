@@ -1,6 +1,7 @@
 package dev.icefish.tourplanner.server.service;
 
 import dev.icefish.tourplanner.models.TourLog;
+import dev.icefish.tourplanner.models.exceptions.RepositoryException;
 import dev.icefish.tourplanner.server.repository.TourLogRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 @Service
 public class TourLogService {
 
-
     private final TourLogRepository tourLogRepository;
     private static final Logger logger = LogManager.getLogger(TourLogService.class);
 
@@ -25,37 +25,67 @@ public class TourLogService {
     }
 
     public List<TourLog> getAllTourLogs() {
-        logger.info("Fetching all tour logs");
-        return tourLogRepository.findAll();
+        try {
+            logger.info("Fetching all tour logs");
+            return tourLogRepository.findAll();
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to fetch all tour logs");
+        }
     }
 
     public Optional<TourLog> getTourLogById(UUID id) {
-        logger.info("Fetching tour log with id: {}", id);
-        return tourLogRepository.findById(id);
+        try {
+            logger.info("Fetching tour log with id: {}", id);
+            return tourLogRepository.findById(id);
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to fetch tour log by id");
+        }
     }
 
     public List<TourLog> getTourLogsByTourId(UUID tourId) {
-        logger.info("Fetching tour logs for tour id: {}", tourId);
-        return tourLogRepository.findByTourId(tourId);
+        try {
+            logger.info("Fetching tour logs for tour id: {}", tourId);
+            return tourLogRepository.findByTourId(tourId);
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to fetch tour logs by tour id");
+        }
     }
 
     public TourLog saveTourLog(TourLog tourLog) {
-        logger.info("Saving tour log: {}", tourLog);
-        return tourLogRepository.save(tourLog);
+        try {
+            logger.info("Saving tour log: {}", tourLog);
+            return tourLogRepository.save(tourLog);
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to save tour log");
+        }
     }
 
     public void deleteTourLog(UUID id) {
-        logger.info("Deleting tour log with id: {}", id);
-        tourLogRepository.deleteById(id);
+        try {
+            logger.info("Deleting tour log with id: {}", id);
+            tourLogRepository.deleteById(id);
+        } catch (Exception e) {
+            logger.error("Repository error: {}", e.getMessage());
+            throw new RepositoryException("Failed to delete tour log");
+        }
     }
 
     public List<TourLog> importTourLogs(List<TourLog> tourLogs) {
         List<TourLog> importedTourLogs = new ArrayList<>();
         for (TourLog tourLog : tourLogs) {
-            if (!tourLogRepository.existsById(tourLog.getId())) {
-                importedTourLogs.add(tourLogRepository.save(tourLog));
-            } else {
-                logger.warn("TourLog with ID {} already exists. Skipping import.", tourLog.getId());
+            try {
+                if (!tourLogRepository.existsById(tourLog.getId())) {
+                    importedTourLogs.add(tourLogRepository.save(tourLog));
+                } else {
+                    logger.warn("TourLog with ID {} already exists. Skipping import.", tourLog.getId());
+                }
+            } catch (Exception e) {
+                logger.error("Repository error: {}", e.getMessage());
+                throw new RepositoryException("Failed to import tour logs");
             }
         }
         return importedTourLogs;
