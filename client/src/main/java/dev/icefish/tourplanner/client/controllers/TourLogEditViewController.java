@@ -67,6 +67,8 @@ public class TourLogEditViewController {
         createButton.setOnAction(this::onSaveButtonClick);
         cancelButton.setOnAction(this::onCancelButtonClick);
 
+        tourComboBox.setDisable(true);
+
         logger.info("TourLogEditViewController initialized.");
 
         Platform.runLater(() -> {
@@ -108,12 +110,41 @@ public class TourLogEditViewController {
                 timeField, difficultyField, distanceField, durationField, ratingField, commentField, tourComboBox, datePicker
         );
         try {
-            tourLog.setDate(Timestamp.valueOf(LocalDateTime.of(datePicker.getValue(), LocalTime.parse(timeField.getText()))));
-            tourLog.setComment(commentField.getText());
-            tourLog.setDifficulty(Integer.parseInt(difficultyField.getText()));
-            tourLog.setDistance(Double.parseDouble(distanceField.getText()));
-            tourLog.setDurationText(durationField.getText());
-            tourLog.setRating(Integer.parseInt(ratingField.getText()));
+            Tour selectedTour = tourComboBox.getValue();
+            var date = datePicker.getValue();
+            var timeText = timeField.getText();
+            var comment = commentField.getText();
+            var difficultyText = difficultyField.getText();
+            var distanceText = distanceField.getText();
+            var durationText = durationField.getText();
+            var ratingText = ratingField.getText();
+
+            Map<String, String> errors = dev.icefish.tourplanner.client.utils.TourLogChecker.validateTourLogRaw(
+                    selectedTour, date, timeText, comment, difficultyText, distanceText, durationText, ratingText
+            );
+
+            if (!errors.isEmpty()) {
+                ControllerUtils.highlightErrorFields(errors, Map.of(
+                        "tour", tourComboBox,
+                        "date", datePicker,
+                        "comment", commentField,
+                        "difficulty", difficultyField,
+                        "distance", distanceField,
+                        "duration", durationField,
+                        "rating", ratingField,
+                        "time", timeField
+                ));
+                ControllerUtils.showErrorAlert(errors);
+                logger.error("Validation errors: {}", errors);
+                return;
+            }
+
+            tourLog.setDate(Timestamp.valueOf(LocalDateTime.of(date, LocalTime.parse(timeText))));
+            tourLog.setComment(comment);
+            tourLog.setDifficulty(Integer.parseInt(difficultyText));
+            tourLog.setDistance(Double.parseDouble(distanceText));
+            tourLog.setDurationText(durationText);
+            tourLog.setRating(Integer.parseInt(ratingText));
 
             logger.info("Saving TourLog: {}", tourLog);
 
@@ -126,9 +157,10 @@ public class TourLogEditViewController {
             logger.info("Edit window closed after saving.");
         } catch (Exception e) {
             logger.error("Error saving TourLog: {}", e.getMessage());
-            ControllerUtils.showErrorAlert("Invalid input: " + e.getMessage());
+            ControllerUtils.showErrorAlert(Map.of("error", "Unexpected Error: " + e.getMessage()));
         }
     }
+
 
     private void onCancelButtonClick(ActionEvent actionEvent) {
         WindowUtils.close(commentField);
