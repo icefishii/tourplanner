@@ -41,8 +41,8 @@ public class Client extends Application {
         stage.setScene(scene);
 
 
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
+        stage.setMinWidth(1400);
+        stage.setMinHeight(800);
 
         stage.setMaximized(true);
 

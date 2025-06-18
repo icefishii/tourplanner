@@ -223,6 +223,8 @@ public class MainViewController {
 
             Scene scene = new Scene(root, 800, 600); // Höhe und Breite nach Wunsch anpassen
             ThemeManager.applyCurrentTheme(scene);
+            tourCreateStage.setMinWidth(800);  // Mindestbreite in Pixel
+            tourCreateStage.setMinHeight(600);
             tourCreateStage.setScene(scene);
 
             // Optional: Wenn du willst, dass die Fenstergröße dynamisch angepasst wird:
@@ -265,8 +267,8 @@ public class MainViewController {
             ThemeManager.applyCurrentTheme(scene);
             tourEditStage.setScene(scene);
             tourEditStage.setTitle("Edit Tour");
-            tourEditStage.setMinWidth(380);
-            tourEditStage.setMinHeight(450);
+            tourEditStage.setMinWidth(800);  // Mindestbreite in Pixel
+            tourEditStage.setMinHeight(600);
             tourEditStage.setOnCloseRequest(e -> tourEditStage = null);
             tourEditStage.show();
         } catch (IOException e) {
@@ -369,7 +371,8 @@ public class MainViewController {
             Scene scene = new Scene(root);
             ThemeManager.applyCurrentTheme(scene); // <--- Hier
             stage.setScene(scene); // <-- Richtiges Stage-Objekt verwenden
-
+            stage.setMinWidth(305);  // Mindestbreite in Pixel
+            stage.setMinHeight(450);
             tourDetailStages.put(tour, stage);
 
             stage.setOnCloseRequest(e -> tourDetailStages.remove(tour));
@@ -398,6 +401,8 @@ public class MainViewController {
             Scene scene = new Scene(root);
             ThemeManager.applyCurrentTheme(scene); // <--- Hier
             stage.setScene(scene);
+            stage.setMinWidth(305);  // Mindestbreite in Pixel
+            stage.setMinHeight(450);
 
             tourLogDetailStages.put(tourLog, stage);
             stage.setOnCloseRequest(e -> tourLogDetailStages.remove(tourLog));
@@ -535,6 +540,8 @@ public class MainViewController {
             Scene scene = new Scene(root);
             ThemeManager.applyCurrentTheme(scene); // <--- Hier
             stage.setScene(scene);
+            stage.setMinWidth(400);  // Mindestbreite in Pixel
+            stage.setMinHeight(200);
             stage.setTitle("Import Data");
             stage.show();
         } catch (IOException e) {
