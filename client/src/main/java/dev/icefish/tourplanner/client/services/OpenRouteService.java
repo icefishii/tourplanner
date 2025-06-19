@@ -3,11 +3,13 @@ import dev.icefish.tourplanner.client.utils.ConfigLoader;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import dev.icefish.tourplanner.models.exceptions.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -18,17 +20,24 @@ public class OpenRouteService {
     private static final String API_KEY = ConfigLoader.get("openrouteservice.api.key");
     private static final String BASE_URL = "https://api.openrouteservice.org/v2/directions/";
 
-    public static RouteInfo getRouteInfo(String from, String to, String transportType) throws Exception {
+    public static RouteInfo getRouteInfo(String from, String to, String transportType) throws ServiceException {
         String profile = switch (transportType.toLowerCase()) {
             case "walk" -> "foot-walking";
             case "bike" -> "cycling-regular";
             case "car" -> "driving-car";
             default -> throw new IllegalArgumentException("Unsupported transport type: " + transportType);
         };
-
+        double[] fromCoords;
+        double[] toCoords;
         //Koordinaten
-        double[] fromCoords = GeoCoder.getCoordinates(from);
-        double[] toCoords = GeoCoder.getCoordinates(to);
+        try {
+            fromCoords = GeoCoder.getCoordinates(from);
+            toCoords = GeoCoder.getCoordinates(to);
+        } catch (Exception e) {
+            logger.error("Error getting coordinates for from: {}, to: {}", from, to, e);
+            throw new ServiceException("Error getting coordinates for from: " + from + ", to: " + to + " - " + e.getMessage());
+        }
+
 
         // Gson JSON-Body
         JsonArray coords = new JsonArray();
@@ -48,18 +57,34 @@ public class OpenRouteService {
         body.add("coordinates", coords);
 
         // HTTP Request vorbereiten
-        URL url = new URL(BASE_URL + profile);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Authorization", API_KEY);
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
+        HttpURLConnection conn;
+        try {
+            URI uri = URI.create(BASE_URL + profile);
+            URL url = uri.toURL();
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", API_KEY);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+        } catch (Exception e) {
+            logger.error("Error creating HTTP connection: {}", e.getMessage());
+            throw new ServiceException("Error creating HTTP connection: " + e.getMessage());
+        }
 
         try (OutputStream os = conn.getOutputStream()) {
             os.write(body.toString().getBytes());
+        } catch (Exception e) {
+            logger.error("Error writing request body: {}", e.getMessage());
+            throw new ServiceException("Error writing request body: " + e.getMessage());
         }
 
-        Scanner scanner = new Scanner(conn.getInputStream()).useDelimiter("\\A");
+        Scanner scanner;
+        try {
+            scanner = new Scanner(conn.getInputStream()).useDelimiter("\\A");
+        } catch (Exception e) {
+            logger.error("Error reading response: {}", e.getMessage());
+            throw new ServiceException("Error reading response: " + e.getMessage());
+        }
         String response = scanner.hasNext() ? scanner.next() : "";
 
         // JSON-Antwort mit Gson auswerten

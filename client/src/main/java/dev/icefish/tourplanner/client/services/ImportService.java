@@ -30,10 +30,23 @@ public class ImportService {
         this.objectMapper = objectMapper;
     }
 
+    public Map<String, Object> loadFromFile(File file) {
+        try {
+            // Read the combined JSON structure
+            return objectMapper.readValue(file,
+                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Object.class));
+        } catch (IOException e) {
+            logger.error("Error loading data from file: {}", e.getMessage());
+            throw new RuntimeException("Error loading data from file: " + e.getMessage());
+        }
+    }
+
+    // Original method kept for backward compatibility if needed
     public String importToursAndLogs(File file) {
         try {
             // Read the combined JSON structure
-            Map<String, Object> data = objectMapper.readValue(file, Map.class);
+            Map<String, Object> data = objectMapper.readValue(file,
+                    objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Object.class));
 
             // Extract tours and tour logs
             List<Tour> tours = objectMapper.convertValue(data.get("tours"),

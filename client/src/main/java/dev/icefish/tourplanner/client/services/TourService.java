@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import dev.icefish.tourplanner.client.utils.ConfigLoader;
 import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.exceptions.ServiceException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -63,7 +64,7 @@ public class TourService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
 
@@ -91,7 +92,7 @@ public class TourService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
 
@@ -123,7 +124,7 @@ public class TourService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
 
@@ -146,7 +147,7 @@ public class TourService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
     private void deleteMapImage(UUID tourId) {

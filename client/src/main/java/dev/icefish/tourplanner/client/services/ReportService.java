@@ -11,6 +11,10 @@ import com.lowagie.text.Image;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Chunk;
+import dev.icefish.tourplanner.models.exceptions.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -20,8 +24,9 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class ReportService {
-
+    private Logger logger = LogManager.getLogger(ReportService.class);
     public void generateTourReport(Tour tour, List<TourLog> tourLogs, Path filePath) {
+
         Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream(filePath.toFile()));
@@ -58,7 +63,8 @@ public class ReportService {
                 document.add(tourImage);
                 document.add(Chunk.NEWLINE);
             } catch (Exception e) {
-                System.out.println("Tour image not found or could not be loaded: " + e.getMessage());
+                logger.warn("Tour image not found or could not be loaded: {}", e.getMessage());
+
             }
 
             // Tour Logs Section
@@ -88,10 +94,11 @@ public class ReportService {
             }
 
             document.close();
-            System.out.println("Report generated at: " + filePath);
+            logger.info("Report generated at: {}", filePath);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error generating report: {}", e.getMessage());
+            throw new ServiceException("Error generating report: " + e.getMessage());
         }
     }
 
@@ -126,7 +133,7 @@ public class ReportService {
                         document.add(tourImage);
                         document.add(Chunk.NEWLINE);
                     } catch (Exception e) {
-                        System.out.println("Tour image not found or could not be loaded: " + e.getMessage());
+                        logger.warn("Tour image not found or could not be loaded: {}", e.getMessage());
                     }
 
                     if (tourLogs.isEmpty()) {
@@ -148,10 +155,11 @@ public class ReportService {
             }
 
             document.close();
-            System.out.println("Summary report generated at: " + filePath);
+            logger.info("Summary report generated at: " + filePath);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error generating summary report: {}", e.getMessage());
+            throw new ServiceException("Error generating summary report: " + e.getMessage());
         }
     }
 

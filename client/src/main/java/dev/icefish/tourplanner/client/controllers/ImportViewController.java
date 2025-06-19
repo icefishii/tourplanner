@@ -1,9 +1,14 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.icefish.tourplanner.client.services.ImportService;
 import dev.icefish.tourplanner.client.utils.ControllerUtils;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.WindowUtils;
+import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
+import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
+import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.TourLog;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +21,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 public class ImportViewController {
@@ -27,7 +34,8 @@ public class ImportViewController {
     public Button cancelButton;
 
     private ImportService importService;
-
+    private TourViewModel tourViewModel;
+    private TourLogViewModel tourLogViewModel;
     private MainViewController mainViewController;
 
     public void setMainViewController(MainViewController mainViewController) {
@@ -36,6 +44,12 @@ public class ImportViewController {
 
     public ImportViewController() {
         this.importService = new ImportService();
+    }
+
+    public ImportViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel) {
+        this.importService = new ImportService();
+        this.tourViewModel = tourViewModel;
+        this.tourLogViewModel = tourLogViewModel;
     }
 
     @FXML
@@ -81,12 +95,32 @@ public class ImportViewController {
             ControllerUtils.showErrorAlert("Please select a file to import.");
             return;
         }
-        String result = importService.importToursAndLogs(new File(filePath));
-        if (result.startsWith("Error")) {
-            ControllerUtils.showErrorAlert(result);
-        } else {
-            ControllerUtils.showInfoAlert(result);
+
+        try {
+            // Load data from file
+            Map<String, Object> data = importService.loadFromFile(new File(filePath));
+
+            // Convert data to model objects
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Tour> tours = objectMapper.convertValue(data.get("tours"),
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, Tour.class));
+            List<TourLog> tourLogs = objectMapper.convertValue(data.get("tourLogs"),
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, TourLog.class));
+
+            // Import through ViewModels to trigger data change events
+            for (Tour tour : tours) {
+                tourViewModel.createNewTour(tour);
+            }
+
+            for (TourLog tourLog : tourLogs) {
+                tourLogViewModel.createNewTourLog(tourLog);
+            }
+
+            ControllerUtils.showInfoAlert("Tours and tour logs imported successfully!");
             WindowUtils.close(filePathField);
+        } catch (Exception e) {
+            logger.error("Error during import: {}", e.getMessage());
+            ControllerUtils.showErrorAlert("Error importing data: " + e.getMessage());
         }
     }
 
@@ -98,4 +132,11 @@ public class ImportViewController {
         this.importService = importService;
     }
 
+    public void setTourViewModel(TourViewModel tourViewModel) {
+        this.tourViewModel = tourViewModel;
+    }
+
+    public void setTourLogViewModel(TourLogViewModel tourLogViewModel) {
+        this.tourLogViewModel = tourLogViewModel;
+    }
 }

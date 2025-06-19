@@ -13,6 +13,8 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -39,18 +41,22 @@ public class ImportViewControllerTest extends TestFXBase {
 
     @Test
     public void testImportSuccess() {
-        // Arrange: mock returns success message
-        when(mockImportService.importToursAndLogs(any(File.class)))
-                .thenReturn("Tours and tour logs imported successfully!");
+        // Arrange: mock loadFromFile returns dummy data
+        Map<String, Object> fakeData = Map.of(
+                "tours", List.of(/* mock Tour objects */),
+                "tourLogs", List.of(/* mock TourLog objects */)
+        );
+        when(mockImportService.loadFromFile(any(File.class))).thenReturn(fakeData);
 
         // Act: simulate UI input and click import
         clickOn("#filePathField").write("fakepath.json");
         clickOn("#importButton");
 
-        // Assert: importService called once
-        verify(mockImportService, times(1)).importToursAndLogs(any(File.class));
-        // You can add assertions for alerts/windows if you mock ControllerUtils/WindowUtils
+        // Assert: loadFromFile called once
+        verify(mockImportService, times(1)).loadFromFile(any(File.class));
+        verify(mockImportService, never()).importToursAndLogs(any(File.class));
     }
+
 
     @Test
     public void testImportNoFileSelected() {
@@ -64,16 +70,24 @@ public class ImportViewControllerTest extends TestFXBase {
 
     @Test
     public void testImportErrorResponse() {
-        // Arrange: mock returns error message
-        when(mockImportService.importToursAndLogs(any(File.class)))
-                .thenReturn("Error importing tours");
+        // Arrange: mock loadFromFile returns error data or null tours
+        Map<String, Object> errorData = Map.of(
+                "tours", List.of(),
+                "error", "Error importing tours"
+        );
+
+        when(mockImportService.loadFromFile(any(File.class))).thenReturn(errorData);
 
         // Act: simulate UI input and click import
         clickOn("#filePathField").write("fakepath.json");
         clickOn("#importButton");
 
-        // Assert: importService called once
-        verify(mockImportService, times(1)).importToursAndLogs(any(File.class));
-        // You could verify error alert shown by mocking ControllerUtils.showErrorAlert
+        // Assert: loadFromFile called once
+        verify(mockImportService, times(1)).loadFromFile(any(File.class));
+        // Verify importToursAndLogs NOT called
+        verify(mockImportService, never()).importToursAndLogs(any(File.class));
+
+        // Optional: verify UI shows error alert (if applicable)
     }
+
 }

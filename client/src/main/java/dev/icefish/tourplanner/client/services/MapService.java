@@ -3,6 +3,7 @@ package dev.icefish.tourplanner.client.services;
 
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.models.Tour;
+import dev.icefish.tourplanner.models.exceptions.ServiceException;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
@@ -46,6 +47,7 @@ public class MapService {
 
         } catch (IOException e) {
             System.err.println("Failed to save WebView snapshot: " + e.getMessage());
+            throw new ServiceException("Failed to save WebView snapshot"+ e.getMessage());
         }
     }
 

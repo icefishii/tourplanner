@@ -525,6 +525,10 @@ public class MainViewController {
             ImportViewController controller = loader.getController();
             controller.setMainViewController(this);
 
+            // Make sure ViewModels are set
+            controller.setTourViewModel(tourViewModel);
+            controller.setTourLogViewModel(tourLogViewModel);
+
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             ThemeManager.applyCurrentTheme(scene);

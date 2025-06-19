@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import dev.icefish.tourplanner.models.TourLog;
+import dev.icefish.tourplanner.models.exceptions.ServiceException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -60,7 +61,7 @@ public class TourLogService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error("Error fetching tour logs: {}", e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
 
@@ -86,7 +87,7 @@ public class TourLogService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error("Error fetching tour logs for tour ID {}: {}", tourId, e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
         return FXCollections.observableArrayList();
     }
@@ -110,7 +111,7 @@ public class TourLogService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error("Error creating tour log: {}", e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
 
@@ -142,7 +143,7 @@ public class TourLogService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error("Error updating tour log: {}", e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
 
@@ -161,7 +162,7 @@ public class TourLogService {
             }
         } catch (IOException | InterruptedException e) {
             logger.error("Error deleting tour log: {}", e.getMessage());
-            e.printStackTrace();
+            throw new ServiceException("Error fetching tour logs: " + e.getMessage());
         }
     }
 }
