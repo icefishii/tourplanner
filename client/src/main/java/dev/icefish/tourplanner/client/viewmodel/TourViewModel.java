@@ -9,7 +9,7 @@ import dev.icefish.tourplanner.models.TourLog;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
+import dev.icefish.tourplanner.client.utils.DataChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class TourViewModel {
     public final static Logger logger = LogManager.getLogger(TourViewModel.class);
     private final ObservableList<Tour> toursList;
+    private final List<DataChangeListener> listeners = new ArrayList<>();
     private final TourService tourService;
     private final ReportService reportService;
     private final TourLogService tourLogService; // Add this field
@@ -62,11 +64,13 @@ public class TourViewModel {
     public void createNewTour(Tour tour) {
         tourService.createNewTour(tour);
         toursList.add(tour);
+        notifyDataChanged();
     }
 
     public void deleteTour(Tour tour) {
         tourService.deleteTour(tour);
         toursList.remove(tour);
+        notifyDataChanged();
     }
 
     public void updateTour(Tour tour) {
@@ -75,6 +79,7 @@ public class TourViewModel {
         if (index >= 0) {
             toursList.set(index, tour);
         }
+        notifyDataChanged();
     }
 
     public void generateTourReport(Tour tour, Path filePath) {
@@ -166,6 +171,20 @@ public class TourViewModel {
     public String getChildFriendliness(Tour tour) {
         ObservableList<TourLog> tourLogs = tourLogService.getTourLogsfromTour(tour.getId());;
         return TourAttributeHelper.computeChildFriendliness(tourLogs, tour);
+    }
+
+    public void addDataChangeListener(DataChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeDataChangeListener(DataChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyDataChanged() {
+        for (DataChangeListener listener : listeners) {
+            listener.onDataChanged();
+        }
     }
 
 }

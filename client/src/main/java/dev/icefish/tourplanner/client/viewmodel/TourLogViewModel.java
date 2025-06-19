@@ -1,16 +1,21 @@
 package dev.icefish.tourplanner.client.viewmodel;
 
 import dev.icefish.tourplanner.client.services.TourLogService;
+import dev.icefish.tourplanner.client.utils.DataChangeListener;
 import dev.icefish.tourplanner.models.TourLog;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class TourLogViewModel {
 
     private final ObservableList<TourLog> tourLogsList;
+    private final List<DataChangeListener> listeners = new ArrayList<>();
     private final TourLogService tourLogService;
 
     public TourLogViewModel(TourLogService tourLogService) {
@@ -51,15 +56,18 @@ public class TourLogViewModel {
         System.out.println("TourLog Created: " + tourLog);
         tourLogService.createNewTourLog(tourLog);
         tourLogsList.add(tourLog);
+        notifyDataChanged(); // Notify listeners about the new TourLog
     }
 
     public void deleteTourLog(TourLog tourLog) {
         tourLogService.deleteTourLog(tourLog);
         tourLogsList.remove(tourLog);
+        notifyDataChanged(); // Notify listeners about the deletion
     }
 
     public void updateTourLog(TourLog tourLog) {
         tourLogService.updateTourLog(tourLog);
+        notifyDataChanged(); // Notify listeners about the update
     }
 
     public ObservableList<TourLog> searchTourLogs(String searchText, ObservableList<TourLog> currentTourLogs) {
@@ -108,5 +116,19 @@ public class TourLogViewModel {
             }
         }
         return filteredTourLogs;
+    }
+
+    public void addDataChangeListener(DataChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeDataChangeListener(DataChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyDataChanged() {
+        for (DataChangeListener listener : listeners) {
+            listener.onDataChanged();
+        }
     }
 }

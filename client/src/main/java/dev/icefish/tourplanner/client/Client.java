@@ -1,8 +1,7 @@
 package dev.icefish.tourplanner.client;
-
-import dev.icefish.tourplanner.client.controllers.MainViewController;
 import dev.icefish.tourplanner.client.services.TourLogService;
 import dev.icefish.tourplanner.client.services.TourService;
+import dev.icefish.tourplanner.client.utils.ControllerFactory;
 import dev.icefish.tourplanner.client.viewmodel.MapViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
@@ -20,20 +19,11 @@ public class Client extends Application {
         // Set up logging
         Logger logger = LogManager.getLogger(Client.class);
         logger.info("Starting Tour Planner Client...");
-        // Initialize services with API connections
-        TourService tourService = new TourService();
-        TourLogService tourLogService = new TourLogService();
-        ReportService reportService = new ReportService();
-        TourLogViewModel tourLogViewModel = new TourLogViewModel(tourLogService);
 
-        // Initialize ViewModels
-        TourViewModel tourViewModel = new TourViewModel(tourService,tourLogService, reportService);
-
-        MapViewModel mapViewModel = new MapViewModel();
-
+        ControllerFactory controllerFactory = getControllerFactory();
         // Load FXML and inject dependencies
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourPlannerWindow.fxml"));
-        loader.setControllerFactory(param -> new MainViewController(tourViewModel, tourLogViewModel, mapViewModel));
+        loader.setControllerFactory(controllerFactory);
 
         Scene scene = new Scene(loader.load(), 620, 440);
 
@@ -47,6 +37,17 @@ public class Client extends Application {
         stage.setMaximized(true);
 
         stage.show();
+    }
+
+    private static ControllerFactory getControllerFactory() {
+        TourService tourService = new TourService();
+        TourLogService tourLogService = new TourLogService();
+        ReportService reportService = new ReportService();
+        TourLogViewModel tourLogViewModel = new TourLogViewModel(tourLogService);
+        TourViewModel tourViewModel = new TourViewModel(tourService,tourLogService, reportService);
+
+        MapViewModel mapViewModel = new MapViewModel();
+        return new ControllerFactory(tourViewModel, tourLogViewModel, mapViewModel);
     }
 
     public static void main(String[] args) {

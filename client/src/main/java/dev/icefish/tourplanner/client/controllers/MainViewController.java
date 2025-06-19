@@ -1,5 +1,6 @@
 package dev.icefish.tourplanner.client.controllers;
 
+import dev.icefish.tourplanner.client.utils.ControllerFactory;
 import dev.icefish.tourplanner.client.utils.ControllerUtils;
 import dev.icefish.tourplanner.client.utils.ShortcutUtils;
 import dev.icefish.tourplanner.client.utils.ThemeManager;
@@ -28,7 +29,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -107,8 +107,6 @@ public class MainViewController {
     private final MapViewModel mapViewModel;
     private final ExportService exportService;
 
-
-
     public MainViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel, MapViewModel mapViewModel) {
         this.tourViewModel = tourViewModel;
         this.tourLogViewModel = tourLogViewModel;
@@ -120,6 +118,8 @@ public class MainViewController {
     public void initialize() {
         setTourListView();
         setTourLogTableView();
+        tourViewModel.addDataChangeListener(this::refreshUI);
+        tourLogViewModel.addDataChangeListener(this::refreshUI);
         deleteTourButton.disableProperty().bind(tourViewModel.deleteTourButtonDisabledProperty());
         editTourButton.disableProperty().bind(tourViewModel.editTourButtonDisabledProperty());
         generateTourReportItem.disableProperty().bind(tourViewModel.tourReportButtonDisabledProperty());
@@ -203,7 +203,6 @@ public class MainViewController {
                 ));
             }
         });
-
     }
 
     public void onCreateTour() {
@@ -214,27 +213,21 @@ public class MainViewController {
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourCreateWindow.fxml"));
-            TourCreateViewController controller = new TourCreateViewController();
-            loader.setController(controller);
+            loader.setController(new TourCreateViewController());
             Parent root = loader.load();
 
-            controller.setTourCreatedListener(tour -> {
-                tourViewModel.createNewTour(tour);
-                refreshUI();
-            });
+            TourCreateViewController controller = loader.getController();
+            controller.setTourCreatedListener(tourViewModel::createNewTour);
 
             tourCreateStage = new Stage();
             tourCreateStage.setTitle("Create Tour");
 
-            Scene scene = new Scene(root, 800, 600); // Höhe und Breite nach Wunsch anpassen
+            Scene scene = new Scene(root, 800, 600);
             ThemeManager.applyCurrentTheme(scene);
-            tourCreateStage.setMinWidth(800);  // Mindestbreite in Pixel
+            tourCreateStage.setMinWidth(800);
             tourCreateStage.setMinHeight(600);
             tourCreateStage.setScene(scene);
-
-            // Optional: Wenn du willst, dass die Fenstergröße dynamisch angepasst wird:
-            tourCreateStage.setResizable(true); // Um das Fenster vergrößern/verkleinern zu können.
-
+            tourCreateStage.setResizable(true);
             tourCreateStage.show();
 
         } catch (IOException e) {
@@ -259,20 +252,16 @@ public class MainViewController {
             loader.setController(new TourEditViewController());
             Parent root = loader.load();
 
-
             TourEditViewController controller = loader.getController();
             controller.setTour(selectedTour);
-            controller.setTourUpdatedListener(tour -> {
-                tourViewModel.updateTour(tour);
-                refreshUI(); // Refresh UI after editing a tour
-            });
+            controller.setTourUpdatedListener(tourViewModel::updateTour);
 
             tourEditStage = new Stage();
             Scene scene = new Scene(root, 800, 600);
             ThemeManager.applyCurrentTheme(scene);
             tourEditStage.setScene(scene);
             tourEditStage.setTitle("Edit Tour");
-            tourEditStage.setMinWidth(800);  // Mindestbreite in Pixel
+            tourEditStage.setMinWidth(800);
             tourEditStage.setMinHeight(600);
             tourEditStage.setOnCloseRequest(e -> tourEditStage = null);
             tourEditStage.show();
@@ -309,11 +298,8 @@ public class MainViewController {
                     }
                     tourViewModel.deleteTour(tour);
                 }
-                refreshUI(); // Refresh UI after deleting tours
-
             }
         });
-
     }
 
     private void setTourListView() {
@@ -365,7 +351,9 @@ public class MainViewController {
             return;
         }
         try {
+            ControllerFactory controllerFactory = new ControllerFactory(tourViewModel, tourLogViewModel, mapViewModel);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourDetailWindow.fxml"));
+            loader.setControllerFactory(controllerFactory);
             Parent root = loader.load();
 
             TourDetailViewController controller = loader.getController();
@@ -374,9 +362,9 @@ public class MainViewController {
             Stage stage = new Stage();
             stage.setTitle("Tour Details");
             Scene scene = new Scene(root);
-            ThemeManager.applyCurrentTheme(scene); // <--- Hier
-            stage.setScene(scene); // <-- Richtiges Stage-Objekt verwenden
-            stage.setMinWidth(305);  // Mindestbreite in Pixel
+            ThemeManager.applyCurrentTheme(scene);
+            stage.setScene(scene);
+            stage.setMinWidth(305);
             stage.setMinHeight(450);
             tourDetailStages.put(tour, stage);
 
@@ -395,7 +383,9 @@ public class MainViewController {
         }
 
         try {
+            ControllerFactory controllerFactory = new ControllerFactory(tourViewModel, tourLogViewModel, mapViewModel);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogDetailWindow.fxml"));
+            loader.setControllerFactory(controllerFactory);
             Parent root = loader.load();
 
             TourLogDetailViewController controller = loader.getController();
@@ -404,9 +394,9 @@ public class MainViewController {
             Stage stage = new Stage();
             stage.setTitle("Tour Log Details");
             Scene scene = new Scene(root);
-            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            ThemeManager.applyCurrentTheme(scene);
             stage.setScene(scene);
-            stage.setMinWidth(305);  // Mindestbreite in Pixel
+            stage.setMinWidth(305);
             stage.setMinHeight(450);
 
             tourLogDetailStages.put(tourLog, stage);
@@ -440,19 +430,16 @@ public class MainViewController {
                 tourLogCreateStage.toFront();
                 return;
             }
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
-            TourLogCreateViewController controller = new TourLogCreateViewController(tourViewModel, tourLogViewModel);
-            loader.setController(controller);
+            loader.setController(new TourLogCreateViewController(tourViewModel, tourLogViewModel));
             Parent root = loader.load();
-            controller.setTourLogCreatedListener(tourLog -> {
-                tourLogViewModel.createNewTourLog(tourLog);
-                refreshUI();
-            });
+
+            TourLogCreateViewController controller = loader.getController();
+            controller.setTourLogCreatedListener(tourLogViewModel::createNewTourLog);
 
             tourLogCreateStage = new Stage();
             Scene scene = new Scene(root);
-            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            ThemeManager.applyCurrentTheme(scene);
             tourLogCreateStage.setScene(scene);
             tourLogCreateStage.setTitle("Create Tour Log");
             tourLogCreateStage.setMinWidth(450);
@@ -488,7 +475,6 @@ public class MainViewController {
                 for (TourLog tourLog : selectedTourLogs) {
                     tourLogViewModel.deleteTourLog(tourLog);
                 }
-                refreshUI();
             }
         });
     }
@@ -508,19 +494,16 @@ public class MainViewController {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
-            TourLogEditViewController controller = new TourLogEditViewController(tourViewModel);
-            loader.setController(controller);
+            loader.setController(new TourLogEditViewController(tourViewModel));
             Parent root = loader.load();
 
+            TourLogEditViewController controller = loader.getController();
             controller.setTourLog(selectedTourLog);
-            controller.setTourLogUpdatedListener(tourLog -> {
-                tourLogViewModel.updateTourLog(tourLog);
-                refreshUI();
-            });
+            controller.setTourLogUpdatedListener(tourLogViewModel::updateTourLog);
 
             tourLogEditStage = new Stage();
             Scene scene = new Scene(root);
-            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            ThemeManager.applyCurrentTheme(scene);
             tourLogEditStage.setScene(scene);
             tourLogEditStage.setTitle("Edit Tour Log");
             tourLogEditStage.setMinWidth(450);
@@ -535,17 +518,19 @@ public class MainViewController {
     //----Menu Bar-----
     public void onImport() {
         try {
+            ControllerFactory controllerFactory = new ControllerFactory(tourViewModel, tourLogViewModel, mapViewModel);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ImportWindow.fxml"));
+            loader.setControllerFactory(controllerFactory);
             Parent root = loader.load();
 
             ImportViewController controller = loader.getController();
-            controller.setMainViewController(this); // Pass the current MainViewController instance
+            controller.setMainViewController(this);
 
             Stage stage = new Stage();
             Scene scene = new Scene(root);
-            ThemeManager.applyCurrentTheme(scene); // <--- Hier
+            ThemeManager.applyCurrentTheme(scene);
             stage.setScene(scene);
-            stage.setMinWidth(400);  // Mindestbreite in Pixel
+            stage.setMinWidth(400);
             stage.setMinHeight(200);
             stage.setTitle("Import Data");
             stage.show();
@@ -585,24 +570,21 @@ public class MainViewController {
         Tour selectedTour = tourListView.getSelectionModel().getSelectedItem();
 
         if (selectedTour == null) {
-            //showAlert("No Tour Selected", "Please select a tour to generate the report.");
             return;
         }
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Tour Report");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf")); // oder .txt, .json
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
         File file = fileChooser.showSaveDialog(((MenuItem) actionEvent.getSource()).getParentPopup().getOwnerWindow());
 
         if (file != null) {
             tourViewModel.generateTourReport(selectedTour, file.toPath());
         }
-
     }
 
     public void onGenerateSummaryReport(ActionEvent actionEvent) {
         if (tourListView.getItems().isEmpty()) {
-            // Optional: Alert anzeigen
             return;
         }
 
@@ -666,10 +648,4 @@ public class MainViewController {
             tourLogTableView.setItems(tourLogViewModel.searchTourLogs(searchText, currentTourLogs));
         }
     }
-
-
 }
-
-//ToDo Rewrite Tests
-
-

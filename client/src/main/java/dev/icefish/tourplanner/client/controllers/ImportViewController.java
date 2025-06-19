@@ -86,9 +86,6 @@ public class ImportViewController {
             ControllerUtils.showErrorAlert(result);
         } else {
             ControllerUtils.showInfoAlert(result);
-            if (mainViewController != null) {
-                mainViewController.refreshUI();
-            }
             WindowUtils.close(filePathField);
         }
     }
