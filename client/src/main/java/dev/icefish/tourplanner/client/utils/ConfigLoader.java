@@ -16,8 +16,7 @@ public class ConfigLoader {
             if (input != null) {
                 properties.load(input);
             } else {
-                logger.error("config.properties not found in classpath!");
-                throw new RuntimeException("config.properties not found in classpath!");
+                logger.warn("config.properties not found in classpath. Will fall back to system properties.");
             }
         } catch (IOException e) {
             logger.error("Error loading config.properties: {}", e.getMessage());
@@ -26,7 +25,11 @@ public class ConfigLoader {
     }
 
     public static String get(String key) {
-        return properties.getProperty(key);
+        // Prefer config.properties, fallback to system property
+        String value = properties.getProperty(key);
+        if (value == null) {
+            value = System.getProperty(key);
+        }
+        return value;
     }
 }
-

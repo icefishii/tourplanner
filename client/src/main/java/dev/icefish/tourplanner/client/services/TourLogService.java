@@ -32,6 +32,17 @@ public class TourLogService {
         fetchTourLogsFromServer();
     }
 
+    public TourLogService(HttpClient httpClient, boolean fetchOnStartup) {
+        this.httpClient = httpClient;
+        this.objectMapper = new ObjectMapper()
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .setDateFormat(new StdDateFormat());
+
+        if (fetchOnStartup) {
+            fetchTourLogsFromServer();
+        }
+    }
+
     private void fetchTourLogsFromServer() {
         logger.info("Fetching tour logs from server...");
         try {

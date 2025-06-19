@@ -26,7 +26,7 @@ public class ImportViewController {
     public Button importButton;
     public Button cancelButton;
 
-    private final ImportService importService;
+    private ImportService importService;
 
     private MainViewController mainViewController;
 
@@ -93,4 +93,9 @@ public class ImportViewController {
     public void onCancel(ActionEvent actionEvent) {
         WindowUtils.close(filePathField);
     }
+
+    public void setImportService(ImportService importService) {
+        this.importService = importService;
+    }
+
 }

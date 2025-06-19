@@ -25,6 +25,11 @@ public class ImportService {
         this.objectMapper = new ObjectMapper();
     }
 
+    public ImportService(HttpClient httpClient, ObjectMapper objectMapper) {
+        this.httpClient = httpClient;
+        this.objectMapper = objectMapper;
+    }
+
     public String importToursAndLogs(File file) {
         try {
             // Read the combined JSON structure

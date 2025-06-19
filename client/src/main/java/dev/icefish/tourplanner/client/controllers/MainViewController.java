@@ -648,4 +648,8 @@ public class MainViewController {
             tourLogTableView.setItems(tourLogViewModel.searchTourLogs(searchText, currentTourLogs));
         }
     }
+
+    public TourViewModel getTourViewModel() {
+        return tourViewModel;
+    }
 }

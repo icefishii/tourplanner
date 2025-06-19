@@ -41,7 +41,7 @@ public class TourLogCreateViewController {
     private ComboBox<Tour> tourComboBox;
 
     @FXML
-    private DatePicker datePicker;
+    public DatePicker datePicker;
 
     private Consumer<TourLog> tourLogCreatedListener;
     private final TourLogViewModel tourLogViewModel;

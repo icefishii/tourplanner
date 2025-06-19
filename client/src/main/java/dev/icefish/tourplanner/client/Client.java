@@ -39,7 +39,7 @@ public class Client extends Application {
         stage.show();
     }
 
-    private static ControllerFactory getControllerFactory() {
+    public static ControllerFactory getControllerFactory() {
         TourService tourService = new TourService();
         TourLogService tourLogService = new TourLogService();
         ReportService reportService = new ReportService();
@@ -50,7 +50,5 @@ public class Client extends Application {
         return new ControllerFactory(tourViewModel, tourLogViewModel, mapViewModel);
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
+
 }

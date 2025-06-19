@@ -20,12 +20,23 @@ import java.util.List;
 import java.util.UUID;
 
 public class TourService {
-    //TODO LOGGING!!!!! (B)
     private final static Logger logger = LogManager.getLogger(TourService.class);
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
+    HttpClient httpClient;
+    ObjectMapper objectMapper;
     private final String BASE_URL = "http://localhost:8080/api/tours";
-    private final ObservableList<Tour> tours = FXCollections.observableArrayList();
+    final ObservableList<Tour> tours = FXCollections.observableArrayList();
+
+    public TourService(HttpClient httpClient, boolean fetchOnStartup) {
+        this.httpClient = httpClient;
+        this.objectMapper = new ObjectMapper()
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .setDateFormat(new StdDateFormat());
+
+        if (fetchOnStartup) {
+            fetchToursFromServer();
+        }
+    }
+
 
     public TourService() {
         this.httpClient = HttpClient.newHttpClient();
