@@ -192,7 +192,6 @@ public class MainViewController {
                         ShortcutUtils.ctrl(KeyCode.D), this::onDeleteTour,
                         ShortcutUtils.ctrl(KeyCode.R), () -> onGenerateTourReport(null),
                         ShortcutUtils.ctrl(KeyCode.I), this::onImport,
-                        ShortcutUtils.ctrl(KeyCode.A), this::onAbout,
                         ShortcutUtils.ctrl(KeyCode.M), this::onToggleDarkMode,
 
                         // TourLog Shortcuts (Ctrl + Shift + Key)
@@ -605,10 +604,6 @@ public class MainViewController {
 
     public void onToggleDarkMode() {
         ThemeManager.setDarkMode(darkModeToggle.isSelected());
-    }
-
-    public void onAbout() {
-        //ToDo Description
     }
 
     //----Search Bars-----

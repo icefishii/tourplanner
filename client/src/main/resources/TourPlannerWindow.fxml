@@ -51,9 +51,6 @@
             <Menu text="View" id="menu">
                <CheckMenuItem fx:id="darkModeToggle" text="Dark Mode" onAction="#onToggleDarkMode"/>
             </Menu>
-            <Menu text="Help" id="menu">
-               <MenuItem text="About" onAction="#onAbout" />
-            </Menu>
          </menus>
       </MenuBar>
 
