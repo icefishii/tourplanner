@@ -37,6 +37,10 @@ import java.util.*;
 public class MainViewController {
 
     public final static Logger logger = LogManager.getLogger(MainViewController.class);
+    public MenuItem generateTourReportItem;
+    public MenuItem generateSummaryReportItem;
+    public MenuItem exportMenuItem;
+    public MenuItem importMenuItem;
 
     @FXML
     private Button deleteTourButton, editTourButton, newTourButton, newTourLogButton, deleteTourLogButton, editTourLogButton;
@@ -118,6 +122,7 @@ public class MainViewController {
         setTourLogTableView();
         deleteTourButton.disableProperty().bind(tourViewModel.deleteTourButtonDisabledProperty());
         editTourButton.disableProperty().bind(tourViewModel.editTourButtonDisabledProperty());
+        generateTourReportItem.disableProperty().bind(tourViewModel.tourReportButtonDisabledProperty());
 
         tourListView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Tour>) c -> {
             tourViewModel.updateTourButtonStates(tourListView.getSelectionModel().getSelectedItems());

@@ -9,6 +9,7 @@ import dev.icefish.tourplanner.models.TourLog;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -36,14 +37,18 @@ public class TourViewModel {
 
     private final BooleanProperty deleteTourButtonDisabled = new SimpleBooleanProperty(true);
     private final BooleanProperty editTourButtonDisabled = new SimpleBooleanProperty(true);
+    private final BooleanProperty tourReportButtonDisabled = new SimpleBooleanProperty(true);
 
     public BooleanProperty deleteTourButtonDisabledProperty() { return deleteTourButtonDisabled; }
     public BooleanProperty editTourButtonDisabledProperty() { return editTourButtonDisabled; }
+    public BooleanProperty tourReportButtonDisabledProperty() { return tourReportButtonDisabled; }
 
     public void updateTourButtonStates(ObservableList<Tour> selectedTours) {
         int count = selectedTours.size();
         deleteTourButtonDisabled.set(count == 0);
         editTourButtonDisabled.set(count != 1);
+        tourReportButtonDisabled.set(count != 1);
+
     }
 
     public void fetchToursFromServer() {
@@ -162,7 +167,5 @@ public class TourViewModel {
         ObservableList<TourLog> tourLogs = tourLogService.getTourLogsfromTour(tour.getId());;
         return TourAttributeHelper.computeChildFriendliness(tourLogs, tour);
     }
-
-
 
 }
