@@ -32,7 +32,7 @@ public class TourAttributeHelper {
             return "Child-Friendly";
         }
 
-        if (averageDifficulty <= 2 && totalDistance <= 5 && totalTime <= 2) {
+        if (averageDifficulty <= 2 && totalDistance <= 20 && totalTime <= 2) {
             return "Child-Friendly";
         } else {
             return "Not Child-Friendly";

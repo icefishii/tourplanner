@@ -8,6 +8,7 @@ import dev.icefish.tourplanner.client.viewmodel.TourLogViewModel;
 import dev.icefish.tourplanner.client.viewmodel.TourViewModel;
 import dev.icefish.tourplanner.models.Tour;
 import dev.icefish.tourplanner.models.TourLog;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -22,10 +24,10 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(ApplicationExtension.class)
 public class TourLogCreateViewTest extends TestFXBase {
@@ -34,31 +36,42 @@ public class TourLogCreateViewTest extends TestFXBase {
     private TourLog createdTourLog;
     private CountDownLatch latch;
 
+    private Tour sampleTour;
     private TourViewModel tourViewModel;
     private TourLogViewModel tourLogViewModel;
 
+    private TourService mockTourService;
+    private TourLogService mockTourLogService;
+    private ReportService mockReportService;
+
     @Start
     public void start(Stage stage) throws Exception {
-        // Mock or stub view models (replace with your preferred mocking)
-        TourService tourService = new TourService(); // or mock
-        TourLogService tourLogService = new TourLogService(); // or mock
-        ReportService reportService = new ReportService(); // or mock
-        tourViewModel = new TourViewModel(tourService,tourLogService,reportService); // or mock
-        tourLogViewModel = new TourLogViewModel(tourLogService); // or mock
+        // Create mocks
+        mockTourService = mock(TourService.class);
+        mockTourLogService = mock(TourLogService.class);
+        mockReportService = mock(ReportService.class);
 
-        // Add a sample Tour to tourViewModel to select from in ComboBox
-        Tour sampleTour = new Tour();
+        // Sample tour
+        sampleTour = new Tour();
         sampleTour.setId(UUID.randomUUID());
         sampleTour.setName("Sample Tour");
-        tourViewModel.getAllTours().add(sampleTour);
 
-        // Load FXML
+        // Configure mock service behavior
+        when(mockTourService.getAllTours()).thenReturn(FXCollections.observableArrayList(sampleTour));
+        when(mockTourLogService.getAllTourLogs()).thenReturn(FXCollections.observableArrayList());
+        when(mockTourLogService.getTourLogsfromTour(any())).thenReturn(FXCollections.observableArrayList());
+
+        // ViewModels using mocks
+        tourViewModel = new TourViewModel(mockTourService, mockTourLogService, mockReportService);
+        tourLogViewModel = new TourLogViewModel(mockTourLogService);
+
+        // Load FXML and inject controller
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/TourLogCreateWindow.fxml"));
         controller = new TourLogCreateViewController(tourViewModel, tourLogViewModel);
         loader.setController(controller);
         Parent root = loader.load();
 
-        // Setup latch and listener to capture created TourLog
+        // Hook for created log
         latch = new CountDownLatch(1);
         controller.setTourLogCreatedListener(tourLog -> {
             createdTourLog = tourLog;
@@ -72,14 +85,11 @@ public class TourLogCreateViewTest extends TestFXBase {
     @Test
     public void testCreateTourLog() {
         try {
-            // Select the first tour in the ComboBox (the "Sample Tour")
             clickOn("#tourComboBox").clickOn("Sample Tour");
 
-            // Set date picker to today
             LocalDate today = LocalDate.now();
             interact(() -> controller.datePicker.setValue(today));
 
-            // Fill in the fields with valid values
             clickOn("#timeField").write("12:30");
             clickOn("#commentField").write("Nice tour log");
             clickOn("#difficultyField").write("3");
@@ -87,14 +97,11 @@ public class TourLogCreateViewTest extends TestFXBase {
             clickOn("#durationField").write("01:30");
             clickOn("#ratingField").write("4");
 
-            // Click the create button
             clickOn("#createButton");
 
-            // Wait for the listener to be called (max 5 seconds)
             boolean success = latch.await(5, TimeUnit.SECONDS);
             assertThat(success).isTrue();
 
-            // Assertions on created TourLog
             assertThat(createdTourLog).isNotNull();
             assertThat(createdTourLog.getTour().getName()).isEqualTo("Sample Tour");
             assertThat(createdTourLog.getComment()).isEqualTo("Nice tour log");

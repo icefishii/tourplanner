@@ -52,6 +52,11 @@ public class TourLogEditViewController {
         this.tourLogViewModel = new TourLogViewModel(new TourLogService());
     }
 
+    public TourLogEditViewController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel) {
+        this.tourViewModel = tourViewModel;
+        this.tourLogViewModel = tourLogViewModel;
+    }
+
     public void setTourViewModel(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
         tourComboBox.setItems(tourViewModel.getAllTours());
