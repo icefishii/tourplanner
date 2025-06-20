@@ -7,20 +7,14 @@ import javafx.scene.input.KeyCombination;
 
 import java.util.Map;
 
+//Zum Erstellen der ShortCuts
 public class ShortcutUtils {
 
-    /**
-     * Fügt der Scene Tastenkombinationen hinzu, die bestimmte Aktionen auslösen.
-     *
-     * @param scene die Scene, auf der die Shortcuts registriert werden
-     * @param shortcuts Map von Tastenkombinationen zu Runnable-Handlern (z.B. Button::fire)
-     */
     public static void addShortcuts(Scene scene, Map<KeyCombination, Runnable> shortcuts) {
         if (scene == null) return;
         shortcuts.forEach(scene.getAccelerators()::put);
     }
 
-    // Hilfsmethode für Standard Shortcut-Definitionen
     public static KeyCodeCombination ctrl(KeyCode code) {
         return new KeyCodeCombination(code, KeyCombination.CONTROL_DOWN);
     }

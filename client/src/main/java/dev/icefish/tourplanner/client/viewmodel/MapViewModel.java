@@ -29,6 +29,7 @@ public class MapViewModel {
         return currentMapImage.get();
     }
 
+    //nimmt ein Bild wenn es existiert
     public void setMapImageForTour(UUID tourId) {
         if (tourId == null) {
             setDefaultImage();

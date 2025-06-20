@@ -30,6 +30,7 @@ public class ImportService {
         this.objectMapper = objectMapper;
     }
 
+    //Lädt die kombinierte Datenstruktur (Touren + Logs) aus einer Datei.
     public Map<String, Object> loadFromFile(File file) {
         try {
             // Read the combined JSON structure
@@ -44,17 +45,17 @@ public class ImportService {
     // Original method kept for backward compatibility if needed
     public String importToursAndLogs(File file) {
         try {
-            // Read the combined JSON structure
+            // 1. JSON-Datei einlesen
             Map<String, Object> data = objectMapper.readValue(file,
                     objectMapper.getTypeFactory().constructMapType(Map.class, String.class, Object.class));
 
-            // Extract tours and tour logs
+            // 2. Extrahiere Touren und Logs aus Map und konvertiere in Objekte
             List<Tour> tours = objectMapper.convertValue(data.get("tours"),
                     objectMapper.getTypeFactory().constructCollectionType(List.class, Tour.class));
             List<TourLog> tourLogs = objectMapper.convertValue(data.get("tourLogs"),
                     objectMapper.getTypeFactory().constructCollectionType(List.class, TourLog.class));
 
-            // Import tours
+            // 3. Serialisiere Touren zu JSON und sende POST-Anfrage an Server
             String toursJson = objectMapper.writeValueAsString(tours);
             HttpRequest toursRequest = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/api/tours/import"))
@@ -68,7 +69,7 @@ public class ImportService {
                 return "Error importing tours: " + toursResponse.body();
             }
 
-            // Import tour logs
+            // 4. Serialisiere TourLogs zu JSON und sende POST-Anfrage an Server
             String tourLogsJson = objectMapper.writeValueAsString(tourLogs);
             HttpRequest logsRequest = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/api/tourlogs/import"))

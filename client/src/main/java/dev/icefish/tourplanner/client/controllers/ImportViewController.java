@@ -70,6 +70,7 @@ public class ImportViewController {
         });
     }
 
+    // Öffnet einen Dateiauswahldialog zum Auswählen einer JSON-Datei
     public void onBrowse(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose file to import");
@@ -89,6 +90,7 @@ public class ImportViewController {
         }
     }
 
+    // Führt den Import der ausgewählten JSON-Datei durch
     public void onImport(ActionEvent actionEvent) {
         String filePath = filePathField.getText();
         if (filePath == null || filePath.isBlank()) {
@@ -97,17 +99,17 @@ public class ImportViewController {
         }
 
         try {
-            // Load data from file
+            // Lädt die JSON-Daten aus der Datei
             Map<String, Object> data = importService.loadFromFile(new File(filePath));
 
-            // Convert data to model objects
+            // Konvertiert
             ObjectMapper objectMapper = new ObjectMapper();
             List<Tour> tours = objectMapper.convertValue(data.get("tours"),
                     objectMapper.getTypeFactory().constructCollectionType(List.class, Tour.class));
             List<TourLog> tourLogs = objectMapper.convertValue(data.get("tourLogs"),
                     objectMapper.getTypeFactory().constructCollectionType(List.class, TourLog.class));
 
-            // Import through ViewModels to trigger data change events
+            //Fügt die importierten Daten über die ViewModels hinzu
             for (Tour tour : tours) {
                 tourViewModel.createNewTour(tour);
             }

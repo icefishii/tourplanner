@@ -66,6 +66,7 @@ public class TourCreateViewController {
         });
     }
 
+    // Wird aufgerufen, wenn der "Load Map"-Button gedrückt wird
     private void onLoadMapButtonClick(ActionEvent event) {
         try {
             ControllerUtils.resetFieldStyles(
@@ -94,14 +95,19 @@ public class TourCreateViewController {
                 return;
             }
 
+            // Koordinaten
             double[] fromCoords = GeoCoder.getCoordinates(fromLocation);
             double[] toCoords = GeoCoder.getCoordinates(toLocation);
+
+            // Transportmittel in OpenRouteService-Format umwandeln
             String orsTransport = switch (transportType.toLowerCase()) {
                 case "walk" -> "foot-walking";
                 case "bike" -> "cycling-regular";
                 case "car" -> "driving-car";
                 default -> throw new IllegalArgumentException("Unsupported transport type: " + transportType);
             };
+
+            // HTML-Vorlage für die Karte laden
             String htmlTemplate;
             try {
                 htmlTemplate = new String(Objects.requireNonNull(getClass().getResourceAsStream("/MapTemplate.html")).readAllBytes());
@@ -110,8 +116,11 @@ public class TourCreateViewController {
                 ControllerUtils.showErrorAlert(Map.of("error", "Couldn't load map template: " + e.getMessage()));
                 return;
             }
+
+            // API-Key laden
             String apiKey = ConfigLoader.get("openrouteservice.api.key");
 
+            // HTML-Inhalt mit Koordinaten und Parametern ersetzen
             String htmlContent = htmlTemplate
                     .replace("LAT_FROM", String.valueOf(fromCoords[0]))
                     .replace("LON_FROM", String.valueOf(fromCoords[1]))
@@ -140,6 +149,7 @@ public class TourCreateViewController {
         this.tourCreatedListener = listener;
     }
 
+    // Wird aufgerufen, wenn der "Create"-Button gedrückt wird
     private void onCreateButtonClick(ActionEvent actionEvent) {
         try {
             ControllerUtils.resetFieldStyles(
@@ -192,6 +202,7 @@ public class TourCreateViewController {
                 tourCreatedListener.accept(newTour);
             }
 
+            // Karten-Snapshot speichern
             MapService.saveWebViewSnapshot(mapWebView, newTour, mapViewModel);
 
             WindowUtils.close(tourNameField);

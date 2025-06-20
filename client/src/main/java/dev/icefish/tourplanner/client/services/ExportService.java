@@ -25,20 +25,22 @@ public class ExportService {
 
     public String exportToursAndLogs(File file) {
         try {
-            // Fetch tours
+
+            // 1. HTTP-Anfrage an /api/tours/export senden
             HttpRequest toursRequest = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/api/tours/export"))
                     .GET()
                     .build();
             HttpResponse<String> toursResponse = httpClient.send(toursRequest, HttpResponse.BodyHandlers.ofString());
 
-            // Fetch tour logs
+            // 2. HTTP-Anfrage an /api/tourlogs/export senden
             HttpRequest logsRequest = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/api/tourlogs/export"))
                     .GET()
                     .build();
             HttpResponse<String> logsResponse = httpClient.send(logsRequest, HttpResponse.BodyHandlers.ofString());
 
+            // 3. Prüfen, ob beide Anfragen erfolgreich waren
             if (toursResponse.statusCode() == 200 && logsResponse.statusCode() == 200) {
                 // Combine tours and logs into a single JSON structure
                 List<?> tours = objectMapper.readValue(toursResponse.body(), List.class);

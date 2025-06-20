@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
+//zum Erstellen einer UUIDv7 als ID für die Tours
 public class UUIDv7Generator {
     // Atomic to ensure thread-safe, monotonically increasing timestamp
     private static final AtomicLong lastTimestamp = new AtomicLong(0);

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+//Sorgt dafür, dass Sachen aus der config Datei ausgelesen werden
 public class ConfigLoader {
     private final static Logger logger = LogManager.getLogger(ConfigLoader.class);
     private static final Properties properties = new Properties();

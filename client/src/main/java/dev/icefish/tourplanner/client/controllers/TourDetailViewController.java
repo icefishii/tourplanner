@@ -44,6 +44,7 @@ public class TourDetailViewController {
         logger.info("Detail window closed.");
     }
 
+    //Umwandeln in schöne Ausgabe
     private String formatDuration(double durationInHours) {
         int hours = (int) durationInHours;
         int minutes = (int) Math.round((durationInHours - hours) * 60);

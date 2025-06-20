@@ -16,6 +16,7 @@ import java.io.IOException;
 
 public class MapService {
 
+    //speichert den Screenshot der Map
     public static void saveWebViewSnapshot(WebView webView, Tour tour, MapViewModel mapViewModel) {
         WritableImage snapshot = webView.snapshot(new SnapshotParameters(), null);
         int width = (int) snapshot.getWidth();

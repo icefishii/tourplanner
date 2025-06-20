@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import java.util.ArrayList;
 import java.util.List;
 
+//zum Einstellen des einheitlichen Themes (Hell oder Dunkel)
 public class ThemeManager {
 
     private static final List<Scene> registeredScenes = new ArrayList<>();

@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.util.Objects;
 
+//zum Berechnen der Attribute, damit man es noch Easy ändern kann falls man es anders
 public class TourAttributeHelper {
 
     public static int computePopularity(ObservableList<TourLog> tourLogs) {

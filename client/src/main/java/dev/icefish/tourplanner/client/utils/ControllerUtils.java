@@ -4,6 +4,7 @@ import dev.icefish.tourplanner.models.Tour;
 import javafx.scene.control.*;
 import java.util.Map;
 
+//Für nicht wiederholenden Code
 public class ControllerUtils {
 
     public static void setupTourComboBox(ComboBox<Tour> comboBox) {

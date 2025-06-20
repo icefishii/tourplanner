@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 
+//für Factory Pattern
 public class ControllerFactory implements Callback<Class<?>, Object> {
     public final static Logger logger = LogManager.getLogger(ControllerFactory.class);
     private final TourViewModel tourViewModel;
